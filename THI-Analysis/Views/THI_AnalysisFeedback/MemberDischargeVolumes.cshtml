@@ -1,0 +1,196 @@
+﻿@model THI_Analysis.Models.ProjectHospital
+
+<div class="content-wrapper" id="DischargeVolumes">
+    <!-- Content Header (Page header) -->
+    <section class="content-header" id="introduction">
+        <h1>
+            Member Statistics
+            <sup>
+                <a href="https://wiki.advisory.com/display/CPM/THI+Analysis+Tool" class="btn btn-primary btn-xs" title="THI Help Wiki" role="button" target="_blank">
+                    <i class="fa fa-wikipedia-w"></i>
+                </a>
+            </sup>
+        </h1>
+    </section>
+
+    <section class="content">
+        <div class="box box-body box-danger" id="volumeParameters">
+            <div class="row">
+                <div class="form-group col-md-6">
+                    <label>Project Name</label>
+                    @Html.DropDownList("Project", null, htmlAttributes: new {@class = "form-control", @style = "width: 100%;", @aria_hidden = "true"})
+                    @Html.ValidationMessageFor(model => model.Project, "", new {@class = "text-danger"})
+                </div>
+
+                <div class="form-group col-md-6" id="projectHospitals">
+                    <label>Facilities</label>
+                    <select class="form-control" disabled="disabled" style="width: 100%;" name="facilitySelect" id="facilitySelection">
+                        <option value="0">Select a valid Project...</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="btn-group" data-toggle="buttons">
+                        <label class="btn btn-primary active">
+                            <input type="radio" name="volumeGroup" id="Annual" autocomplete="off" checked> Annual Volumes
+                        </label>
+                        <label class="btn btn-primary">
+                            <input type="radio" name="volumeGroup" id="Monthly" autocomplete="off"> Monthly Volumes
+                        </label>
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <button type="submit" class="btn btn-block btn-primary" id="volumeParamSubmit" value="MemberDischargeVolumes">Generate Data</button>
+                </div>
+            </div>
+        </div>
+        
+        <div class="box box-primary">
+            <div class="box-header with-border">
+                <h3 class="box-title">OPPE Details</h3>
+            </div>
+            <div class="box-body">
+                <div class="row">
+                    <div class="col-md-3">
+                        <div class="info-box bg-aqua">
+                            <span class="info-box-icon"><i class="fa fa-bookmark-o"></i></span>
+
+                            <div class="info-box-content">
+                                <span class="info-box-text">Custom OPPE</span>
+                                <span class="info-box-number" id="customOppeCount">NA</span>
+
+                                <div class="progress">
+                                    <div class="progress-bar" style="width: 70%"></div>
+                                </div>
+
+                            </div>
+                            <!-- /.info-box-content -->
+                            <!-- /.info-box -->
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="info-box bg-yellow">
+                            <span class="info-box-icon"><i class="fa fa-calendar"></i></span>
+
+                            <div class="info-box-content">
+                                <span class="info-box-text">OPPE Loaded Till</span>
+                                <span class="info-box-number" id="maxRrDate">NA</span>
+
+                                <div class="progress">
+                                    <div class="progress-bar" style="width: 70%"></div>
+                                </div>
+                            </div>
+                            <!-- /.info-box-content -->
+                        </div>
+                        <!-- /.info-box -->
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        
+
+        <div class="box box-warning container">
+            <div class="box-header with-border">
+                <h3 class="box-title">Grouper Details</h3>
+            </div>
+            <div class="box-body">
+                <div class="row">
+
+                    <div class="col-md-3">
+                        <div class="info-box bg-red">
+                            <span class="info-box-icon"><i class="fa fa-flag-o"></i></span>
+
+                            <div class="info-box-content">
+                                <span class="info-box-text">3M Grouper License</span>
+                                <span class="info-box-number" id="3mGrouper">NA</span>
+
+                                <div class="progress">
+                                    <div class="progress-bar" style="width: 70%"></div>
+                                </div>
+                                <span class="progress-description">
+                                    Source: Salesforce
+                                </span>
+                            </div>
+                            <!-- /.info-box-content -->
+                        </div>
+                        <!-- /.info-box -->
+                    </div>
+                    <div class="col-md-3">
+                        <div class="info-box bg-green">
+                            <span class="info-box-icon"><i class="ion ion-ios-gear-outline"></i></span>
+
+                            <div class="info-box-content">
+                                <span class="info-box-text">Run APR-DRG</span>
+                                <span class="info-box-number" id="runAPRDRG">NA</span>
+
+                                <div class="progress">
+                                    <div class="progress-bar" style="width: 70%"></div>
+                                </div>
+                                <span class="progress-description">
+                                    Source: Data Manager
+                                </span>
+                            </div>
+                            <!-- /.info-box-content -->
+                        </div>
+                        <!-- /.info-box -->
+                    </div>
+                    <div class="col-md-3">
+                        <div class="info-box bg-purple">
+                            <span class="info-box-icon"><i class="fa fa-filter"></i></span>
+
+                            <div class="info-box-content">
+                                <span class="info-box-text">APRDRG Details</span>
+                                <span class="info-box-number" id="aprdrgAggregation">NA</span>
+                                <div class="progress">
+                                    <div class="progress-bar" style="width: 70%"></div>
+                                </div>
+                                <span class="progress-description">
+                                    Source: Member Site
+                                </span>
+                            </div>
+                            <!-- /.info-box-content -->
+                            <!-- /.info-box -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+            <div class="row">
+                <div class="col-xs-4">
+                    <!-- /.box -->
+
+                    <div class="box box-success" style="overflow-y: scroll; overflow-x: hidden; height:400px;" id="tableBox">
+                        <table id="casesVolumeTable" class="table table-bordered table-hover">
+                            <thead>
+                                <tr role="row">
+                                    <th tabindex="0" rowspan="1" colspan="1">Period</th>
+                                    <th tabindex="0" rowspan="1" colspan="1">IP Cases</th>
+                                    <th tabindex="0" rowspan="1" colspan="1">OP Cases</th>
+                                </tr>
+                            </thead>
+
+                            <tbody id="caseVolumeTable"></tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="col-xs-8">
+                    <div class="box box-primary" id="chartBox">
+                        <!-- /.box-header -->
+                        <div class="box-body" id="volumeChartElement" style="height: 400px;">
+
+                        </div>
+                        <!-- /.box-body -->
+                    </div>
+                    <!-- /.box -->
+                    <!-- /.box-body -->
+                </div>
+                <!-- /.col -->
+            </div>
+            <!-- /.row -->
+</section>
+
+    <!-- /.content -->
+</div>

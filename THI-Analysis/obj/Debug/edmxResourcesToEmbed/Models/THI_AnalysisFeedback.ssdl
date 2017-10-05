@@ -1,0 +1,751 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="CCCOperationsModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityType Name="ACLBridge">
+    <Key>
+      <PropertyRef Name="ACLBridgeKey" />
+    </Key>
+    <Property Name="ACLBridgeKey" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="AclKey" Type="int" Nullable="false" />
+    <Property Name="Userkey" Type="int" />
+  </EntityType>
+  <EntityType Name="ACLs">
+    <Key>
+      <PropertyRef Name="AclKey" />
+    </Key>
+    <Property Name="AclKey" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="AclName" Type="varchar(max)" />
+  </EntityType>
+  <EntityType Name="AnalysisSummary">
+    <Key>
+      <PropertyRef Name="AnalysisSummaryKey" />
+    </Key>
+    <Property Name="AnalysisSummaryKey" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="AnalysisSummaryDescription" Type="nvarchar" MaxLength="100" />
+  </EntityType>
+  <EntityType Name="CriticalDiagnostics">
+    <Key>
+      <PropertyRef Name="CriticalDiagnosticKey" />
+    </Key>
+    <Property Name="CriticalDiagnosticKey" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="CriticalDiagnosticsDescription" Type="nvarchar" MaxLength="100" />
+  </EntityType>
+  <EntityType Name="CustomOPPEinfo">
+    <Key>
+      <PropertyRef Name="CustomOPPEinfoKey" />
+    </Key>
+    <Property Name="CustomOPPEinfoKey" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Project" Type="int" Nullable="false" />
+    <Property Name="TotalCount" Type="int" />
+    <Property Name="MaxRR" Type="date" />
+  </EntityType>
+  <EntityType Name="DAS_Findings">
+    <Key>
+      <PropertyRef Name="DAS_FindingsKey" />
+    </Key>
+    <Property Name="DAS_FindingsKey" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="DAS_FindingsDescription" Type="nvarchar" MaxLength="100" />
+  </EntityType>
+  <EntityType Name="DataElements">
+    <Key>
+      <PropertyRef Name="DataElementsKey" />
+    </Key>
+    <Property Name="DataElementsKey" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="DataElementsDescription" Type="nvarchar" MaxLength="100" />
+  </EntityType>
+  <EntityType Name="DataLag">
+    <Key>
+      <PropertyRef Name="DataLagKey" />
+    </Key>
+    <Property Name="DataLagKey" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="DataLagDescription" Type="nvarchar" MaxLength="100" />
+  </EntityType>
+  <EntityType Name="DataLoadTimeliness">
+    <Key>
+      <PropertyRef Name="DataLoadTimelinessKey" />
+    </Key>
+    <Property Name="DataLoadTimelinessKey" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="DataLoadTimelinessDescription" Type="nvarchar" MaxLength="100" />
+  </EntityType>
+  <EntityType Name="DischargeVolumes">
+    <Key>
+      <PropertyRef Name="DischargeVolumeKey" />
+    </Key>
+    <Property Name="DischargeVolumeKey" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="ProjectHospital" Type="int" Nullable="false" />
+    <Property Name="Year" Type="int" />
+    <Property Name="Month" Type="int" />
+    <Property Name="IP_COUNT" Type="int" />
+    <Property Name="OP_COUNT" Type="int" />
+  </EntityType>
+  <EntityType Name="MemberSupportTickets">
+    <Key>
+      <PropertyRef Name="MemberSupportTicketsKey" />
+    </Key>
+    <Property Name="MemberSupportTicketsKey" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="MemberSupportTicketsDescription" Type="nvarchar" MaxLength="100" />
+  </EntityType>
+  <EntityType Name="Minesweeper">
+    <Key>
+      <PropertyRef Name="MinesweeperKey" />
+    </Key>
+    <Property Name="MinesweeperKey" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="MinesweeperDescription" Type="nvarchar" MaxLength="100" />
+  </EntityType>
+  <EntityType Name="ParameterThresholds">
+    <Key>
+      <PropertyRef Name="PARAMETERTHRESHOLDKEY" />
+    </Key>
+    <Property Name="PARAMETERTHRESHOLDKEY" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Parameter" Type="varchar(max)" />
+    <Property Name="ThresholdDescription" Type="varchar(max)" />
+  </EntityType>
+  <EntityType Name="ProjectHospitals">
+    <Key>
+      <PropertyRef Name="ProjectHospitalKey" />
+    </Key>
+    <Property Name="ProjectHospitalKey" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Project" Type="int" Nullable="false" />
+    <Property Name="HospitalName" Type="varchar" MaxLength="250" />
+  </EntityType>
+  <EntityType Name="SalesforceProjects">
+    <Key>
+      <PropertyRef Name="ProjectKey" />
+    </Key>
+    <Property Name="ProjectKey" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="ProjectName" Type="varchar" MaxLength="500" Nullable="false" />
+    <Property Name="ProdDBName" Type="varchar" MaxLength="100" Nullable="false" />
+    <Property Name="DataManagerName" Type="varchar" MaxLength="250" />
+    <Property Name="STGDBName" Type="varchar" MaxLength="250" />
+    <Property Name="CCC_3M" Type="varchar" MaxLength="250" />
+    <Property Name="RunAPRDRG" Type="varchar" MaxLength="250" />
+    <Property Name="CustomOPPE" Type="int" />
+    <Property Name="PG" Type="int" />
+    <Property Name="MAxRR" Type="date" />
+    <Property Name="APRDRGAggregate" Type="bit" />
+  </EntityType>
+  <EntityType Name="SSA_Findings">
+    <Key>
+      <PropertyRef Name="SSA_FindingsKey" />
+    </Key>
+    <Property Name="SSA_FindingsKey" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="SSA_FindingsDescription" Type="nvarchar" MaxLength="100" />
+  </EntityType>
+  <EntityType Name="THI_AnalysisFeedback">
+    <Key>
+      <PropertyRef Name="AnalysisFeedbackKey" />
+    </Key>
+    <Property Name="AnalysisFeedbackKey" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Project" Type="int" Nullable="false" />
+    <Property Name="AnalysisSummary" Type="int" Nullable="false" />
+    <Property Name="AnalysisCreatedDate" Type="smalldatetime" Nullable="false" />
+    <Property Name="BusinessAnalyst" Type="varchar" MaxLength="150" Nullable="false" />
+    <Property Name="AnalysisNotes" Type="varchar(max)" Nullable="false" />
+    <Property Name="AnalysisRecommendations" Type="varchar(max)" Nullable="false" />
+    <Property Name="DataSubmissionTimelines" Type="int" Nullable="false" />
+    <Property Name="Comments_DataSubmissionTimelines" Type="varchar(max)" Nullable="false" />
+    <Property Name="DataLag" Type="int" Nullable="false" />
+    <Property Name="Comments_DataLag" Type="varchar(max)" Nullable="false" />
+    <Property Name="CriticalDiagnostics" Type="int" Nullable="false" />
+    <Property Name="Comments_CriticalDiagnostics" Type="varchar(max)" Nullable="false" />
+    <Property Name="MemberSupportTickets" Type="int" Nullable="false" />
+    <Property Name="Comments_MemberSupportTickets" Type="varchar(max)" Nullable="false" />
+    <Property Name="DataElementsPresent" Type="int" Nullable="false" />
+    <Property Name="Comments_DataElementsPresent" Type="varchar(max)" Nullable="false" />
+    <Property Name="Minesweeper" Type="int" Nullable="false" />
+    <Property Name="Comments_Minesweeper" Type="varchar(max)" Nullable="false" />
+    <Property Name="DAS_Findings" Type="int" Nullable="false" />
+    <Property Name="Comments_DAS_Findings" Type="varchar(max)" Nullable="false" />
+    <Property Name="SSA_Findings" Type="int" Nullable="false" />
+    <Property Name="Comments_SSA_Findings" Type="varchar(max)" Nullable="false" />
+    <Property Name="LastModifiedBy" Type="varchar" MaxLength="150" />
+    <Property Name="LastModifiedDate" Type="smalldatetime" Nullable="false" />
+    <Property Name="IsDeleted" Type="bit" Nullable="false" />
+  </EntityType>
+  <EntityType Name="ToolRefreshDate">
+    <Key>
+      <PropertyRef Name="ToolRefreshDateKey" />
+    </Key>
+    <Property Name="ToolRefreshDateKey" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="RecentRundate" Type="datetime" />
+  </EntityType>
+  <EntityType Name="UsageActivity">
+    <Key>
+      <PropertyRef Name="UsageActivityKey" />
+    </Key>
+    <Property Name="UsageActivityKey" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="UsageActivityName" Type="varchar(max)" />
+  </EntityType>
+  <EntityType Name="UsageActivityLogs">
+    <Key>
+      <PropertyRef Name="UsageActivityLogs" />
+    </Key>
+    <Property Name="UsageActivityLogs" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="UsageActivityKey" Type="int" />
+    <Property Name="Userkey" Type="int" />
+    <Property Name="ParameterXML" Type="xml" />
+    <Property Name="SessionID" Type="varchar(max)" />
+    <Property Name="AccessTime" Type="datetime" />
+  </EntityType>
+  <EntityType Name="Users">
+    <Key>
+      <PropertyRef Name="Userkey" />
+    </Key>
+    <Property Name="Userkey" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="FirstName" Type="varchar(max)" />
+    <Property Name="LastName" Type="varchar(max)" />
+    <Property Name="Email" Type="varchar(max)" />
+    <Property Name="Admin" Type="int" />
+    <Property Name="CreatedDate" Type="date" />
+    <Property Name="UserGUID" Type="varchar(max)" />
+    <Property Name="Username" Type="varchar(max)" />
+  </EntityType>
+  <!--Errors Found During Generation:
+warning 6002: The table/view 'CCCOperations.thi.CCCMemberContractInfo' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+  <EntityType Name="CCCMemberContractInfo">
+    <Key>
+      <PropertyRef Name="ProjectKey" />
+      <PropertyRef Name="OptOut" />
+    </Key>
+    <Property Name="ProjectKey" Type="int" Nullable="false" />
+    <Property Name="Year" Type="int" />
+    <Property Name="Month" Type="int" />
+    <Property Name="AnnualContractValue" Type="float" />
+    <Property Name="LatestContractEndDate" Type="datetime" />
+    <Property Name="NextContractDecision" Type="datetime" />
+    <Property Name="OptOut" Type="varchar" MaxLength="7" Nullable="false" />
+    <Property Name="CurrentContractRiskType" Type="nvarchar" MaxLength="255" />
+    <Property Name="UploadFrequency" Type="varchar(max)" />
+    <Property Name="LoginCount" Type="int" />
+  </EntityType>
+  <!--Errors Found During Generation:
+warning 6002: The table/view 'CCCOperations.thi.CCCTHIScoreColor' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+  <EntityType Name="CCCTHIScoreColor">
+    <Key>
+      <PropertyRef Name="ProjectKey" />
+      <PropertyRef Name="Data_Submission_Timeliness_CC" />
+      <PropertyRef Name="#_Member_Support_Tickets_CC" />
+      <PropertyRef Name="#_Critical_Diagnostics_CC" />
+      <PropertyRef Name="#Ability_to_Keep_up_w_Releases_CC" />
+      <PropertyRef Name="#MineSweeper_CC" />
+      <PropertyRef Name="#Data_Lag_CC" />
+      <PropertyRef Name="#_USE_SSA_CC" />
+      <PropertyRef Name="#USE_Compass_Connect_CC" />
+      <PropertyRef Name="#Data_Elements_Present_CC" />
+      <PropertyRef Name="THISCORE_CC" />
+    </Key>
+    <Property Name="ProjectKey" Type="int" Nullable="false" />
+    <Property Name="Year" Type="int" />
+    <Property Name="Month" Type="int" />
+    <Property Name="ProjectPhase" Type="varchar(max)" />
+    <Property Name="Data_Submission_Timeliness" Type="float" />
+    <Property Name="Data_Submission_Timeliness_CC" Type="varchar" MaxLength="6" Nullable="false" />
+    <Property Name="#_Member_Support_Tickets" Type="float" />
+    <Property Name="#_Member_Support_Tickets_CC" Type="varchar" MaxLength="6" Nullable="false" />
+    <Property Name="#_Critical_Diagnostics" Type="float" />
+    <Property Name="#_Critical_Diagnostics_CC" Type="varchar" MaxLength="6" Nullable="false" />
+    <Property Name="#Ability_to_Keep_up_w_Releases" Type="float" />
+    <Property Name="#Ability_to_Keep_up_w_Releases_CC" Type="varchar" MaxLength="6" Nullable="false" />
+    <Property Name="#MineSweeper" Type="float" />
+    <Property Name="#MineSweeper_CC" Type="varchar" MaxLength="6" Nullable="false" />
+    <Property Name="#Data_Lag" Type="float" />
+    <Property Name="#Data_Lag_CC" Type="varchar" MaxLength="6" Nullable="false" />
+    <Property Name="#_USE_SSA" Type="float" />
+    <Property Name="#_USE_SSA_CC" Type="varchar" MaxLength="6" Nullable="false" />
+    <Property Name="#USE_Compass_Connect" Type="float" />
+    <Property Name="#USE_Compass_Connect_CC" Type="varchar" MaxLength="6" Nullable="false" />
+    <Property Name="#Data_Elements_Present" Type="float" />
+    <Property Name="#Data_Elements_Present_CC" Type="varchar" MaxLength="6" Nullable="false" />
+    <Property Name="THIScore" Type="float" />
+    <Property Name="THISCORE_CC" Type="varchar" MaxLength="6" Nullable="false" />
+  </EntityType>
+  <!--Errors Found During Generation:
+warning 6002: The table/view 'CCCOperations.thi.CCCTHIScores' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+  <EntityType Name="CCCTHIScores">
+    <Key>
+      <PropertyRef Name="ProjectKey" />
+    </Key>
+    <Property Name="ProjectKey" Type="int" Nullable="false" />
+    <Property Name="Year" Type="int" />
+    <Property Name="Month" Type="int" />
+    <Property Name="Data_Submission_Timeliness" Type="float" />
+    <Property Name="#_Member_Support_Tickets" Type="float" />
+    <Property Name="#_Critical_Diagnostics" Type="float" />
+    <Property Name="#Ability_to_Keep_up_w_Releases" Type="float" />
+    <Property Name="#MineSweeper" Type="float" />
+    <Property Name="#Data_Lag" Type="float" />
+    <Property Name="#_USE_SSA" Type="float" />
+    <Property Name="#USE_Compass_Connect" Type="float" />
+    <Property Name="#Data_Elements_Present" Type="float" />
+    <Property Name="Frequency" Type="varchar(max)" />
+    <Property Name="THIScore" Type="float" />
+    <Property Name="ProjectPhase" Type="varchar(max)" />
+  </EntityType>
+  <!--Errors Found During Generation:
+warning 6002: The table/view 'CCCOperations.thi.DataLoadDrill' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+  <EntityType Name="DataLoadDrill">
+    <Key>
+      <PropertyRef Name="ProjectKey" />
+      <PropertyRef Name="Project_ID" />
+    </Key>
+    <Property Name="ProjectKey" Type="int" Nullable="false" />
+    <Property Name="Project_ProjectName" Type="nvarchar" MaxLength="255" />
+    <Property Name="Project_ID" Type="varchar(max)" Nullable="false" />
+    <Property Name="ProjectPhase" Type="nvarchar" MaxLength="255" />
+    <Property Name="TestDBName" Type="nvarchar(max)" />
+    <Property Name="ProdDBName" Type="nvarchar(max)" />
+    <Property Name="ShortDescription" Type="nvarchar" MaxLength="255" />
+    <Property Name="MemberSupport_SupportIssueNumber" Type="nvarchar" MaxLength="255" />
+    <Property Name="DateTimeOpened" Type="datetime" />
+    <Property Name="DateTimeClosed" Type="datetime" />
+    <Property Name="ExpectedResolutionDateCalc" Type="datetime" />
+    <Property Name="DaysLate_DataLoad" Type="int" />
+    <Property Name="FilesReceived" Type="datetime" />
+    <Property Name="DataLoadPeriodEnd" Type="datetime" />
+    <Property Name="CrimsonDataLag" Type="float" />
+    <Property Name="MovedtoProduction" Type="datetime" />
+    <Property Name="DataSubmissionTargetDate" Type="datetime2" Precision="7" />
+    <Property Name="ETLCompletion_DataLoad" Type="int" />
+    <Property Name="FilesLate_DataLoad" Type="int" />
+  </EntityType>
+  <!--Errors Found During Generation:
+warning 6002: The table/view 'CCCOperations.thi.MemberDataElements_IP' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+  <EntityType Name="MemberDataElements_IP">
+    <Key>
+      <PropertyRef Name="ProjectKey" />
+    </Key>
+    <Property Name="ProjectKey" Type="int" Nullable="false" />
+    <Property Name="Project_ProjectName" Type="nvarchar" MaxLength="255" />
+    <Property Name="DataElement" Type="varchar(max)" />
+    <Property Name="Category" Type="nvarchar" MaxLength="255" />
+  </EntityType>
+  <!--Errors Found During Generation:
+warning 6002: The table/view 'CCCOperations.thi.MemberDataElements_OP' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+  <EntityType Name="MemberDataElements_OP">
+    <Key>
+      <PropertyRef Name="ProjectKey" />
+    </Key>
+    <Property Name="ProjectKey" Type="int" Nullable="false" />
+    <Property Name="Project_ProjectName" Type="nvarchar" MaxLength="255" />
+    <Property Name="DataElement" Type="varchar(max)" />
+    <Property Name="Category" Type="nvarchar" MaxLength="255" />
+  </EntityType>
+  <!--Errors Found During Generation:
+warning 6002: The table/view 'CCCOperations.thi.MemberDataElements_OPPE' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+  <EntityType Name="MemberDataElements_OPPE">
+    <Key>
+      <PropertyRef Name="ProjectKey" />
+    </Key>
+    <Property Name="ProjectKey" Type="int" Nullable="false" />
+    <Property Name="Project_ProjectName" Type="nvarchar" MaxLength="255" />
+    <Property Name="DataElement" Type="varchar(max)" />
+    <Property Name="Category" Type="nvarchar" MaxLength="255" />
+  </EntityType>
+  <Association Name="FK__ACLBridge__AclKe__0E748177">
+    <End Role="ACLs" Type="Self.ACLs" Multiplicity="1" />
+    <End Role="ACLBridge" Type="Self.ACLBridge" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="ACLs">
+        <PropertyRef Name="AclKey" />
+      </Principal>
+      <Dependent Role="ACLBridge">
+        <PropertyRef Name="AclKey" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__ACLBridge__Userk__0F68A5B0">
+    <End Role="Users" Type="Self.Users" Multiplicity="0..1" />
+    <End Role="ACLBridge" Type="Self.ACLBridge" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Users">
+        <PropertyRef Name="Userkey" />
+      </Principal>
+      <Dependent Role="ACLBridge">
+        <PropertyRef Name="Userkey" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__UsageActi__Usage__13393694">
+    <End Role="UsageActivity" Type="Self.UsageActivity" Multiplicity="0..1" />
+    <End Role="UsageActivityLogs" Type="Self.UsageActivityLogs" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="UsageActivity">
+        <PropertyRef Name="UsageActivityKey" />
+      </Principal>
+      <Dependent Role="UsageActivityLogs">
+        <PropertyRef Name="UsageActivityKey" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__UsageActi__Userk__142D5ACD">
+    <End Role="Users" Type="Self.Users" Multiplicity="0..1" />
+    <End Role="UsageActivityLogs" Type="Self.UsageActivityLogs" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Users">
+        <PropertyRef Name="Userkey" />
+      </Principal>
+      <Dependent Role="UsageActivityLogs">
+        <PropertyRef Name="Userkey" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_AnalysisSummary_AnalysisSummaryKey">
+    <End Role="AnalysisSummary" Type="Self.AnalysisSummary" Multiplicity="1" />
+    <End Role="THI_AnalysisFeedback" Type="Self.THI_AnalysisFeedback" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="AnalysisSummary">
+        <PropertyRef Name="AnalysisSummaryKey" />
+      </Principal>
+      <Dependent Role="THI_AnalysisFeedback">
+        <PropertyRef Name="AnalysisSummary" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_CriticalDiagnostics_CriticalDiagnosticKey">
+    <End Role="CriticalDiagnostics" Type="Self.CriticalDiagnostics" Multiplicity="1" />
+    <End Role="THI_AnalysisFeedback" Type="Self.THI_AnalysisFeedback" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="CriticalDiagnostics">
+        <PropertyRef Name="CriticalDiagnosticKey" />
+      </Principal>
+      <Dependent Role="THI_AnalysisFeedback">
+        <PropertyRef Name="CriticalDiagnostics" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_CustomOPPEInfo_SalesforceProjects_ProjectKey">
+    <End Role="SalesforceProjects" Type="Self.SalesforceProjects" Multiplicity="1" />
+    <End Role="CustomOPPEinfo" Type="Self.CustomOPPEinfo" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="SalesforceProjects">
+        <PropertyRef Name="ProjectKey" />
+      </Principal>
+      <Dependent Role="CustomOPPEinfo">
+        <PropertyRef Name="Project" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_DAS_Findings_DAS_FindingsKey">
+    <End Role="DAS_Findings" Type="Self.DAS_Findings" Multiplicity="1" />
+    <End Role="THI_AnalysisFeedback" Type="Self.THI_AnalysisFeedback" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="DAS_Findings">
+        <PropertyRef Name="DAS_FindingsKey" />
+      </Principal>
+      <Dependent Role="THI_AnalysisFeedback">
+        <PropertyRef Name="DAS_Findings" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_DataElementsPresent_DataElementsKey">
+    <End Role="DataElements" Type="Self.DataElements" Multiplicity="1" />
+    <End Role="THI_AnalysisFeedback" Type="Self.THI_AnalysisFeedback" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="DataElements">
+        <PropertyRef Name="DataElementsKey" />
+      </Principal>
+      <Dependent Role="THI_AnalysisFeedback">
+        <PropertyRef Name="DataElementsPresent" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_DataLag_DataLagKey">
+    <End Role="DataLag" Type="Self.DataLag" Multiplicity="1" />
+    <End Role="THI_AnalysisFeedback" Type="Self.THI_AnalysisFeedback" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="DataLag">
+        <PropertyRef Name="DataLagKey" />
+      </Principal>
+      <Dependent Role="THI_AnalysisFeedback">
+        <PropertyRef Name="DataLag" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_DataSubmissionTimelines_DataLoadTimelinessKey">
+    <End Role="DataLoadTimeliness" Type="Self.DataLoadTimeliness" Multiplicity="1" />
+    <End Role="THI_AnalysisFeedback" Type="Self.THI_AnalysisFeedback" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="DataLoadTimeliness">
+        <PropertyRef Name="DataLoadTimelinessKey" />
+      </Principal>
+      <Dependent Role="THI_AnalysisFeedback">
+        <PropertyRef Name="DataSubmissionTimelines" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_MemberSupportTickets_MemberSupportTicketsKey">
+    <End Role="MemberSupportTickets" Type="Self.MemberSupportTickets" Multiplicity="1" />
+    <End Role="THI_AnalysisFeedback" Type="Self.THI_AnalysisFeedback" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="MemberSupportTickets">
+        <PropertyRef Name="MemberSupportTicketsKey" />
+      </Principal>
+      <Dependent Role="THI_AnalysisFeedback">
+        <PropertyRef Name="MemberSupportTickets" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Minesweeper_MinesweeperKey">
+    <End Role="Minesweeper" Type="Self.Minesweeper" Multiplicity="1" />
+    <End Role="THI_AnalysisFeedback" Type="Self.THI_AnalysisFeedback" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Minesweeper">
+        <PropertyRef Name="MinesweeperKey" />
+      </Principal>
+      <Dependent Role="THI_AnalysisFeedback">
+        <PropertyRef Name="Minesweeper" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Project_ProjectKey">
+    <End Role="SalesforceProjects" Type="Self.SalesforceProjects" Multiplicity="1" />
+    <End Role="THI_AnalysisFeedback" Type="Self.THI_AnalysisFeedback" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="SalesforceProjects">
+        <PropertyRef Name="ProjectKey" />
+      </Principal>
+      <Dependent Role="THI_AnalysisFeedback">
+        <PropertyRef Name="Project" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_ProjectHospital_ProjectHospitals_ProjectHospitalKey">
+    <End Role="ProjectHospitals" Type="Self.ProjectHospitals" Multiplicity="1" />
+    <End Role="DischargeVolumes" Type="Self.DischargeVolumes" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="ProjectHospitals">
+        <PropertyRef Name="ProjectHospitalKey" />
+      </Principal>
+      <Dependent Role="DischargeVolumes">
+        <PropertyRef Name="ProjectHospital" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_ProjectHospitals_SalesforceProjects_ProjectKey">
+    <End Role="SalesforceProjects" Type="Self.SalesforceProjects" Multiplicity="1" />
+    <End Role="ProjectHospitals" Type="Self.ProjectHospitals" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="SalesforceProjects">
+        <PropertyRef Name="ProjectKey" />
+      </Principal>
+      <Dependent Role="ProjectHospitals">
+        <PropertyRef Name="Project" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_SSA_Findings_SSA_FindingsKey">
+    <End Role="SSA_Findings" Type="Self.SSA_Findings" Multiplicity="1" />
+    <End Role="THI_AnalysisFeedback" Type="Self.THI_AnalysisFeedback" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="SSA_Findings">
+        <PropertyRef Name="SSA_FindingsKey" />
+      </Principal>
+      <Dependent Role="THI_AnalysisFeedback">
+        <PropertyRef Name="SSA_Findings" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Function Name="ETLCompletion" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="thi">
+    <Parameter Name="Proj" Type="int" Mode="In" />
+    <Parameter Name="Year" Type="int" Mode="In" />
+    <Parameter Name="Month" Type="int" Mode="In" />
+  </Function>
+  <EntityContainer Name="CCCOperationsModelStoreContainer">
+    <EntitySet Name="ACLBridge" EntityType="Self.ACLBridge" Schema="thi" store:Type="Tables" />
+    <EntitySet Name="ACLs" EntityType="Self.ACLs" Schema="thi" store:Type="Tables" />
+    <EntitySet Name="AnalysisSummary" EntityType="Self.AnalysisSummary" Schema="thi" store:Type="Tables" />
+    <EntitySet Name="CriticalDiagnostics" EntityType="Self.CriticalDiagnostics" Schema="thi" store:Type="Tables" />
+    <EntitySet Name="CustomOPPEinfo" EntityType="Self.CustomOPPEinfo" Schema="thi" store:Type="Tables" />
+    <EntitySet Name="DAS_Findings" EntityType="Self.DAS_Findings" Schema="thi" store:Type="Tables" />
+    <EntitySet Name="DataElements" EntityType="Self.DataElements" Schema="thi" store:Type="Tables" />
+    <EntitySet Name="DataLag" EntityType="Self.DataLag" Schema="thi" store:Type="Tables" />
+    <EntitySet Name="DataLoadTimeliness" EntityType="Self.DataLoadTimeliness" Schema="thi" store:Type="Tables" />
+    <EntitySet Name="DischargeVolumes" EntityType="Self.DischargeVolumes" Schema="thi" store:Type="Tables" />
+    <EntitySet Name="MemberSupportTickets" EntityType="Self.MemberSupportTickets" Schema="thi" store:Type="Tables" />
+    <EntitySet Name="Minesweeper" EntityType="Self.Minesweeper" Schema="thi" store:Type="Tables" />
+    <EntitySet Name="ParameterThresholds" EntityType="Self.ParameterThresholds" Schema="thi" store:Type="Tables" />
+    <EntitySet Name="ProjectHospitals" EntityType="Self.ProjectHospitals" Schema="thi" store:Type="Tables" />
+    <EntitySet Name="SalesforceProjects" EntityType="Self.SalesforceProjects" Schema="thi" store:Type="Tables" />
+    <EntitySet Name="SSA_Findings" EntityType="Self.SSA_Findings" Schema="thi" store:Type="Tables" />
+    <EntitySet Name="THI_AnalysisFeedback" EntityType="Self.THI_AnalysisFeedback" Schema="thi" store:Type="Tables" />
+    <EntitySet Name="ToolRefreshDate" EntityType="Self.ToolRefreshDate" Schema="thi" store:Type="Tables" />
+    <EntitySet Name="UsageActivity" EntityType="Self.UsageActivity" Schema="thi" store:Type="Tables" />
+    <EntitySet Name="UsageActivityLogs" EntityType="Self.UsageActivityLogs" Schema="thi" store:Type="Tables" />
+    <EntitySet Name="Users" EntityType="Self.Users" Schema="thi" store:Type="Tables" />
+    <EntitySet Name="CCCMemberContractInfo" EntityType="Self.CCCMemberContractInfo" store:Type="Views" store:Schema="thi">
+      <DefiningQuery>SELECT 
+    [CCCMemberContractInfo].[ProjectKey] AS [ProjectKey], 
+    [CCCMemberContractInfo].[Year] AS [Year], 
+    [CCCMemberContractInfo].[Month] AS [Month], 
+    [CCCMemberContractInfo].[AnnualContractValue] AS [AnnualContractValue], 
+    [CCCMemberContractInfo].[LatestContractEndDate] AS [LatestContractEndDate], 
+    [CCCMemberContractInfo].[NextContractDecision] AS [NextContractDecision], 
+    [CCCMemberContractInfo].[OptOut] AS [OptOut], 
+    [CCCMemberContractInfo].[CurrentContractRiskType] AS [CurrentContractRiskType], 
+    [CCCMemberContractInfo].[UploadFrequency] AS [UploadFrequency], 
+    [CCCMemberContractInfo].[LoginCount] AS [LoginCount]
+    FROM [thi].[CCCMemberContractInfo] AS [CCCMemberContractInfo]</DefiningQuery>
+    </EntitySet>
+    <EntitySet Name="CCCTHIScoreColor" EntityType="Self.CCCTHIScoreColor" store:Type="Views" store:Schema="thi">
+      <DefiningQuery>SELECT 
+    [CCCTHIScoreColor].[ProjectKey] AS [ProjectKey], 
+    [CCCTHIScoreColor].[Year] AS [Year], 
+    [CCCTHIScoreColor].[Month] AS [Month], 
+    [CCCTHIScoreColor].[ProjectPhase] AS [ProjectPhase], 
+    [CCCTHIScoreColor].[Data_Submission_Timeliness] AS [Data_Submission_Timeliness], 
+    [CCCTHIScoreColor].[Data_Submission_Timeliness_CC] AS [Data_Submission_Timeliness_CC], 
+    [CCCTHIScoreColor].[#_Member_Support_Tickets] AS [#_Member_Support_Tickets], 
+    [CCCTHIScoreColor].[#_Member_Support_Tickets_CC] AS [#_Member_Support_Tickets_CC], 
+    [CCCTHIScoreColor].[#_Critical_Diagnostics] AS [#_Critical_Diagnostics], 
+    [CCCTHIScoreColor].[#_Critical_Diagnostics_CC] AS [#_Critical_Diagnostics_CC], 
+    [CCCTHIScoreColor].[#Ability_to_Keep_up_w_Releases] AS [#Ability_to_Keep_up_w_Releases], 
+    [CCCTHIScoreColor].[#Ability_to_Keep_up_w_Releases_CC] AS [#Ability_to_Keep_up_w_Releases_CC], 
+    [CCCTHIScoreColor].[#MineSweeper] AS [#MineSweeper], 
+    [CCCTHIScoreColor].[#MineSweeper_CC] AS [#MineSweeper_CC], 
+    [CCCTHIScoreColor].[#Data_Lag] AS [#Data_Lag], 
+    [CCCTHIScoreColor].[#Data_Lag_CC] AS [#Data_Lag_CC], 
+    [CCCTHIScoreColor].[#_USE_SSA] AS [#_USE_SSA], 
+    [CCCTHIScoreColor].[#_USE_SSA_CC] AS [#_USE_SSA_CC], 
+    [CCCTHIScoreColor].[#USE_Compass_Connect] AS [#USE_Compass_Connect], 
+    [CCCTHIScoreColor].[#USE_Compass_Connect_CC] AS [#USE_Compass_Connect_CC], 
+    [CCCTHIScoreColor].[#Data_Elements_Present] AS [#Data_Elements_Present], 
+    [CCCTHIScoreColor].[#Data_Elements_Present_CC] AS [#Data_Elements_Present_CC], 
+    [CCCTHIScoreColor].[THIScore] AS [THIScore], 
+    [CCCTHIScoreColor].[THISCORE_CC] AS [THISCORE_CC]
+    FROM [thi].[CCCTHIScoreColor] AS [CCCTHIScoreColor]</DefiningQuery>
+    </EntitySet>
+    <EntitySet Name="CCCTHIScores" EntityType="Self.CCCTHIScores" store:Type="Views" store:Schema="thi">
+      <DefiningQuery>SELECT 
+    [CCCTHIScores].[ProjectKey] AS [ProjectKey], 
+    [CCCTHIScores].[Year] AS [Year], 
+    [CCCTHIScores].[Month] AS [Month], 
+    [CCCTHIScores].[Data_Submission_Timeliness] AS [Data_Submission_Timeliness], 
+    [CCCTHIScores].[#_Member_Support_Tickets] AS [#_Member_Support_Tickets], 
+    [CCCTHIScores].[#_Critical_Diagnostics] AS [#_Critical_Diagnostics], 
+    [CCCTHIScores].[#Ability_to_Keep_up_w_Releases] AS [#Ability_to_Keep_up_w_Releases], 
+    [CCCTHIScores].[#MineSweeper] AS [#MineSweeper], 
+    [CCCTHIScores].[#Data_Lag] AS [#Data_Lag], 
+    [CCCTHIScores].[#_USE_SSA] AS [#_USE_SSA], 
+    [CCCTHIScores].[#USE_Compass_Connect] AS [#USE_Compass_Connect], 
+    [CCCTHIScores].[#Data_Elements_Present] AS [#Data_Elements_Present], 
+    [CCCTHIScores].[Frequency] AS [Frequency], 
+    [CCCTHIScores].[THIScore] AS [THIScore], 
+    [CCCTHIScores].[ProjectPhase] AS [ProjectPhase]
+    FROM [thi].[CCCTHIScores] AS [CCCTHIScores]</DefiningQuery>
+    </EntitySet>
+    <EntitySet Name="DataLoadDrill" EntityType="Self.DataLoadDrill" store:Type="Views" store:Schema="thi">
+      <DefiningQuery>SELECT 
+    [DataLoadDrill].[ProjectKey] AS [ProjectKey], 
+    [DataLoadDrill].[Project_ProjectName] AS [Project_ProjectName], 
+    [DataLoadDrill].[Project_ID] AS [Project_ID], 
+    [DataLoadDrill].[ProjectPhase] AS [ProjectPhase], 
+    [DataLoadDrill].[TestDBName] AS [TestDBName], 
+    [DataLoadDrill].[ProdDBName] AS [ProdDBName], 
+    [DataLoadDrill].[ShortDescription] AS [ShortDescription], 
+    [DataLoadDrill].[MemberSupport_SupportIssueNumber] AS [MemberSupport_SupportIssueNumber], 
+    [DataLoadDrill].[DateTimeOpened] AS [DateTimeOpened], 
+    [DataLoadDrill].[DateTimeClosed] AS [DateTimeClosed], 
+    [DataLoadDrill].[ExpectedResolutionDateCalc] AS [ExpectedResolutionDateCalc], 
+    [DataLoadDrill].[DaysLate_DataLoad] AS [DaysLate_DataLoad], 
+    [DataLoadDrill].[FilesReceived] AS [FilesReceived], 
+    [DataLoadDrill].[DataLoadPeriodEnd] AS [DataLoadPeriodEnd], 
+    [DataLoadDrill].[CrimsonDataLag] AS [CrimsonDataLag], 
+    [DataLoadDrill].[MovedtoProduction] AS [MovedtoProduction], 
+    [DataLoadDrill].[DataSubmissionTargetDate] AS [DataSubmissionTargetDate], 
+    [DataLoadDrill].[ETLCompletion_DataLoad] AS [ETLCompletion_DataLoad], 
+    [DataLoadDrill].[FilesLate_DataLoad] AS [FilesLate_DataLoad]
+    FROM [thi].[DataLoadDrill] AS [DataLoadDrill]</DefiningQuery>
+    </EntitySet>
+    <EntitySet Name="MemberDataElements_IP" EntityType="Self.MemberDataElements_IP" store:Type="Views" store:Schema="thi">
+      <DefiningQuery>SELECT 
+    [MemberDataElements_IP].[ProjectKey] AS [ProjectKey], 
+    [MemberDataElements_IP].[Project_ProjectName] AS [Project_ProjectName], 
+    [MemberDataElements_IP].[DataElement] AS [DataElement], 
+    [MemberDataElements_IP].[Category] AS [Category]
+    FROM [thi].[MemberDataElements_IP] AS [MemberDataElements_IP]</DefiningQuery>
+    </EntitySet>
+    <EntitySet Name="MemberDataElements_OP" EntityType="Self.MemberDataElements_OP" store:Type="Views" store:Schema="thi">
+      <DefiningQuery>SELECT 
+    [MemberDataElements_OP].[ProjectKey] AS [ProjectKey], 
+    [MemberDataElements_OP].[Project_ProjectName] AS [Project_ProjectName], 
+    [MemberDataElements_OP].[DataElement] AS [DataElement], 
+    [MemberDataElements_OP].[Category] AS [Category]
+    FROM [thi].[MemberDataElements_OP] AS [MemberDataElements_OP]</DefiningQuery>
+    </EntitySet>
+    <EntitySet Name="MemberDataElements_OPPE" EntityType="Self.MemberDataElements_OPPE" store:Type="Views" store:Schema="thi">
+      <DefiningQuery>SELECT 
+    [MemberDataElements_OPPE].[ProjectKey] AS [ProjectKey], 
+    [MemberDataElements_OPPE].[Project_ProjectName] AS [Project_ProjectName], 
+    [MemberDataElements_OPPE].[DataElement] AS [DataElement], 
+    [MemberDataElements_OPPE].[Category] AS [Category]
+    FROM [thi].[MemberDataElements_OPPE] AS [MemberDataElements_OPPE]</DefiningQuery>
+    </EntitySet>
+    <AssociationSet Name="FK__ACLBridge__AclKe__0E748177" Association="Self.FK__ACLBridge__AclKe__0E748177">
+      <End Role="ACLs" EntitySet="ACLs" />
+      <End Role="ACLBridge" EntitySet="ACLBridge" />
+    </AssociationSet>
+    <AssociationSet Name="FK__ACLBridge__Userk__0F68A5B0" Association="Self.FK__ACLBridge__Userk__0F68A5B0">
+      <End Role="Users" EntitySet="Users" />
+      <End Role="ACLBridge" EntitySet="ACLBridge" />
+    </AssociationSet>
+    <AssociationSet Name="FK__UsageActi__Usage__13393694" Association="Self.FK__UsageActi__Usage__13393694">
+      <End Role="UsageActivity" EntitySet="UsageActivity" />
+      <End Role="UsageActivityLogs" EntitySet="UsageActivityLogs" />
+    </AssociationSet>
+    <AssociationSet Name="FK__UsageActi__Userk__142D5ACD" Association="Self.FK__UsageActi__Userk__142D5ACD">
+      <End Role="Users" EntitySet="Users" />
+      <End Role="UsageActivityLogs" EntitySet="UsageActivityLogs" />
+    </AssociationSet>
+    <AssociationSet Name="FK_AnalysisSummary_AnalysisSummaryKey" Association="Self.FK_AnalysisSummary_AnalysisSummaryKey">
+      <End Role="AnalysisSummary" EntitySet="AnalysisSummary" />
+      <End Role="THI_AnalysisFeedback" EntitySet="THI_AnalysisFeedback" />
+    </AssociationSet>
+    <AssociationSet Name="FK_CriticalDiagnostics_CriticalDiagnosticKey" Association="Self.FK_CriticalDiagnostics_CriticalDiagnosticKey">
+      <End Role="CriticalDiagnostics" EntitySet="CriticalDiagnostics" />
+      <End Role="THI_AnalysisFeedback" EntitySet="THI_AnalysisFeedback" />
+    </AssociationSet>
+    <AssociationSet Name="FK_CustomOPPEInfo_SalesforceProjects_ProjectKey" Association="Self.FK_CustomOPPEInfo_SalesforceProjects_ProjectKey">
+      <End Role="SalesforceProjects" EntitySet="SalesforceProjects" />
+      <End Role="CustomOPPEinfo" EntitySet="CustomOPPEinfo" />
+    </AssociationSet>
+    <AssociationSet Name="FK_DAS_Findings_DAS_FindingsKey" Association="Self.FK_DAS_Findings_DAS_FindingsKey">
+      <End Role="DAS_Findings" EntitySet="DAS_Findings" />
+      <End Role="THI_AnalysisFeedback" EntitySet="THI_AnalysisFeedback" />
+    </AssociationSet>
+    <AssociationSet Name="FK_DataElementsPresent_DataElementsKey" Association="Self.FK_DataElementsPresent_DataElementsKey">
+      <End Role="DataElements" EntitySet="DataElements" />
+      <End Role="THI_AnalysisFeedback" EntitySet="THI_AnalysisFeedback" />
+    </AssociationSet>
+    <AssociationSet Name="FK_DataLag_DataLagKey" Association="Self.FK_DataLag_DataLagKey">
+      <End Role="DataLag" EntitySet="DataLag" />
+      <End Role="THI_AnalysisFeedback" EntitySet="THI_AnalysisFeedback" />
+    </AssociationSet>
+    <AssociationSet Name="FK_DataSubmissionTimelines_DataLoadTimelinessKey" Association="Self.FK_DataSubmissionTimelines_DataLoadTimelinessKey">
+      <End Role="DataLoadTimeliness" EntitySet="DataLoadTimeliness" />
+      <End Role="THI_AnalysisFeedback" EntitySet="THI_AnalysisFeedback" />
+    </AssociationSet>
+    <AssociationSet Name="FK_MemberSupportTickets_MemberSupportTicketsKey" Association="Self.FK_MemberSupportTickets_MemberSupportTicketsKey">
+      <End Role="MemberSupportTickets" EntitySet="MemberSupportTickets" />
+      <End Role="THI_AnalysisFeedback" EntitySet="THI_AnalysisFeedback" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Minesweeper_MinesweeperKey" Association="Self.FK_Minesweeper_MinesweeperKey">
+      <End Role="Minesweeper" EntitySet="Minesweeper" />
+      <End Role="THI_AnalysisFeedback" EntitySet="THI_AnalysisFeedback" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Project_ProjectKey" Association="Self.FK_Project_ProjectKey">
+      <End Role="SalesforceProjects" EntitySet="SalesforceProjects" />
+      <End Role="THI_AnalysisFeedback" EntitySet="THI_AnalysisFeedback" />
+    </AssociationSet>
+    <AssociationSet Name="FK_ProjectHospital_ProjectHospitals_ProjectHospitalKey" Association="Self.FK_ProjectHospital_ProjectHospitals_ProjectHospitalKey">
+      <End Role="ProjectHospitals" EntitySet="ProjectHospitals" />
+      <End Role="DischargeVolumes" EntitySet="DischargeVolumes" />
+    </AssociationSet>
+    <AssociationSet Name="FK_ProjectHospitals_SalesforceProjects_ProjectKey" Association="Self.FK_ProjectHospitals_SalesforceProjects_ProjectKey">
+      <End Role="SalesforceProjects" EntitySet="SalesforceProjects" />
+      <End Role="ProjectHospitals" EntitySet="ProjectHospitals" />
+    </AssociationSet>
+    <AssociationSet Name="FK_SSA_Findings_SSA_FindingsKey" Association="Self.FK_SSA_Findings_SSA_FindingsKey">
+      <End Role="SSA_Findings" EntitySet="SSA_Findings" />
+      <End Role="THI_AnalysisFeedback" EntitySet="THI_AnalysisFeedback" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>

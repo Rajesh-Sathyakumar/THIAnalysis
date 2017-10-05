@@ -1,0 +1,250 @@
+﻿@model THI_Analysis.Models.THI_AnalysisFeedback
+
+
+<!-- Content Wrapper. Contains page content -->
+<div class="content-wrapper" id="detailsSection">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+        <h1>
+            Member THI Feedback Information
+            <small>Inputs from THI Analysis</small>
+        </h1>
+
+    </section>
+
+    <!-- Main content -->
+    <!-- Work begins here -->
+
+    <br />
+    <div class="box">
+        <div class="box-header with-border">
+            <h3 class="box-title"> <b> Project Name </b> </h3>
+            <div class="box-tools pull-right">
+                <button type="button" class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip" title="Collapse">
+                    <i class="fa fa-minus"></i>
+                </button>
+            </div>
+        </div>
+        <div class="box-body">
+            @Html.DisplayFor(model => model.SalesforceProject.ProjectName)
+        </div>
+    </div>
+
+    <br />
+    <div class="box">
+        <div class="box-header with-border">
+            <h3 class="box-title"> <b> Analysis Date </b> </h3>
+            <div class="box-tools pull-right">
+                <button type="button" class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip" title="Collapse">
+                    <i class="fa fa-minus"></i>
+                </button>
+            </div>
+        </div>
+        <div class="box-body">
+            @Html.DisplayFor(model => model.AnalysisCreatedDate)
+        </div>
+    </div>
+
+    <br />
+    <div class="box">
+        <div class="box-header with-border">
+            <h3 class="box-title"> <b> Last Modified </b> </h3>
+            <div class="box-tools pull-right">
+                <button type="button" class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip" title="Collapse">
+                    <i class="fa fa-minus"></i>
+                </button>
+            </div>
+        </div>
+        <div class="box-body">
+            Last Modified By: @Html.DisplayFor(model => model.LastModifiedBy) <br />
+            Last Modified Date: @Html.DisplayFor(model => model.LastModifiedDate) <br />
+        </div>
+    </div>
+
+    <br />
+    <div class="box">
+        <div class="box-header with-border">
+            <h3 class="box-title">  <b> Analysis Summary </b> </h3>
+            <div class="box-tools pull-right">
+                <button type="button" class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip" title="Collapse">
+                    <i class="fa fa-minus"></i>
+                </button>
+            </div>
+        </div>
+        <div class="box-body">
+            @Html.DisplayFor(model => model.AnalysisSummary1.AnalysisSummaryDescription)
+        </div>
+    </div>
+
+    <br />
+    <div class="box">
+        <div class="box-header with-border">
+            <h3 class="box-title">  <b>   Analysis Notes  </b> </h3>
+            <div class="box-tools pull-right">
+                <button type="button" class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip" title="Collapse">
+                    <i class="fa fa-minus"></i>
+                </button>
+            </div>
+        </div>
+        <div class="box-body">
+            @Html.DisplayFor(model => model.AnalysisNotes)
+
+        </div>
+    </div>
+
+
+    <br />
+    <div class="box">
+        <div class="box-header with-border">
+            <h3 class="box-title">  <b>   Recommendations </b> </h3>
+            <div class="box-tools pull-right">
+                <button type="button" class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip" title="Collapse">
+                    <i class="fa fa-minus"></i>
+                </button>
+            </div>
+        </div>
+        <div class="box-body">
+
+            @Html.DisplayFor(model => model.AnalysisRecommendations)
+
+        </div>
+    </div>
+
+    <br />
+    <div class="box">
+        <div class="box-header with-border">
+            <h3 class="box-title">  <b>   Data Submission TimeLines </b> </h3>
+            <div class="box-tools pull-right">
+                <button type="button" class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip" title="Collapse">
+                    <i class="fa fa-minus"></i>
+                </button>
+            </div>
+        </div>
+        <div class="box-body">
+
+            @Html.DisplayFor(model => model.DataLoadTimeliness.DataLoadTimelinessDescription) <br />
+            @Html.DisplayFor(model => model.Comments_DataSubmissionTimelines)
+        </div>
+    </div>
+
+
+    <br />
+    <div class="box">
+        <div class="box-header with-border">
+            <h3 class="box-title">  <b>   Data Lag  </b> </h3>
+            <div class="box-tools pull-right">
+                <button type="button" class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip" title="Collapse">
+                    <i class="fa fa-minus"></i>
+                </button>
+            </div>
+        </div>
+        <div class="box-body">
+            @Html.DisplayFor(model => model.DataLag1.DataLagDescription) <br />
+            @Html.DisplayFor(model => model.Comments_DataLag)
+
+        </div>
+    </div>
+
+    <br />
+    <div class="box">
+        <div class="box-header with-border">
+            <h3 class="box-title">  <b> Critical Diagnostics  </b> </h3>
+            <div class="box-tools pull-right">
+                <button type="button" class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip" title="Collapse">
+                    <i class="fa fa-minus"></i>
+                </button>
+            </div>
+        </div>
+        <div class="box-body">
+            @Html.DisplayFor(model => model.CriticalDiagnostic.CriticalDiagnosticsDescription) <br />
+            @Html.DisplayFor(model => model.Comments_CriticalDiagnostics)
+
+        </div>
+    </div>
+
+    <br />
+    <div class="box">
+        <div class="box-header with-border">
+            <h3 class="box-title">  <b> Member Support Tickets </b> </h3>
+            <div class="box-tools pull-right">
+                <button type="button" class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip" title="Collapse">
+                    <i class="fa fa-minus"></i>
+                </button>
+            </div>
+        </div>
+        <div class="box-body">
+            @Html.DisplayFor(model => model.MemberSupportTicket.MemberSupportTicketsDescription) <br />
+            @Html.DisplayFor(model => model.Comments_MemberSupportTickets)
+        </div>
+    </div>
+
+
+    <br />
+    <div class="box">
+        <div class="box-header with-border">
+            <h3 class="box-title">  <b> Data element present </b> </h3>
+            <div class="box-tools pull-right">
+                <button type="button" class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip" title="Collapse">
+                    <i class="fa fa-minus"></i>
+                </button>
+            </div>
+        </div>
+        <div class="box-body">
+            @Html.DisplayFor(model => model.DataElement.DataElementsDescription) <br />
+            @Html.DisplayFor(model => model.Comments_DataElementsPresent)
+        </div>
+    </div>
+
+    <br />
+    <div class="box">
+        <div class="box-header with-border">
+            <h3 class="box-title">  <b> Minesweeper  </b> </h3>
+            <div class="box-tools pull-right">
+                <button type="button" class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip" title="Collapse">
+                    <i class="fa fa-minus"></i>
+                </button>
+            </div>
+        </div>
+        <div class="box-body">
+            @Html.DisplayFor(model => model.Minesweeper1.MinesweeperDescription) <br />
+            @Html.DisplayFor(model => model.Comments_Minesweeper)
+        </div>
+    </div>
+
+
+    <br />
+    <div class="box">
+        <div class="box-header with-border">
+            <h3 class="box-title">  <b> DAS Findings   </b> </h3>
+            <div class="box-tools pull-right">
+                <button type="button" class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip" title="Collapse">
+                    <i class="fa fa-minus"></i>
+                </button>
+            </div>
+        </div>
+        <div class="box-body">
+            @Html.DisplayFor(model => model.DAS_Findings1.DAS_FindingsDescription) <br />
+            @Html.DisplayFor(model => model.Comments_DAS_Findings)
+        </div>
+    </div>
+
+
+    <br />
+    <div class="box">
+        <div class="box-header with-border">
+            <h3 class="box-title">  <b> SSA Findings </b> </h3>
+            <div class="box-tools pull-right">
+                <button type="button" class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip" title="Collapse">
+                    <i class="fa fa-minus"></i>
+                </button>
+            </div>
+        </div>
+        <div class="box-body">
+            @Html.DisplayFor(model => model.SSA_Findings1.SSA_FindingsDescription) <br />
+            @Html.DisplayFor(model => model.Comments_SSA_Findings)
+
+        </div>
+    </div>
+    <!-- Work ends here  -->
+    <!-- /.content -->
+</div>

@@ -1,0 +1,1169 @@
+﻿@using SamlHelperLibrary.Models
+@{
+    var SessionUser = string.Empty;
+    if (Session != null && Session["UserSessionInfo"] != null)
+    {
+        var user = ((UserSessionInfo) Session["UserSessionInfo"]).firstName;
+        if (user != null)
+        {
+            SessionUser = user;
+        }
+        else
+        {
+            SessionUser = "Guest";
+        }
+    }
+    else
+    {
+        SessionUser = "Guest";
+    }
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Crimson | THI Analysis</title>
+
+    <!-- Tell the browser to be responsive to screen width -->
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+    <!-- Bootstrap 3.3.6 -->
+    <link rel="stylesheet" href="@Url.Content("~/Content/bootstrap.min.css")">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="@Url.Content("https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.5.0/css/font-awesome.min.css")">
+
+    <link rel="shortcut icon" href="@Url.Content("~/Content/favicon.ico")">
+
+    <!-- Ionicons -->
+    <link rel="stylesheet" href="@Url.Content("https://cdnjs.cloudflare.com/ajax/libs/ionicons/2.0.1/css/ionicons.min.css")">
+    <!-- Theme style -->
+    <link rel="stylesheet" href="@Url.Content("~/Content/AdminLTE.min.css")">
+    <!-- AdminLTE Skins. We have chosen the skin-blue for this starter
+    page. However, you can choose any other skin. Make sure you
+    apply the skin class to the body tag so the changes take effect.
+    -->
+    <link rel="stylesheet" href="@Url.Content("~/Content/skin-blue.min.css")">
+
+    <link rel="stylesheet" href="@Url.Content("~/Content/datepicker3.css")">
+
+    <link rel="stylesheet" href="@Url.Content("~/Content/dataTables.bootstrap.css")">
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+        <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+</head>
+<!--
+BODY TAG OPTIONS:
+=================
+Apply one or more of the following classes to get the
+desired effect
+|---------------------------------------------------------|
+| SKINS | skin-blue |
+| | skin-black |
+| | skin-purple |
+| | skin-yellow |
+| | skin-red |
+| | skin-green |
+|---------------------------------------------------------|
+|LAYOUT OPTIONS | fixed |
+| | layout-boxed |
+| | layout-top-nav |
+| | sidebar-collapse |
+| | sidebar-mini |
+|---------------------------------------------------------|
+-->
+<body class="skin-blue sidebar-mini sidebar-collapse">
+<div class="wrapper">
+
+    <!-- Main Header -->
+    <header class="main-header">
+
+        <!-- Logo -->
+        <a href="@Url.Content("~/THI_AnalysisFeedback/")" class="logo">
+            <!-- mini logo for sidebar mini 50x50 pixels -->
+            <span class="logo-mini"><b>T</b>HI</span>
+            <!-- logo for regular state and mobile devices -->
+            <span class="logo-lg">CCC THI Analysis</span>
+        </a>
+
+        <!-- Header Navbar -->
+        <nav class="navbar navbar-static-top" role="navigation">
+            <!-- Sidebar toggle button-->
+            <a href="#" class="sidebar-toggle" data-toggle="offcanvas" role="button">
+                <span class="sr-only">Toggle navigation</span>
+            </a>
+
+
+            <!-- Navbar Right Menu -->
+            <div class="navbar-custom-menu">
+                <ul class="nav navbar-nav">
+
+                    <!-- User Account Menu -->
+                    <li class="dropdown user user-menu">
+                        <!-- Menu Toggle Button -->
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                            <!-- The user image in the navbar-->
+                            <img src="@Url.Content("~/Content/Images/" + SessionUser.Substring(0, 1) + ".png")" class="user-image" alt="User Image">
+                            <!-- hidden-xs hides the username on small devices so only the image appears. -->
+                            <span class="hidden-xs">Hello @SessionUser !</span>
+
+                        </a>
+                    </li>
+
+                    <!-- Control Sidebar Toggle Button -->
+
+                    <li class="dropdown user user-menu">
+                        <a aria-expanded="false" data-toggle="dropdown" class="dropdown-toggle" href="#">
+                            <i class="fa fa-sign-out"></i>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <!-- User image -->
+                            <!-- Menu Body -->
+                            <li class="user-body">
+                                <div class="row">
+                                    <div class="col-xs-12 text-center">
+                                        <a href="#">Confirm Sign Out?</a>
+                                    </div>
+
+
+                                </div>
+                                <!-- /.row -->
+                            </li>
+                            <!-- Menu Footer-->
+                            <li class="user-footer">
+                                <div class="pull-left">
+                                    <a href="#" class="btn btn-default btn-flat">Cancel</a>
+                                </div>
+                                <div class="pull-right">
+                                    <a href="@Url.Content("~/THI_AnalysisFeedback/Logout")" class="btn btn-default btn-flat">Sign out</a>
+                                </div>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+    </header>
+    <!-- Left side column. contains the logo and sidebar -->
+    <aside class="main-sidebar">
+
+        <!-- sidebar: style can be found in sidebar.less -->
+        <section class="sidebar">
+
+            <!-- Sidebar user panel (optional) -->
+
+            <!-- Sidebar Menu -->
+            <ul class="sidebar-menu">
+
+                <li class="header">Main Navigation</li>
+                <!-- Optionally, you can add icons to the links -->
+
+
+                <li id="thi-case-volume">
+                    <a href="@Url.Content("~/THI_AnalysisFeedback/MemberDischargeVolumes")">
+                        <i class="fa fa-line-chart"></i> <span>Member Statistics</span>
+                    </a>
+                </li>
+                <li id="thi-scores">
+                    <a href="@Url.Content("~/THI_AnalysisFeedback/MemberTHIScores")">
+                        <i class="fa fa-check-square-o"></i> <span>Member THI Scores</span>
+                    </a>
+                </li>
+                <li id="thi-data-logs">
+                    <a href="@Url.Content("~/THI_AnalysisFeedback/Index")">
+                        <i class="fa fa-database"></i> <span>THI Data Logs</span>
+                    </a>
+                </li>
+                <li id="thi-data-feed">
+                    <a href="@Url.Content("~/THI_AnalysisFeedback/Create")">
+                        <i class="fa fa-edit"></i> <span>THI Data Feedback</span>
+                    </a>
+                </li>
+            </ul>
+            <!-- /.sidebar-menu -->
+        </section>
+
+        <!-- /.sidebar -->
+    </aside>
+
+    @RenderBody()
+
+    <!-- Content Wrapper. Contains page content -->
+
+    <!-- /.content-wrapper -->
+    <!-- Main Footer -->
+    <footer class="main-footer">
+        <!-- To the right -->
+        <div class="pull-right hidden-xs">
+            "Putting Members First"
+        </div>
+        <!-- Default to the left -->
+        <strong>Copyright &copy; 2017 <a href="https://www.advisory.com/">The Advisory Board Company</a>.</strong> All rights reserved.
+    </footer>
+
+    <!-- /.control-sidebar -->
+    <!-- Add the sidebar's background. This div must be placed
+    immediately after the control sidebar -->
+    <div class="control-sidebar-bg"></div>
+</div>
+<!-- ./wrapper -->
+<!-- REQUIRED JS SCRIPTS -->
+<!-- jQuery 2.2.3 -->
+<script src="@Url.Content("~/Scripts/jquery-2.2.3.min.js")"></script>
+<!-- Bootstrap 3.3.6 -->
+<script src="@Url.Content("~/Scripts/bootstrap.min.js")"></script>
+
+<!-- AdminLTE App -->
+<script src="@Url.Content("~/Scripts/app.min.js")"></script>
+
+<script src="@Url.Content("~/Scripts/fastclick.js")"></script>
+
+<script src="@Url.Content("~/Scripts/bootstrap-datepicker.js")"></script>
+
+<script src="@Url.Content("~/Scripts/jquery.dataTables.min.js")"></script>
+
+<script src="@Url.Content("~/Scripts/dataTables.bootstrap.min.js")"></script>
+
+<script src="@Url.Content("~/Scripts/highcharts.js")"></script>
+
+<script src="@Url.Content("~/Scripts/exporting.js")"></script>
+
+<script src="@Url.Content("~/Scripts/handlebars.min.js")"></script>
+
+<script src="https://code.highcharts.com/modules/no-data-to-display.js"></script>
+
+<!-- Optionally, you can add Slimscroll and FastClick plugins.
+Both of these plugins are recommended to enhance the
+user experience. Slimscroll is required when using the
+fixed layout. -->
+
+<script type="text/javascript">
+
+    var monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "June", "July", "Aug", "Sep", "Oct", "Nov", "Dec"];
+
+    $('#thi-member-data tbody tr').css('cursor', 'pointer');
+
+    $('#thi-member-data').DataTable();
+    var caseVolumeTable = $('#casesVolumeTable').DataTable({
+        "searching": false,
+        "ordering": false,
+        "paging": false,
+        "lengthChange": false,
+        "bInfo": false,
+        "oLanguage": {
+            "sEmptyTable": "<center><b>No Data to display</b></center>"
+        }
+    });
+
+    var memberValue = $('#MemberContract').DataTable({
+        "searching": false,
+        "ordering": false,
+        "paging": false,
+        "lengthChange": false,
+        "bInfo": false,
+        "oLanguage": {
+            "sEmptyTable": "<center><b>No Data to display</b></center>"
+        }
+    });
+
+    var memberTHIParamaterScores = $('#MemberTHIParameterScores').DataTable({
+        "searching": false,
+        "ordering": false,
+        "paging": false,
+        "lengthChange": false,
+        "bInfo": false,
+        "oLanguage": {
+            "sEmptyTable": "<center><b>No Data to display</b></center>"
+        }
+    });
+
+
+    var dstTable = $('#dstTable').DataTable({
+        "searching": false,
+        "ordering": false,
+        "paging": false,
+        "lengthChange": false,
+        "bInfo": false,
+        "oLanguage": {
+            "sEmptyTable": "<center><b>No Data to display</b></center>"
+        }
+    });
+
+
+    var mseTable = $('#mseTable').DataTable({
+        "searching": false,
+        "ordering": false,
+        "paging": false,
+        "lengthChange": false,
+        "bInfo": false,
+        "oLanguage": {
+            "sEmptyTable": "<center><b>No Data to display</b></center>"
+        }
+    });
+
+    $('#thi-member-data tbody').on('click',
+        'tr',
+        function() {
+
+            var redirectUrl = "Details/" + this.id;
+            window.location.href = redirectUrl;
+
+            $('#myModal').modal('show');
+        });
+
+    @*$('#thi-member-data tbody').on('click',
+        'tr',
+        function() {
+
+            var request = {
+                "url": "@Url.Content("~/THI_AnalysisFeedback/Details")",
+            "method": "POST",
+            "headers": {
+                "content-type": "application/json"
+            },
+            "data": "{ \"id\": " + this.id + " }",
+            "dataType": "JSON",
+            "success": function(data) {
+                console.log(data);
+            }
+            };
+            $.ajax(request);
+
+            $('#THIFeedbackData').modal('show');
+        });*@
+
+    $('#formsubmissionmodal').on('shown.bs.modal',
+        function() {
+            $('#submitform').focus();
+        });
+
+    var thiDataFeedTab = $("#thi-data-feed");
+    var thiDataLogsTab = $("#thi-data-logs");
+    var thiCaseVolumeTab = $('#thi-case-volume');
+    var thiMemberScores = $('#thi-scores');
+
+    if ($("#createSection").length) {
+        thiDataFeedTab.addClass("active");
+        thiDataLogsTab.removeClass("active");
+        thiCaseVolumeTab.removeClass("active");
+        thiMemberScores.removeClass("active");
+    } else if ($("#indexSection").length) {
+        thiDataLogsTab.addClass("active");
+        thiDataFeedTab.removeClass("active");
+        thiCaseVolumeTab.removeClass("active");
+        thiMemberScores.removeClass("active");
+    } else if ($("#DischargeVolumes").length) {
+        thiCaseVolumeTab.addClass("active");
+        thiDataLogsTab.removeClass("active");
+        thiDataFeedTab.removeClass("active");
+        thiMemberScores.removeClass("active");
+    } else if ($("#MemberTHIScores").length) {
+        thiCaseVolumeTab.removeClass("active");
+        thiDataLogsTab.removeClass("active");
+        thiDataFeedTab.removeClass("active");
+        thiMemberScores.addClass("active");
+    }
+
+    function disableComments(dropDownId) {
+        $('#' + dropDownId).change(function() {
+            if ($('#' + dropDownId).val() == "1") {
+                $('#Comments_' + dropDownId).val("N/A");
+                $('#Comments_' + dropDownId).attr('readonly', false);
+            } else if ($('#' + dropDownId).val() == "-1") {
+                $('#Comments_' + dropDownId).attr('readonly', true);
+            } else {
+                if ($('#Comments_' + dropDownId).val() == "N/A") {
+                    $('#Comments_' + dropDownId).val('');
+                }
+                $('#Comments_' + dropDownId).attr('readonly', false);
+            }
+        });
+        $('#' + dropDownId).trigger('change');
+    }
+
+    function renderingLoadingBlock(loadingId) {
+        return '<div class="overlay" id = "' + loadingId + '">  <i class="fa fa-refresh fa-spin"> </i> </div>';
+    }
+
+    disableComments("DataSubmissionTimelines");
+    disableComments("DataLag");
+    disableComments("CriticalDiagnostics");
+    disableComments("MemberSupportTickets");
+    disableComments("DataElementsPresent");
+    disableComments("Minesweeper");
+    disableComments("DAS_Findings");
+    disableComments("SSA_Findings");
+
+    $("#createSection #Project option[value='1']").remove();
+    $("#indexSection #Project option[value='0']").remove();
+    $("#DischargeVolumes #Project option[value='1']").remove();
+    $("#MemberTHIScores #Project option[value='1']").remove();
+
+
+    $('#DischargeVolumes #wiki-help').click(function() {
+        window.location.href = "@Url.Content("https://wiki.advisory.com/display/CPM/THI+Analysis+Tool")";
+    });
+
+    $('#DischargeVolumes #Project').change(function() {
+
+        var selectedProj = $(this).find('option:selected').attr('value');
+        var $btn = $('#DischargeVolumes #volumeParamSubmit');
+
+        if (selectedProj != 0) {
+
+            var loadingId = "HospitalSelection";
+            $btn.removeAttr('disabled');
+            $('#facilitySelection').removeAttr('disabled');
+            $('#volumeParameters').append(renderingLoadingBlock(loadingId));
+
+            var filterProjectJsonReq = {
+                "url": "@Url.Content("~/THI_AnalysisFeedback/FilterHospitalsByProject")",
+                "method": "POST",
+                "headers": {
+                    "content-type": "application/json"
+                },
+                "data": "{ \"project\": " + selectedProj + " }",
+                "dataType": "JSON",
+                "success": function(data) {
+                    var rawHospitalTemplate = $('#projectHospitalsTemplate').html();
+                    var compiledHospitalTemplate = Handlebars.compile(rawHospitalTemplate);
+                    $('#projectHospitals').html(compiledHospitalTemplate(data));
+                    $('#' + loadingId).remove();
+                    if ($('#DischargeVolumes #facilitySelection').find('option:selected').val() == 0) {
+                        $btn.attr('disabled', 'disabled');
+                    }
+                }
+            };
+            $.ajax(filterProjectJsonReq);
+
+            var getMemberInfoJsonReq = {
+                "url": "@Url.Content("~/THI_AnalysisFeedback/getMemberInformation")",
+                "method": "POST",
+                "headers": {
+                    "content-type": "application/json"
+                },
+                "data": "{ \"project\": " + selectedProj + " }",
+                "dataType": "JSON",
+                "success": function(data) {
+
+                    var Grouper3MInfo;
+                    var runAPRDRGInfo;
+                    var aprdrgAggregate;
+                    var maxRefreshRateDate;
+                    var customOppeCount;
+
+                    if (data.length != 0) {
+                        customOppeCount = Number(data[0].TotalCount.toFixed(1)).toLocaleString();
+                        maxRefreshRateDate = data[0].MaxRR;
+
+                        if (data[0].CCC_3M == 0) {
+                            Grouper3MInfo = "OFF";
+                        } else if (data[0].CCC_3M == 1) {
+                            Grouper3MInfo = "ON";
+                        } else if (data[0].CCC_3M == -1) {
+                            Grouper3MInfo = "NA";
+                        }
+
+                        if (data[0].RunAPRDRG == 0) {
+                            runAPRDRGInfo = "OFF";
+                        } else if (data[0].RunAPRDRG == 1) {
+                            runAPRDRGInfo = "ON";
+                        } else if (data[0].RunAPRDRG == -1) {
+                            runAPRDRGInfo = "NA";
+                        }
+
+                        if (maxRefreshRateDate == null) {
+                            maxRefreshRateDate = "NA";
+                        } else {
+                            maxRefreshRateDate = convertDate(maxRefreshRateDate);
+                        }
+                        if (data[0].APRDRGAggregate == 0) {
+                            aprdrgAggregate = "OFF";
+                        } else if (data[0].APRDRGAggregate == 1) {
+                            aprdrgAggregate = "ON";
+                        }
+                    } else {
+
+                        Grouper3MInfo = "NA";
+                        runAPRDRGInfo = "NA";
+                        aprdrgAggregate = "NA";
+                        maxRefreshRateDate = "NA";
+                        customOppeCount = "NA";
+                    }
+
+                    $('#DischargeVolumes #3mGrouper').html(Grouper3MInfo);
+                    $('#DischargeVolumes #runAPRDRG').html(runAPRDRGInfo);
+                    $('#DischargeVolumes #customOppeCount').html(customOppeCount);
+                    $('#DischargeVolumes #maxRrDate').html(maxRefreshRateDate);
+                    $('#DischargeVolumes #aprdrgAggregation').html(aprdrgAggregate);
+                }
+            };
+            $.ajax(getMemberInfoJsonReq);
+
+
+        } else {
+            $('#facilitySelection').find('option').remove().end()
+                .append("<option value='0'>Select a valid Project..</option>").attr('disabled', 'disabled');
+            $btn.attr('disabled', 'disabled');
+
+            $('#DischargeVolumes #3mGrouper').html("NA");
+            $('#DischargeVolumes #runAPRDRG').html("NA");
+            $('#DischargeVolumes #customOppeCount').html("NA");
+            $('#DischargeVolumes #maxRrDate').html("NA");
+            $('#DischargeVolumes #aprdrgAggregation').html("NA");
+        }
+
+    });
+
+
+    $('#DischargeVolumes #volumeParamSubmit').on('click',
+        function() {
+
+            var chartLoadingId = "loadingChart";
+            var tableLoadingId = "loadingTable";
+
+            var $btn = $(this).button('loading');
+
+            $('#DischargeVolumes #chartBox').append(renderingLoadingBlock(chartLoadingId));
+            $('#DischargeVolumes #tableBox').append(renderingLoadingBlock(tableLoadingId));
+
+            var selectedHospital = $('#DischargeVolumes #projectHospitals').find('option:selected').attr('value');
+            var selectedProjectName = $('#Project').find('option:selected').text();
+            var selectedHospitalName = $('#facilitySelection').find('option:selected').text();
+
+            var settings = {
+                "url": "@Url.Content("~/THI_AnalysisFeedback/MemberDischargeVolumes")",
+                "method": "POST",
+                "headers": {
+                    "content-type": "application/json"
+                },
+                "data": "{ \"facilitySelect\": " + selectedHospital + " }",
+                "dataType": "JSON",
+                "success": function(data) {
+
+                    var jsonConvert = [];
+                    var volumeGroupSelect = $('input[name=volumeGroup]:checked').attr('id');
+
+                    if (volumeGroupSelect == "Monthly") {
+                        jsonConvert = data;
+                    } else if (volumeGroupSelect == "Annual") {
+                        for (var i = 0; i < data.length; i++) {
+                            var foundYearInJson = 0;
+                            for (var j = 0; j < jsonConvert.length; j++) {
+                                if (data[i].Year == jsonConvert[j].Year) {
+                                    foundYearInJson = 1;
+                                    jsonConvert[j].IP_COUNT += data[i].IP_COUNT;
+                                    jsonConvert[j].OP_COUNT += data[i].OP_COUNT;
+                                }
+                            }
+                            if (foundYearInJson == 0) {
+                                jsonConvert.push({
+                                    Year: data[i].Year,
+                                    IP_COUNT: data[i].IP_COUNT,
+                                    OP_COUNT: data[i].OP_COUNT
+                                });
+                            }
+                        }
+                    }
+
+                    var rawVolumeTemplate = $('#caseVolTableTemplate').html();
+                    var compiledVolumeTemplate = Handlebars.compile(rawVolumeTemplate);
+                    $('#caseVolumeTable').html(compiledVolumeTemplate(jsonConvert));
+
+                    if (!data.length) {
+                        caseVolumeTable.clear().draw();
+                    }
+
+                    volumeChart.title.update({ text: selectedProjectName });
+                    volumeChart.subtitle.update({ text: selectedHospitalName });
+
+                    var ipCases = [];
+                    var opCases = [];
+                    var xAxisLabels = [];
+
+                    for (var i = 0; i < jsonConvert.length; i++) {
+                        ipCases.unshift(jsonConvert[i].IP_COUNT);
+                        opCases.unshift(jsonConvert[i].OP_COUNT);
+                        if (volumeGroupSelect == "Monthly") {
+                            xAxisLabels.unshift(monthNames[jsonConvert[i].Month - 1] + '-' + jsonConvert[i].Year);
+                        } else if (volumeGroupSelect == "Annual") {
+                            xAxisLabels.unshift(jsonConvert[i].Year);
+                        }
+                    }
+                    volumeChart.series[0].setData(opCases);
+                    volumeChart.series[1].setData(ipCases);
+                    volumeChart.xAxis[0].update({ categories: xAxisLabels });
+
+                    $('#' + chartLoadingId).remove();
+                    $('#' + tableLoadingId).remove();
+
+                    $btn.button('reset');
+                }
+            };
+            $.ajax(settings);
+        });
+
+    if ($('#DischargeVolumes').length != 0) {
+        var volumeChart = Highcharts.chart('volumeChartElement',
+        {
+            credits: {
+                enabled: false
+            },
+            chart: {
+                type: 'area'
+            },
+            title: {
+                text: 'None Selected'
+            },
+            subtitle: {
+                text: 'Select a Project...'
+            },
+            xAxis: {
+                allowDecimals: false,
+                labels: {
+                    formatter: function() {
+                        return this.value; // clean, unformatted number for year
+                    }
+                }
+            },
+            yAxis: {
+                title: {
+                    text: false
+                },
+                labels: {
+                    formatter: function() {
+                        return this.value / 1000 + 'k';
+                    }
+                }
+            },
+            tooltip: {
+                pointFormat: '{series.name} : <b>{point.y:,.0f}</b>'
+            },
+            plotOptions: {
+                area: {
+                    marker: {
+                        enabled: false,
+                        symbol: 'circle',
+                        radius: 2,
+                        states: {
+                            hover: {
+                                enabled: true
+                            }
+                        }
+                    }
+                }
+            },
+            series: [
+                {
+                    name: 'OP Volumes',
+                    data: []
+                }, {
+                    name: 'IP Volumes',
+                    data: []
+                }
+            ],
+            lang: {
+                noData: 'No Data to display'
+            },
+            noData: {
+                style: {
+                    fontWeight: 'bold',
+                    fontSize: '15px',
+                    color: '#303030'
+                }
+            }
+        });
+
+    }
+
+
+    Handlebars.registerHelper('monthConvert',
+        function(month) {
+            return (monthNames[month - 1]);
+        });
+
+
+    if ($('#MemberTHIScores').length != 0) {
+        var THIScoreTrend = Highcharts.chart('THITrendChart',
+        {
+            credits: {
+                enabled: false
+            },
+
+            title: {
+                text: 'None Selected'
+            },
+
+            subtitle: {
+                text: 'Select a Project...'
+            },
+            xAxis: {
+                allowDecimals: false,
+                labels: {
+                    formatter: function() {
+                        return this.value; // clean, unformatted number for year
+                    }
+                }
+            },
+            yAxis: {
+                title: {
+                    text: false
+                }
+            },
+            plotOptions: {
+                series: {
+                    zones: [
+                        {
+                            value: 1.66,
+                            color: 'red'
+                        }, {
+                            value: 2.04,
+                            color: 'orange'
+                        }, {
+                            color: 'green'
+                        }
+                    ]
+                }
+            },
+            series: [
+                {
+                    name: 'THI Score Trend',
+                    data: [],
+                    tooltip: {
+                        valueDecimals: 2
+                    }
+                }
+            ]
+        });
+    }
+
+    $('#MemberTHIScores #GenerateTHI').on('click',
+        function() {
+
+            var MemberContractTableloading = "THIScoresTableloading";
+            var THIScoresTableloading = "THIScoresTableloading";
+            var THIGraphloading = "THIScoresTableloading";
+
+            var $btn = $('#GenerateTHI').button('loading');
+
+            $('#MemberTHIScores #tableBox').append(renderingLoadingBlock(MemberContractTableloading));
+            $('#MemberTHIScores #MemberTHIParameterScoresDiv').append(renderingLoadingBlock(THIScoresTableloading));
+            $('#MemberTHIScores #chartBox').append(renderingLoadingBlock(THIGraphloading));
+
+
+            var project = $('#MemberTHIScores #Project').find('option:selected').attr('value');
+            var year = $('#MemberTHIScores #yearSelection').find('option:selected').attr('value');
+            var month = $('#MemberTHIScores #monthSelection').find('option:selected').attr('value');
+
+            var settings = {
+                "url": "@Url.Content("~/THI_AnalysisFeedback/THIScoresGeneration")",
+                "method": "POST",
+                "headers": {
+                    "content-type": "application/json"
+                },
+                "data": "{\"ProjectKey\" : \"" +
+                    project +
+                    "\",\"Year\" : \"" +
+                    year +
+                    "\",\"Month\" : \"" +
+                    month +
+                    "\"}"
+            };
+            $.ajax(settings).done(function(response) {
+
+                var jsonConvert = response.THIParamaterScores[0];
+                var selectedProj = $('#MemberTHIScores #Project').find('option:selected').html();
+
+                if (response.THIParamaterScores.length) {
+                    var rawTHIScoreTemplate = $('#memberTHIParameterScoresTemplate').html();
+                    var compiledTHIScoreTemplate = Handlebars.compile(rawTHIScoreTemplate);
+                    $('#MemberTHIParameterScoresTable').html(compiledTHIScoreTemplate(jsonConvert));
+                } else {
+                    memberTHIParamaterScores.clear().draw();
+                }
+
+                jsonConvert = response.ContractInfo[0];
+
+                if (response.ContractInfo.length) {
+                    var rawMemberContractInfoTemplate = $('#memberContractInfoTemplate').html();
+                    var compiledMemberContractInfoTemplate = Handlebars.compile(rawMemberContractInfoTemplate);
+                    $('#MemberContractInfoTable').html(compiledMemberContractInfoTemplate(jsonConvert));
+                    $('#etlCompletion').html(response.AverageETL[0].toFixed(2));
+                } else {
+                    memberValue.clear().draw();
+                }
+
+                if (response.ThiTrendByPeriod.length != 0) {
+                    var THIScoreJSon = [];
+                    var xAxisLabels = [];
+                    for (var i = 0; i < response.ThiTrendByPeriod.length; i++) {
+                        THIScoreJSon.push(response.ThiTrendByPeriod[i].THIScore);
+                        xAxisLabels.push(monthNames[response.ThiTrendByPeriod[i].Month - 1] +
+                            '-' +
+                            response.ThiTrendByPeriod[i].Year);
+                    }
+
+                    THIScoreTrend.series[0].setData(THIScoreJSon);
+
+                    THIScoreTrend.title.update({ text: selectedProj });
+
+                    for (var i in response.ThiTrendByPeriod) {
+                        if (year == response.ThiTrendByPeriod[i].Year && month == response.ThiTrendByPeriod[i].Month) {
+                            THIScoreTrend.subtitle.update({ text: response.ThiTrendByPeriod[i].ProjectPhase });
+                        }
+                    }
+
+                    THIScoreTrend.xAxis[0].update({ categories: xAxisLabels });
+                } else {
+                    THIScoreTrend.title.update({ text: 'None Selected' });
+                    THIScoreTrend.subtitle.update({ text: 'Select a Project...' });
+                }
+
+
+                $('#' + THIScoresTableloading).remove();
+                $('#' + MemberContractTableloading).remove();
+                $('#' + THIGraphloading).remove();
+                $btn.button('reset');
+
+            });
+
+        });
+
+    //Defaulting Year and Month Selection to be Latest THI Refresh Year and Month
+
+    function defaultPeriodInTHIPage() {
+        var getDate = new Date();
+        getDate.setDate(0);
+
+        $('#yearSelection').val(getDate.getFullYear());
+        $('#monthSelection').val(getDate.getMonth() + 1);
+    }
+
+    defaultPeriodInTHIPage();
+
+    $('#MemberTHIScores #Project').change(
+        function() {
+            defaultPeriodInTHIPage();
+            if ($('#MemberTHIScores #Project').val() == 0) {
+                $('#MemberTHIScores #yearSelection').attr('disabled', 'disabled');
+                $('#MemberTHIScores #monthSelection').attr('disabled', 'disabled');
+                $('#MemberTHIScores #GenerateTHI').attr('disabled', 'disabled');
+                $('#MemberTHIScores #MoreThiDetails').attr('disabled', 'disabled');
+            } else {
+                $('#MemberTHIScores #yearSelection').removeAttr('disabled');
+                $('#MemberTHIScores #monthSelection').removeAttr('disabled');
+                $('#MemberTHIScores #GenerateTHI').removeAttr('disabled');
+                $('#MemberTHIScores #MoreThiDetails').removeAttr('disabled');
+            }
+        });
+
+    $('#MemberTHIScores #MoreThiDetails').click(function() {
+
+        var project = $('#MemberTHIScores #Project').find('option:selected').val();
+        $('#MemberTHIScores #MoreThiDetails').button('loading');
+        var settings = {
+            "url": "@Url.Content("~/THI_AnalysisFeedback/THIScoresDrillDown")",
+            "method": "POST",
+            "headers": {
+                "content-type": "application/json"
+            },
+            "data": "{\"ProjectKey\" : \"" +
+                project +
+                "\"}"
+        };
+        $.ajax(settings).done(function(response) {
+
+            $('#THIScoresDrillDown #ScoresDataPrj').html($('#MemberTHIScores #Project').find('option:selected').html());
+            mseTable.clear().draw();
+            dstTable.clear().draw();
+
+            if (response != null) {
+                if (response.dlDrill.length != 0) {
+                    var template = $('#dataLoadTimelinessTemplate').html();
+                    var compiledTemplate = Handlebars.compile(template);
+                    $('#DataSubmimssionTimelines').html(compiledTemplate(response.dlDrill));
+                }
+
+                var ipElement, opElement, oppeElement;
+                var maxLength = Math.max(response.MissingIp.length,
+                    response.MissingOp.length,
+                    response.MissingOppe.length);
+                var missingElementsJson = [];
+
+                for (var i = 0; i < maxLength; i++) {
+                    if (i < response.MissingIp.length)
+                        ipElement = response.MissingIp[i].DataElement;
+                    else
+                        ipElement = '';
+
+
+                    if (i < response.MissingOp.length)
+                        opElement = response.MissingOp[i].DataElement;
+                    else
+                        opElement = '';
+
+                    if (i < response.MissingOppe.length)
+                        oppeElement = response.MissingOppe[i].DataElement;
+                    else
+                        oppeElement = '';
+
+                    missingElementsJson.push({
+                        ip: ipElement,
+                        op: opElement,
+                        oppe: oppeElement
+                    });
+
+                    if (maxLength > 0) {
+                        var template = $('#missingDataElements').html();
+                        var compiledTemplate = Handlebars.compile(template);
+                        $('#MissingDataElements').html(compiledTemplate(missingElementsJson));
+                    }
+                }
+
+            }
+            $('#MemberTHIScores #MoreThiDetails').button('reset');
+            $('#THIScoresDrillDown').modal();
+        });
+    });
+
+    //Triggering Project Dropdown To pull Default values in Member Info page
+
+    $('#DischargeVolumes #Project').trigger('change');
+
+    //Triggering Project Dropdown To pull Default values in THI Scores page
+
+    $('#MemberTHIScores #Project').trigger('change');
+
+</script>
+
+<script id="missingDataElements" type="text/x-handlebars-template">
+        {{#each this}}
+        <tr>
+            <td>{{ip}} </td>
+            <td>{{op}}</td>
+            <td>{{oppe}}</td>
+        </tr>
+        {{/each}}
+    </script>
+
+<script id="dataLoadTimelinessTemplate" type="text/x-handlebars-template">
+    {{#each this}}
+    <tr>
+        <td>{{ShortDescription}} </td>
+        <td>{{MemberSupport_SupportIssueNumber}}</td>
+        <td>{{formatDate DataSubmissionTargetDate}}</td>
+        <td>{{formatDate FilesReceived}}</td>
+        <td>{{DaysLate_DataLoad}}</td>
+        <td>{{formatDate DateTimeClosed}}</td>
+        <td>{{ETLCompletion_DataLoad}}</td>
+    </tr>
+    {{/each}}
+</script>
+
+
+<script id="missingDataElementsTemplate" type="text/x-handlebars-template">
+        {{#each this}}
+        <tr>
+            <td>{{ShortDescription}} </td>
+            <td>{{MemberSupport_SupportIssueNumber}}</td>
+            <td>{{formatDate DataSubmissionTargetDate}}</td>
+        </tr>
+        {{/each}}
+    </script>
+
+<script id="projectHospitalsTemplate" type="text/x-handlebars-template">
+            <label>Facilities</label>
+        {{#if this}}
+            <select class="form-control" style="width: 100%;" name="facilitySelection" id="facilitySelection">
+                {{#each this}}
+                    <option value="{{ProjectHospitalKey}}">{{HospitalName}}</option>
+                {{/each}}
+            </select>
+        {{else}}
+            <select class="form-control" disabled ="disabled" style="width: 100%;" name="facilitySelection" id="facilitySelection">
+                <option value="0">Select a valid Project...</option>
+            </select>
+        {{/if}}
+    </script>
+
+
+<script id="caseVolTableTemplate" type="text/x-handlebars-template">
+        {{#each this}}    
+        <tr role="row">
+                <td class="">{{monthConvert Month}} {{Year}}</td>
+                <td>{{formatNumber IP_COUNT}}</td>
+                <td>{{formatNumber OP_COUNT}}</td>
+        </tr>
+        {{/each}}
+    </script>
+
+<script id="memberTHIParameterScoresTemplate" type="text/x-handlebars-template">
+        <tr role="row">
+            <td class="{{formatColor THISCORE_CC}}" title="RED: 1.66 AND BELOW, YELLOW: 1.67 AND 2.04, GREEN: 2.05 AND ABOVE">{{formatTHIScores THIScore}}</td>
+            <td class="{{formatColor Data_Submission_Timeliness_CC}}" title="RED: 7 AND ABOVE, YELLOW: 2.01 TO 6.99, GREEN: 2 AND BELOW">{{formatTHIScores Data_Submission_Timeliness}}</td>
+            <td class="{{formatColor C__Member_Support_Tickets_CC}}" title="RED: 4 AND ABOVE, YELLOW: 2 TO 3, GREEN: 1">{{formatTHIScores C__Member_Support_Tickets}}</td>
+            <td class="{{formatColor C__Critical_Diagnostics_CC}}" title="RED: 5 AND ABOVE, YELLOW: 2.01 TO 4.99, GREEN: 2 AND BELOW">{{formatTHIScores C__Critical_Diagnostics}}</td>
+            <td class="{{formatColor C_Ability_to_Keep_up_w_Releases_CC}}" title="RED: 61 AND ABOVE, YELLOW: 30 TO 60, GREEN: BELOW 30">{{formatTHIScores C_Ability_to_Keep_up_w_Releases}}</td>
+            <td class="{{formatColor C_MineSweeper_CC}}" title="RED: 3 AND ABOVE, YELLOW: 2, GREEN: 1 AND BELOW">{{formatTHIScores C_MineSweeper}}</td>
+            <td class="{{formatColor C_Data_Lag_CC}}" title="RED: (46 AND ABOVE) OR QUARTERLY, YELLOW: 21 TO 45, 20 AND BELOW">{{formatTHIScoresToInt C_Data_Lag}}</td>
+            <td class="{{formatColor C__USE_SSA_CC}}" title="RED: 0, GREEN: 1">{{formatTHIScoresToInt C__USE_SSA}}</td>
+            <td class="{{formatColor C_USE_Compass_Connect_CC}}" title="RED: 0, GREEN: 1">{{formatTHIScoresToInt C_USE_Compass_Connect}}</td>
+            <td class="{{formatColor C_Data_Elements_Present_CC}}" title="RED: 0.8 AND BELOW, YELLOW: 0.801 TO 0.85, GREEN: 0.851 AND ABOVE">{{formatTHIScores C_Data_Elements_Present}}</td>
+        </tr>
+    </script>
+
+<script id="memberContractInfoTemplate" type="text/x-handlebars-template">
+         <tr role="row">
+             <td>Annual Contract Value</td>
+             <td>{{formatMoney AnnualContractValue}}</td>
+         </tr>
+        <tr role="row">
+            <td>Latest Contract End Date</td>
+            <td>{{formatDate LatestContractEndDate}}</td>
+        </tr>
+        <tr role="row">
+            <td>Next Contract Decision Date</td>
+            <td>{{formatDate NextContractDecision}}</td>
+        </tr>
+        <tr role="row">
+            <td>Opt-Out</td>
+            <td>{{formatNulls OptOut}}</td>
+        <tr role="row">
+            <td>Current Contract Risk Type</td>
+            <td>{{formatNulls CurrentContractRiskType}}</td>
+        </tr>
+        <tr role="row">
+            <td>Upload Frequency</td>
+            <td>{{formatNulls UploadFrequency}}</td>
+        </tr>
+        <tr role="row">
+            <td>Average ETL Completion Time(days)</td>
+            <td id="etlCompletion"></td>
+        </tr>
+        <tr role="row">
+            <td>Login Count</td>
+            <td>{{formatNulls LoginCount}}</td>
+        </tr>
+     </script>
+
+<script>
+
+    function convertDate(date) {
+
+        if (date == null)
+            return 'N/A';
+        else {
+            var formattedDate = new Date(parseInt(date.replace('/Date(', '')));
+            var dd = formattedDate.getDate();
+            var mm = formattedDate.getMonth() + 1; //January is 0!
+
+            var yyyy = formattedDate.getFullYear();
+            if (dd < 10) {
+                dd = '0' + dd;
+            }
+            if (mm < 10) {
+                mm = '0' + mm;
+            }
+            return mm + '/' + dd + '/' + yyyy;
+        }
+    }
+
+    Handlebars.registerHelper('monthConvert',
+        function(month) {
+            return (monthNames[month - 1]);
+        });
+
+    Handlebars.registerHelper('formatDate',
+        convertDate
+    );
+
+    Handlebars.registerHelper('formatTHIScores',
+        function(number) {
+            if (number == -99999.0) {
+                return 'N/A';
+            } else {
+                return (number.toFixed(2));
+            }
+        });
+
+    Handlebars.registerHelper('formatTHIScoresToInt',
+        function(number) {
+            if (number == -99999.0) {
+                return 'N/A';
+            } else {
+                return (number.toFixed(0));
+            }
+        });
+
+    Handlebars.registerHelper('formatNumber',
+        function(number) {
+            if (number == null) {
+                return 'N/A';
+            } else {
+                return (Number(number.toFixed(1)).toLocaleString());
+            }
+        });
+
+    Handlebars.registerHelper('formatNulls',
+        function(data) {
+            if (data == null) {
+                return 'N/A';
+            } else {
+                return data;
+            }
+        });
+
+    Handlebars.registerHelper('formatMoney',
+        function(money) {
+            if (money == null) {
+                return 'N/A';
+            } else {
+                return ('$ ' + Number(money.toFixed(1)).toLocaleString());
+            }
+        });
+
+    Handlebars.registerHelper('formatColor',
+        function(color) {
+            if (color == 'GREEN') {
+                return 'bg-green';
+            } else if (color == 'YELLOW') {
+                return 'bg-yellow';
+            } else if (color == 'RED') {
+                return 'bg-red';
+            } else {
+                return '';
+            }
+        });
+
+</script>
+
+@*<script>
+    var settings = {
+        "async": true,
+        "crossDomain": true,
+        "url": "https://loginbeta.advisory.com/CrimsonProvisioningService/api/User/SearchUsers",
+        "method": "POST",
+        "headers": {
+            "content-type": "application/json",
+            "version": "2",
+            "cache-control": "no-cache",
+            "postman-token": "d5cd0123-cf03-6984-c789-a502070bf1c4"
+        },
+        "data":
+            " {\r\n   \"Keyword\":\"\",\r\n   \"AccountStatus\": 1,\r\n   \"Usertype\":0,\r\n   \"SortColumn\":\"LastName,FirstName\",\r\n   \"SortDirection\":0,\r\n   \"Index\":0,\r\n   \"NoofItems\":10,\r\n   \"MemberOrgKeys\":[\r\n      \"5B95F3B2-C265-4E1A-91AB-60FC449E96EB\",\r\n   ],\r\n   \"ApplicationKey\":\"c3cc809f-9b80-438f-a20f-42e67b504cec\",\r\n   \"EnvironmentKeys\":[\r\n\t\"37b473ae-b5a5-4839-91d5-80676a86b4b9\"\r\n   ]\r\n}\r\n"
+    };
+    $.ajax(settings).done(function(response) {
+        console.log(response);
+    });
+
+</script>*@
+
+
+</body>
+
+</html>

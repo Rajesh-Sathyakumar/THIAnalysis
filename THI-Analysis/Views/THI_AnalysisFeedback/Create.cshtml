@@ -1,0 +1,385 @@
+﻿@model THI_Analysis.Models.THI_AnalysisFeedback
+
+
+<div class="content-wrapper" id="createSection">
+    <!-- Content Header (Page header) -->
+    <section class="content-header" id="introduction">
+        <h1>
+            THI Data Feedback
+            <small>BA Inputs from THI Analysis</small>
+        </h1>
+    </section>
+
+
+    <!-- Main content -->
+    <!-- /.content -->
+
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+
+        <section class="content">
+
+            <div class="box box-danger container">
+
+                <!-- form start -->
+
+                <div class="box-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Project Name</label>
+                               
+                                @Html.DropDownList("Project", null, htmlAttributes: new { @class = "form-control", @style = "width: 100%;", @aria_hidden="true"})
+                                @Html.ValidationMessageFor(model => model.Project, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+
+
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Analysis Summary</label>
+                                
+                                @Html.DropDownList("AnalysisSummary", null, htmlAttributes: new { @class = "form-control", @style = "width: 100%;", @aria_hidden="true" })
+                                @Html.ValidationMessageFor(model => model.AnalysisSummary, "", new { @class = "text-danger" })
+
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Business Analyst</label>
+
+                                @Html.TextBox("BusinessAnalyst", null, new { @class = "form-control", @rows = "3", @placeholder = "Enter Full Name Here..", @style = "resize: none;" })
+                                @Html.ValidationMessageFor(model => model.BusinessAnalyst , "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                    </div>
+
+
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label>Analysis Notes</label>
+
+                                    @Html.TextArea("AnalysisNotes", null, new { @class = "form-control", @rows = "3", @placeholder = "Your Comments ...", @style = "resize: none;" })
+                                    @Html.ValidationMessageFor(model => model.AnalysisNotes, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label>Recommendations</label>
+
+                                    @Html.TextArea("AnalysisRecommendations", null, new { @class = "form-control", @rows = "3", @placeholder = "Your Comments ...", @style = "resize: none;" })
+                                    @Html.ValidationMessageFor(model => model.AnalysisRecommendations, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+            </div>
+
+            <div class="box box-success container">
+
+                <!-- form start -->
+
+                <div class="box-body">
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Data Submission Timeliness</label>
+
+                                @Html.DropDownList("DataSubmissionTimelines", null, htmlAttributes: new { @class = "form-control" })
+                                @Html.ValidationMessageFor(model => model.DataSubmissionTimelines, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label>Comments</label>
+                                @Html.TextArea("Comments_DataSubmissionTimelines", null, new { @class = "form-control", @rows = "3", @placeholder = "Your Comments ...", @style = "resize: none;" })
+                                @Html.ValidationMessageFor(model => model.Comments_DataSubmissionTimelines, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+
+            <div class="box box-info container">
+
+                <!-- form start -->
+
+                <div class="box-body">
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Data Lag</label>
+                                
+                                @Html.DropDownList("DataLag", null, htmlAttributes: new { @class = "form-control"})
+                                @Html.ValidationMessageFor(model => model.DataLag, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label>Comments</label>
+                                
+                                
+                                @Html.TextArea("Comments_DataLag", null, new { @class = "form-control", @rows = "3", @placeholder = "Your Comments ...", @style = "resize: none;" })
+                                @Html.ValidationMessageFor(model => model.Comments_DataLag, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+
+
+            <div class="box box-warning container">
+
+                <!-- form start -->
+
+                <div class="box-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Critical Diagnostics</label>
+                                
+                                @Html.DropDownList("CriticalDiagnostics", null, htmlAttributes: new { @class = "form-control" })
+                                @Html.ValidationMessageFor(model => model.CriticalDiagnostics, "", new { @class = "text-danger" })
+
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label>Comments</label>
+                                
+                                @Html.TextArea("Comments_CriticalDiagnostics", null, new { @class = "form-control", @rows = "3", @placeholder = "Your Comments ...", @style = "resize: none;" })
+                                @Html.ValidationMessageFor(model => model.Comments_CriticalDiagnostics, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+
+            <div class="box box-primary container">
+
+                <!-- form start -->
+
+                <div class="box-body">
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Member Support Tickets</label>
+                                
+                                @Html.DropDownList("MemberSupportTickets", null, htmlAttributes: new { @class = "form-control" })
+                                @Html.ValidationMessageFor(model => model.MemberSupportTickets, "", new { @class = "text-danger" })
+
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label>Comments</label>
+                                @Html.TextArea("Comments_MemberSupportTickets", null, new { @class = "form-control", @rows = "3", @placeholder = "Your Comments ...", @style = "resize: none;" })
+                                @Html.ValidationMessageFor(model => model.Comments_MemberSupportTickets, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+
+
+            <div class="box box-default container">
+
+                <!-- form start -->
+
+                <div class="box-body">
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Data Elements Present</label>
+                                
+                                @Html.DropDownList("DataElementsPresent", null, htmlAttributes: new { @class = "form-control" })
+                                @Html.ValidationMessageFor(model => model.DataElementsPresent, "", new { @class = "text-danger" })
+
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label>Comments</label>
+
+                                @Html.TextArea("Comments_DataElementsPresent", null, new { @class = "form-control", @rows = "3", @placeholder = "Your Comments ...", @style = "resize: none;" })
+                                @Html.ValidationMessageFor(model => model.Comments_DataElementsPresent, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div class="box box-danger container">
+
+                <!-- form start -->
+
+                <div class="box-body">
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Minesweeper</label>
+                                
+                                @Html.DropDownList("Minesweeper", null, htmlAttributes: new { @class = "form-control" })
+                                @Html.ValidationMessageFor(model => model.Minesweeper, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label>Comments</label>
+
+                                @Html.TextArea("Comments_Minesweeper", null, new { @class = "form-control", @rows = "3", @placeholder = "Your Comments ...", @style = "resize: none;" })
+                                @Html.ValidationMessageFor(model => model.Comments_Minesweeper, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div class="box box-info container">
+
+                <!-- form start -->
+
+                <div class="box-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>DAS Findings</label>
+                                
+                                @Html.DropDownList("DAS_Findings", null, htmlAttributes: new { @class = "form-control" })
+                                @Html.ValidationMessageFor(model => model.DAS_Findings, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label>Comments</label>
+
+                                @Html.TextArea("Comments_DAS_Findings", null, new { @class = "form-control", @rows = "3", @placeholder = "Your Comments ...", @style = "resize: none;" })
+                                @Html.ValidationMessageFor(model => model.Comments_DAS_Findings, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div class="box box-success container">
+
+                <!-- form start -->
+
+                <div class="box-body">
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>SSA Findings</label>
+
+                                @Html.DropDownList("SSA_Findings", null, htmlAttributes: new { @class = "form-control" })
+                                @Html.ValidationMessageFor(model => model.SSA_Findings, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label>Comments</label>
+                                @Html.TextArea("Comments_SSA_Findings", null, new { @class = "form-control", @rows = "3", @placeholder = "Your Comments ...", @style = "resize: none;" })
+                                @Html.ValidationMessageFor(model => model.Comments_SSA_Findings, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class="body" id="submitform">
+                <center>  <button type="button" class="btn btn-primary margin" data-toggle="modal" data-target="#formsubmissionmodal">Submit the Form</button> </center>
+            </div>
+
+            <!-- Modal -->
+            <div class="modal fade" id="formsubmissionmodal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h4 class="modal-title" id="myModalLabel">THI Feedback Form</h4>
+                        </div>
+                        <div class="modal-body">
+                            Are you sure you want to Submit the form ?
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-primary" onclick="location.href='@Url.Action("Create", "THI_AnalysisFeedback")'" id="savechanges" data-loading-text="Loading..." autocomplete="off">Submit</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </section>
+
+        <!-- /.content -->
+    }
+</div>

@@ -1,0 +1,210 @@
+﻿@model THI_Analysis.Models.ProjectHospital
+
+<div class="content-wrapper" id="MemberTHIScores">
+    <!-- Content Header (Page header) -->
+    <section class="content-header" id="introduction">
+        <h1>
+            Member THI Scores
+        </h1>
+    </section>
+
+    <section class="content">
+        <div class="box box-body box-danger" id="MemberTHIParameters">
+            <div class="row">
+                <div class="form-group col-md-6">
+                    <label>Project Name</label>
+                    @Html.DropDownList("Project", null, htmlAttributes: new { @class = "form-control", @style = "width: 100%;", @aria_hidden = "true" })
+                    @Html.ValidationMessageFor(model => model.Project, "", new { @class = "text-danger" })
+                </div>
+
+                <div class="form-group col-md-2" id="Year">
+                    <label>Year</label>
+                    <select class="form-control" style="width: 100%;" id="yearSelection">
+                        
+                        <option value="2016">2016</option>
+                        <option value="2017">2017</option>
+                        <option value="2018">2018</option>
+                        
+                    </select>
+                </div>
+                
+                <div class="form-group col-md-2" id="Month">
+                    <label>Month</label>
+                    <select class="form-control" style="width: 100%;" id="monthSelection">
+                        <option value="1">January</option>
+                        <option value="2">February</option>
+                        <option value="3">March</option>
+                        <option value="4">April</option>
+                        <option value="5">May</option>
+                        <option value="6">June</option>
+                        <option value="7">July</option>
+                        <option value="8">August</option>
+                        <option value="9">September</option>
+                        <option value="10">October</option>
+                        <option value="11">November</option>
+                        <option value="12">December</option>
+                    </select>
+                </div>
+
+            </div>
+
+            <div class="row">
+                <div class="col-md-2">
+                    <button type="submit" class="btn btn-block btn-primary" id="GenerateTHI" value="GenerateTHI">Generate THI Scores</button>
+                </div>
+                <div class="col-md-2">
+                    <button type="submit" class="btn btn-block btn-primary" id="MoreThiDetails" value="MoreThiDetails">More Details &gt;&gt;</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+  
+            <div class="col-xs-4">
+                <!-- /.box -->
+
+                <div class="box box-success" style="overflow-y: scroll; overflow-x: hidden; height:400px;" id="tableBox">
+                    <table id="MemberContract" class="table table-bordered table-hover">
+                        <thead>
+                        <tr>
+                            <th>Member Information</th>
+                            <th> Value </th>    
+                        </tr>
+                        
+                        </thead>
+
+                        <tbody id="MemberContractInfoTable">
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <!-- /.col -->
+            
+            <div class="col-xs-8">
+                <div class="box box-primary" id="chartBox">
+                    <!-- /.box-header -->
+
+                    <div id="THITrendChart" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
+                    <!-- /.box-body -->
+                    </div>
+                <!-- /.box -->
+                <!-- /.box-body -->
+            </div>
+
+        </div>
+        
+        <div class="row">
+
+            <div class="col-xs-12">
+                <!-- /.box -->
+
+                <div class="box box-primary container" style="overflow-y: scroll; overflow-x: hidden;" id="MemberTHIParameterScoresDiv">
+                    <table id="MemberTHIParameterScores" class="table table-bordered table-hover">
+                        <thead>
+                            <tr role="row">
+                                <th>THI Score</th>
+                                <th>Data Submission Timeliness</th>
+                                <th># Member Support Tickets (Norm by Contract Value)</th>
+                                <th># Critical Diagnostics</th>
+                                <th>Ability to Keep up w/Releases</th>
+                                <th>Minesweeper</th>
+                                <th>Data Lag</th>
+                                <th>Uses Std Architecture</th>
+                                <th>Uses Compass Connect</th>
+                                <th># Data Elements Present</th>
+                            </tr>
+                        </thead>
+
+                        <tbody id="MemberTHIParameterScoresTable">
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <!-- /.col -->
+        </div>
+
+
+    </section>
+</div>
+
+<div class="modal fade" id="THIScoresDrillDown">
+    <div class="modal-dialog modal-lg">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <section class="content-header">
+                    <h1>
+                        <span id="ScoresDataPrj"></span>
+                        <small>THI Scores Full Recent Data</small>
+                    </h1>
+                </section>
+            </div>
+            <div class="modal-body">
+                <section class="content">
+                    <div class="row">
+                        <div class="col-xs-12">
+                            <div class="box box-success">
+                                <div class="box-header">
+                                    <h3 class="box-title">Data Submission Timeliness</h3>
+                                </div>
+                                <!-- /.box-header -->
+                                <div class="box-body">
+                                    <table class="table table-bordered table-hover" id="dstTable">
+                                        <thead>
+                                            <tr>
+                                                <th>Short Description</th>
+                                                <th>Issue Number</th>
+                                                <th>Data Submission Target Date</th>
+                                                <th>Files Received Date</th>
+                                                <th># of Days Delay for File Receipt</th>
+                                                <th>Date Time Closed</th>
+                                                <th># of Days for Data Load ETLCompletion</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="DataSubmimssionTimelines">
+                                        
+                                        </tbody>
+
+                                    </table>
+                                </div>
+                                <!-- /.box-body -->
+                            </div>
+                            <!-- /.box -->
+
+                            <div class="box box-info">
+                                <div class="box-header">
+                                    <h3 class="box-title">Missing Data Elements</h3>
+                                </div>
+                                <!-- /.box-header -->
+                                <div class="box-body">
+                                    <table class="table table-bordered table-hover" id="mseTable">
+                                        <thead>
+                                            <tr>
+                                                <th>Inpatient Data Elements</th>
+                                                <th>Outpatient Data Elements</th>
+                                                <th>OPPE Data Elements</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="MissingDataElements">
+                                        </tbody>
+
+                                    </table>
+                                </div>
+                                <!-- /.box-body -->
+                            </div>
+                            <!-- /.box -->
+                        </div>
+                        <!-- /.col -->
+                    </div>
+                    <!-- /.row -->
+                </section>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+
+    </div>
+</div>

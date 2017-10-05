@@ -1,0 +1,153 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+  <EntityContainerMapping StorageEntityContainer="CCCOperationsModelStoreContainer" CdmEntityContainer="CCCOperationsEntities">
+    <EntitySetMapping Name="AnalysisSummaries">
+      <EntityTypeMapping TypeName="CCCOperationsModel.AnalysisSummary">
+        <MappingFragment StoreEntitySet="AnalysisSummary">
+          <ScalarProperty Name="AnalysisSummaryKey" ColumnName="AnalysisSummaryKey" />
+          <ScalarProperty Name="AnalysisSummaryDescription" ColumnName="AnalysisSummaryDescription" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="CriticalDiagnostics">
+      <EntityTypeMapping TypeName="CCCOperationsModel.CriticalDiagnostic">
+        <MappingFragment StoreEntitySet="CriticalDiagnostics">
+          <ScalarProperty Name="CriticalDiagnosticKey" ColumnName="CriticalDiagnosticKey" />
+          <ScalarProperty Name="CriticalDiagnosticsDescription" ColumnName="CriticalDiagnosticsDescription" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="CustomOPPEinfoes">
+      <EntityTypeMapping TypeName="CCCOperationsModel.CustomOPPEinfo">
+        <MappingFragment StoreEntitySet="CustomOPPEinfo">
+          <ScalarProperty Name="CustomOPPEinfoKey" ColumnName="CustomOPPEinfoKey" />
+          <ScalarProperty Name="Project" ColumnName="Project" />
+          <ScalarProperty Name="TotalCount" ColumnName="TotalCount" />
+          <ScalarProperty Name="MaxRR" ColumnName="MaxRR" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="DAS_Findings">
+      <EntityTypeMapping TypeName="CCCOperationsModel.DAS_Findings">
+        <MappingFragment StoreEntitySet="DAS_Findings">
+          <ScalarProperty Name="DAS_FindingsKey" ColumnName="DAS_FindingsKey" />
+          <ScalarProperty Name="DAS_FindingsDescription" ColumnName="DAS_FindingsDescription" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="DataElements">
+      <EntityTypeMapping TypeName="CCCOperationsModel.DataElement">
+        <MappingFragment StoreEntitySet="DataElements">
+          <ScalarProperty Name="DataElementsKey" ColumnName="DataElementsKey" />
+          <ScalarProperty Name="DataElementsDescription" ColumnName="DataElementsDescription" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="DataLags">
+      <EntityTypeMapping TypeName="CCCOperationsModel.DataLag">
+        <MappingFragment StoreEntitySet="DataLag">
+          <ScalarProperty Name="DataLagKey" ColumnName="DataLagKey" />
+          <ScalarProperty Name="DataLagDescription" ColumnName="DataLagDescription" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="DataLoadTimelinesses">
+      <EntityTypeMapping TypeName="CCCOperationsModel.DataLoadTimeliness">
+        <MappingFragment StoreEntitySet="DataLoadTimeliness">
+          <ScalarProperty Name="DataLoadTimelinessKey" ColumnName="DataLoadTimelinessKey" />
+          <ScalarProperty Name="DataLoadTimelinessDescription" ColumnName="DataLoadTimelinessDescription" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="DischargeVolumes">
+      <EntityTypeMapping TypeName="CCCOperationsModel.DischargeVolume">
+        <MappingFragment StoreEntitySet="DischargeVolumes">
+          <ScalarProperty Name="DischargeVolumeKey" ColumnName="DischargeVolumeKey" />
+          <ScalarProperty Name="ProjectHospital" ColumnName="ProjectHospital" />
+          <ScalarProperty Name="Year" ColumnName="Year" />
+          <ScalarProperty Name="Month" ColumnName="Month" />
+          <ScalarProperty Name="IP_COUNT" ColumnName="IP_COUNT" />
+          <ScalarProperty Name="OP_COUNT" ColumnName="OP_COUNT" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="MemberSupportTickets">
+      <EntityTypeMapping TypeName="CCCOperationsModel.MemberSupportTicket">
+        <MappingFragment StoreEntitySet="MemberSupportTickets">
+          <ScalarProperty Name="MemberSupportTicketsKey" ColumnName="MemberSupportTicketsKey" />
+          <ScalarProperty Name="MemberSupportTicketsDescription" ColumnName="MemberSupportTicketsDescription" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Minesweepers">
+      <EntityTypeMapping TypeName="CCCOperationsModel.Minesweeper">
+        <MappingFragment StoreEntitySet="Minesweeper">
+          <ScalarProperty Name="MinesweeperKey" ColumnName="MinesweeperKey" />
+          <ScalarProperty Name="MinesweeperDescription" ColumnName="MinesweeperDescription" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="ProjectHospitals">
+      <EntityTypeMapping TypeName="CCCOperationsModel.ProjectHospital">
+        <MappingFragment StoreEntitySet="ProjectHospitals">
+          <ScalarProperty Name="ProjectHospitalKey" ColumnName="ProjectHospitalKey" />
+          <ScalarProperty Name="Project" ColumnName="Project" />
+          <ScalarProperty Name="HospitalName" ColumnName="HospitalName" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="SalesforceProjects">
+      <EntityTypeMapping TypeName="CCCOperationsModel.SalesforceProject">
+        <MappingFragment StoreEntitySet="SalesforceProjects">
+          <ScalarProperty Name="ProjectKey" ColumnName="ProjectKey" />
+          <ScalarProperty Name="ProjectName" ColumnName="ProjectName" />
+          <ScalarProperty Name="ProdDBName" ColumnName="ProdDBName" />
+          <ScalarProperty Name="DataManagerName" ColumnName="DataManagerName" />
+          <ScalarProperty Name="STGDBName" ColumnName="STGDBName" />
+          <ScalarProperty Name="CCC_3M" ColumnName="CCC_3M" />
+          <ScalarProperty Name="RunAPRDRG" ColumnName="RunAPRDRG" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="SSA_Findings">
+      <EntityTypeMapping TypeName="CCCOperationsModel.SSA_Findings">
+        <MappingFragment StoreEntitySet="SSA_Findings">
+          <ScalarProperty Name="SSA_FindingsKey" ColumnName="SSA_FindingsKey" />
+          <ScalarProperty Name="SSA_FindingsDescription" ColumnName="SSA_FindingsDescription" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="THI_AnalysisFeedback">
+      <EntityTypeMapping TypeName="CCCOperationsModel.THI_AnalysisFeedback">
+        <MappingFragment StoreEntitySet="THI_AnalysisFeedback">
+          <ScalarProperty Name="AnalysisFeedbackKey" ColumnName="AnalysisFeedbackKey" />
+          <ScalarProperty Name="Project" ColumnName="Project" />
+          <ScalarProperty Name="AnalysisSummary" ColumnName="AnalysisSummary" />
+          <ScalarProperty Name="AnalysisCreatedDate" ColumnName="AnalysisCreatedDate" />
+          <ScalarProperty Name="BusinessAnalyst" ColumnName="BusinessAnalyst" />
+          <ScalarProperty Name="AnalysisNotes" ColumnName="AnalysisNotes" />
+          <ScalarProperty Name="AnalysisRecommendations" ColumnName="AnalysisRecommendations" />
+          <ScalarProperty Name="DataSubmissionTimelines" ColumnName="DataSubmissionTimelines" />
+          <ScalarProperty Name="Comments_DataSubmissionTimelines" ColumnName="Comments_DataSubmissionTimelines" />
+          <ScalarProperty Name="DataLag" ColumnName="DataLag" />
+          <ScalarProperty Name="Comments_DataLag" ColumnName="Comments_DataLag" />
+          <ScalarProperty Name="CriticalDiagnostics" ColumnName="CriticalDiagnostics" />
+          <ScalarProperty Name="Comments_CriticalDiagnostics" ColumnName="Comments_CriticalDiagnostics" />
+          <ScalarProperty Name="MemberSupportTickets" ColumnName="MemberSupportTickets" />
+          <ScalarProperty Name="Comments_MemberSupportTickets" ColumnName="Comments_MemberSupportTickets" />
+          <ScalarProperty Name="DataElementsPresent" ColumnName="DataElementsPresent" />
+          <ScalarProperty Name="Comments_DataElementsPresent" ColumnName="Comments_DataElementsPresent" />
+          <ScalarProperty Name="Minesweeper" ColumnName="Minesweeper" />
+          <ScalarProperty Name="Comments_Minesweeper" ColumnName="Comments_Minesweeper" />
+          <ScalarProperty Name="DAS_Findings" ColumnName="DAS_Findings" />
+          <ScalarProperty Name="Comments_DAS_Findings" ColumnName="Comments_DAS_Findings" />
+          <ScalarProperty Name="SSA_Findings" ColumnName="SSA_Findings" />
+          <ScalarProperty Name="Comments_SSA_Findings" ColumnName="Comments_SSA_Findings" />
+          <ScalarProperty Name="LastModifiedBy" ColumnName="LastModifiedBy" />
+          <ScalarProperty Name="LastModifiedDate" ColumnName="LastModifiedDate" />
+          <ScalarProperty Name="IsDeleted" ColumnName="IsDeleted" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+  </EntityContainerMapping>
+</Mapping>
