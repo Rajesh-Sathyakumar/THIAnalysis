@@ -1,6 +1,13 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Configuration;
 using System.Data.Entity;
+using System.Dynamic;
 using System.Linq;
+using System.Net;
+using System.Net.Http;
+using System.Net.Http.Headers;
+using System.Text;
 using System.Web;
 using System.Web.Mvc;
 using System.Xml.Linq;
@@ -10,19 +17,255 @@ using SamlHelperLibrary.Models;
 using SamlHelperLibrary.Service;
 using THI_Analysis.Constants;
 using THI_Analysis.Models;
+using THI_Analysis.Dto;
+using THI_Analysis.Utility;
 
 namespace THI_Analysis.Controllers
 {
     public class THI_AnalysisFeedbackController : Controller
     {
-        private readonly CCCOperationsEntities db = new CCCOperationsEntities();
-        private UsageActivityList _usgAct = new UsageActivityList();
+        private readonly CCCOperationsEntities _db = new CCCOperationsEntities();
+        private readonly UsageActivityList _usgAct = new UsageActivityList();
+        private readonly UserCreationService _userService = new UserCreationService();
+        private readonly Guid _memberOrgKey = Guid.Parse(ConfigurationManager.AppSettings["MemberOrgKey"]);
+        private readonly Guid _productKey = Guid.Parse(ConfigurationManager.AppSettings["ProductKey"]);
+        private readonly Guid _environmentKey = Guid.Parse(ConfigurationManager.AppSettings["EnvironmentKey"]);
+        private readonly string _siamBaseUrl = ConfigurationManager.AppSettings["SIAMBaseURL"];
+        private readonly string _crimsonProvisioningService = ConfigurationManager.AppSettings["CrimsonProvisioningService"];
+
+
+        public ActionResult EditUserPermission()
+        {
+            if (Request.Url != null) SiamRedirection(Request.Url.AbsoluteUri);
+
+            dynamic userStatus = new ExpandoObject();
+            var getPendingUsers = new List<ManageUserDetail>();
+            var deactivatedUsers = new List<ManageUserDetail>();
+
+            if (Session?["SessionAuthToken"] != null)
+            {
+                getPendingUsers = _userService.GetUnprovisionedUsers(_memberOrgKey, _productKey, _environmentKey,
+                        _siamBaseUrl + _crimsonProvisioningService,
+                        string.Concat(
+                            "User/GetUnprovisionedUsersByMemberApplicationEnvironment",
+                            "?memberOrgId={{{0}}}&applicationId={{{1}}}&environmentId={{{2}}}"),
+                        Session["SessionAuthToken"].ToString())
+                    .Select(
+                        a =>
+                            new ManageUserDetail
+                            {
+                                FirstName = a.FirstName,
+                                LastName = a.LastName,
+                                Email = a.Email,
+                                Role = "NA",
+                                UserGuid = a.UserKey
+                            }).ToList();
+
+
+                int deactivatedUsersCount = _userService.GetDeactivatedUsersCount(
+                    new UsersCount()
+                    {
+                        MemberOrgKeys = new[] {_memberOrgKey},
+                        ApplicationKey = _productKey,
+                        EnvironmentKeys = new[] {_environmentKey}
+                    },
+                    _siamBaseUrl + _crimsonProvisioningService,
+                    "User/GetUserCountAndStatus", Session["SessionAuthToken"].ToString()
+                    );
+
+                for (int i = 0; i < deactivatedUsersCount; i += 20)
+                {
+                    deactivatedUsers.AddRange(_userService.GetDeactivatedUsers(new SearchUsersPostData
+                    {
+                        Keyword = "",
+                        AccountStatus = 5,
+                        UserType = 0,
+                        SortColumn = "LastName,FirstName",
+                        SortDirection = 0,
+                        Index = i,
+                        NoofItems = 20,
+                        MemberOrgKeys = new[] { _memberOrgKey },
+                        ApplicationKey = _productKey,
+                        EnvironmentKeys = new[] { _environmentKey }
+                    },
+                        _siamBaseUrl + _crimsonProvisioningService,
+                        "User/SearchUsers",
+                        Session["SessionAuthToken"].ToString()
+                    )
+                    .Select(
+                        a =>
+                            new ManageUserDetail
+                            {
+                                FirstName = a.FirstName,
+                                LastName = a.LastName,
+                                Email = a.Email,
+                                Role = "NA",
+                                UserGuid = a.UserKey
+                            })
+                    .ToList());
+                }
+
+                foreach (var user in deactivatedUsers)
+                {
+                    var dbUser = _db.Users.FirstOrDefault(a => a.UserGUID == user.UserGuid.ToString());
+
+                    if (dbUser != null)
+                    {
+                        dbUser.IsActive = false;
+                        _db.Entry(dbUser).State = EntityState.Modified;
+                        _db.SaveChanges();
+                    }
+                }
+
+            }
+
+            userStatus.pendingUsers = getPendingUsers;
+
+            userStatus.inactiveUsers = _db.Users.Where(a => a.IsActive == false).Select(b => new ManageUserDetail()
+            {
+                FirstName = b.FirstName,
+                LastName = b.LastName,
+                Email = b.Email,
+                Role = b.Admin.ToString()
+            }).ToList();
+
+            userStatus.activeUsers = _db.Users.Where(a => a.IsActive).Select(b => new ManageUserDetail()
+            {
+                FirstName = b.FirstName,
+                LastName = b.LastName,
+                Email = b.Email,
+                Role = b.Admin.ToString()
+            }).ToList();
+
+            userStatus.allUsers = _db.Users.Select(b => new ManageUserDetail()
+            {
+                FirstName = b.FirstName,
+                LastName = b.LastName,
+                Email = b.Email,
+                Role = b.Admin.ToString()
+            }).ToList();
+
+            return View(userStatus);
+        }
+
+        private static HttpClient ConstructRequest(SiamRequestServiceParam requestServiceParam)
+        {
+            var cookieContainer = new CookieContainer();
+
+            var handler = new HttpClientHandler { CookieContainer = cookieContainer };
+
+            var httpClient = new HttpClient(handler)
+            {
+                BaseAddress = requestServiceParam.BaseAddress,
+                Timeout =
+                    TimeSpan.FromMilliseconds(requestServiceParam.HttpTimeOut)
+            };
+
+            httpClient.DefaultRequestHeaders.Add("Version", requestServiceParam.SiamApiVersion);
+            httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+            foreach (var requestParam in requestServiceParam.FormParam)
+                cookieContainer.Add(requestServiceParam.BaseAddress, new Cookie(requestParam.Key, requestParam.Value));
+
+            return httpClient;
+        }
+
+        public string MakePostCallAndReturnCookie(SiamRequestServiceParam requestServiceParam)
+        {
+            var cookieValue = string.Empty;
+            var httpClient = ConstructRequest(requestServiceParam);
+            var psstringContent = new StringContent(
+                requestServiceParam.SamlResponse,
+                Encoding.UTF8,
+                requestServiceParam.ContentType);
+            var response = httpClient.PostAsync(requestServiceParam.FragmentUrl, psstringContent).Result;
+            if (response.IsSuccessStatusCode)
+            {
+                IEnumerable<string> cookieHeader;
+                response.Headers.TryGetValues("Set-Cookie", out cookieHeader);
+                var cookie = cookieHeader.FirstOrDefault();
+                if (cookie != null)
+                    cookieValue = cookie.Split(';')[0].Split('=').ToList()[1] + '=';
+
+                return cookieValue;
+            }
+
+            throw new WebException(response.Content.ReadAsStringAsync().Result);
+
+        }
+
+
+        public string PerformInitialAuthenticationAndCreateCookies(
+            string siamApiUrl,
+            string siamApiVersion,
+            string samlRespone,
+            int httpTimeOut)
+        {
+            var requestparam = new SiamRequestServiceParam
+            {
+                BaseAddress = new Uri(siamApiUrl),
+                SamlResponse = samlRespone,
+                FormParam = new List<KeyValuePair<string, string>>(),
+                FragmentUrl = "Authenticate/",
+                HttpTimeOut = httpTimeOut,
+                SiamApiVersion = siamApiVersion,
+                ContentType = "application/x-www-form-urlencoded"
+            };
+            return MakePostCallAndReturnCookie(requestparam);
+        }
+
+
+        [HttpPost]
+        public void SiamRedirection(string returnUrl)
+        {
+            if (Session["UserSessionInfo"] == null)
+            {
+                var cas = new CasAuthenticationService(SamlHelperConfiguration.Config, UserSessionHandler.Get());
+                var httpContextBase = new HttpContextWrapper(System.Web.HttpContext.Current);
+                if (!cas.IsSAMLResponse(httpContextBase) && (Session == null || Session["UserSessionInfo"] == null))
+                {
+                    cas.RedirectUserToCasLogin(
+                        _memberOrgKey,
+                        _productKey,
+                        _environmentKey,
+                        returnUrl);
+                }
+                else
+                {
+                    var samlResponse = httpContextBase.Request.Form["SAMLResponse"];
+                    var relayState = httpContextBase.Request.Form["RelayState"];
+                    var samlAndRelayUrl =
+                        $"SAMLResponse={HttpUtility.UrlEncode(samlResponse)}&RelayState={HttpUtility.UrlEncode(relayState)}";
+                    var authToken = PerformInitialAuthenticationAndCreateCookies(
+                        _siamBaseUrl + _crimsonProvisioningService,
+                        "2",
+                        samlAndRelayUrl,
+                        10000000);
+                    Session["SessionAuthToken"] = authToken;
+                    var sessionInfo = cas.GetSessionFromSaml(httpContextBase);
+
+                    if (sessionInfo != null)
+                    {
+                        if (HttpContext.Session != null)
+                        {
+                            HttpContext.Session.Add("UserSessionInfo", sessionInfo);
+                            HttpContext.Session.Timeout = 20;
+                        }
+                        SetUsage(_usgAct.LogIn);
+                    }
+                    Response.Cookies.Add(new HttpCookie("sessionId", authToken));
+
+                    returnUrl = returnUrl.Replace("http://thi.advisory.com:81", "https://thi.advisory.com");
+                    Response.Redirect(returnUrl);
+                }
+            }
+        }
+
 
 
         [HttpPost]
         public void SetUsage(int usageActivity, XDocument paramXml = null)
         {
-            if (Session != null && Session["UserSessionInfo"] != null)
+            if (Session?["UserSessionInfo"] != null)
             {
                 var currentUsage = new UsageActivityLog();
                 var userGuid = ((UserSessionInfo)Session["UserSessionInfo"]).userKey.ToString();
@@ -33,52 +276,12 @@ namespace THI_Analysis.Controllers
                 }
                 currentUsage.AccessTime = DateTime.Now;
                 currentUsage.UsageActivityKey = usageActivity;
-                currentUsage.Userkey = db.Users.Where(a => a.UserGUID == userGuid).Max(a => a.Userkey);
+                currentUsage.Userkey = _db.Users.Where(a => a.UserGUID == userGuid).Max(a => a.Userkey);
                 currentUsage.SessionID = sessionId;
-                db.UsageActivityLogs.Add(currentUsage);
+                _db.UsageActivityLogs.Add(currentUsage);
 
-                db.SaveChanges();
+                _db.SaveChanges();
             }            
-        }
-
-        public ActionResult EditUserPermission()
-        {
-            SiamRedirection(Request.Url.AbsoluteUri);
-            return View();
-        }
-
-        [HttpPost]
-        public void SiamRedirection(string returnUrl)
-        {
-
-            if (Session["UserSessionInfo"] == null)
-            {
-                var cas = new CasAuthenticationService(SamlHelperConfiguration.Config, UserSessionHandler.Get());
-                var httpContextBase = new HttpContextWrapper(System.Web.HttpContext.Current);
-                if (!cas.IsSAMLResponse(httpContextBase) && (Session == null || Session["UserSessionInfo"] == null))
-                {
-                    cas.RedirectUserToCasLogin(
-                        new Guid("5B95F3B2-C265-4E1A-91AB-60FC449E96EB"),
-                        new Guid("85346158-DB2E-49CE-80AC-0E868527DF2B"),
-                        new Guid("37B473AE-B5A5-4839-91D5-80676A86B4B9"),
-                        returnUrl);
-                }
-                else
-                {
-                    var sessionInfo = cas.GetSessionFromSaml(httpContextBase);
-
-                    if (sessionInfo != null)
-                    {
-                        HttpContext.Session.Add("UserSessionInfo", sessionInfo);
-                        HttpContext.Session.Timeout = 20;
-                        SetUsage(_usgAct.LogIn);
-                    }
-
-                    returnUrl = returnUrl.Replace("http://thi.advisory.com:81", "https://thi.advisory.com");
-
-                    Response.Redirect(returnUrl);
-                }
-            }
         }
 
         public void Logout()
@@ -100,7 +303,7 @@ namespace THI_Analysis.Controllers
             SetUsage(_usgAct.MemberThiScoresMoreDetails, doc);
             
 
-            var dataLoadDrill = db.DataLoadDrills.Where(a => a.ProjectKey == ProjectKey).Select(a => new
+            var dataLoadDrill = _db.DataLoadDrills.Where(a => a.ProjectKey == ProjectKey).Select(a => new
             {
                 a.Project_ProjectName,
                 a.ShortDescription,
@@ -112,17 +315,17 @@ namespace THI_Analysis.Controllers
                 a.ETLCompletion_DataLoad
             }).OrderBy(a=> a.DateTimeClosed);
 
-            var missingElementsIp = db.MemberDataElements_IP.Where(a => a.ProjectKey == ProjectKey).Select(a => new
+            var missingElementsIp = _db.MemberDataElements_IP.Where(a => a.ProjectKey == ProjectKey).Select(a => new
             {
                 a.DataElement
             }).OrderBy(a=> a.DataElement);
 
-            var missingElementsOp = db.MemberDataElements_OP.Where(a => a.ProjectKey == ProjectKey).Select(a => new
+            var missingElementsOp = _db.MemberDataElements_OP.Where(a => a.ProjectKey == ProjectKey).Select(a => new
             {
                 a.DataElement
             }).OrderBy(a => a.DataElement);
 
-            var missingElementsOppe = db.MemberDataElements_OPPE.Where(a => a.ProjectKey == ProjectKey).Select(a => new
+            var missingElementsOppe = _db.MemberDataElements_OPPE.Where(a => a.ProjectKey == ProjectKey).Select(a => new
             {
                 a.DataElement
             }).OrderBy(a => a.DataElement);
@@ -151,8 +354,8 @@ namespace THI_Analysis.Controllers
             SetUsage(_usgAct.GenerateThiScore, doc);
 
             var memberInfo =
-                db.CCCTHIScoreColors.Where(a => a.ProjectKey == ProjectKey && a.Year == Year && a.Month == Month)
-                    .Join(db.SalesforceProjects, a => a.ProjectKey, b => b.ProjectKey,
+                _db.CCCTHIScoreColors.Where(a => a.ProjectKey == ProjectKey && a.Year == Year && a.Month == Month)
+                    .Join(_db.SalesforceProjects, a => a.ProjectKey, b => b.ProjectKey,
                         (a, b) => new {CCCTHIScoreColors = a, SalesforceProject = b})
                     .Select(a => new
                     {
@@ -189,7 +392,7 @@ namespace THI_Analysis.Controllers
                         a.CCCTHIScoreColors.THISCORE_CC
                     });
 
-            var ThiTrend = db.CCCTHIScoreColors.Where(a => a.ProjectKey == ProjectKey).Select(a => new
+            var ThiTrend = _db.CCCTHIScoreColors.Where(a => a.ProjectKey == ProjectKey).Select(a => new
             {
                 a.ProjectPhase,
                 a.Year,
@@ -198,7 +401,7 @@ namespace THI_Analysis.Controllers
                 a.THISCORE_CC
             }).OrderBy(a => new {a.Year, a.Month});
 
-            var MemberContractInfo = db.CCCMemberContractInfoes.Where(
+            var MemberContractInfo = _db.CCCMemberContractInfoes.Where(
                     a => a.ProjectKey == ProjectKey && a.Year == Year && a.Month == Month)
                 .Select(a => new
                 {
@@ -211,7 +414,7 @@ namespace THI_Analysis.Controllers
                     a.LoginCount
                 });
 
-            var ETLCompletion = db.ETLCompletion(ProjectKey, Year, Month).Select(a => a.Avg_ETLDurationn_DataLoad);
+            var ETLCompletion = _db.ETLCompletion(ProjectKey, Year, Month).Select(a => a.Avg_ETLDurationn_DataLoad);
 
             return
                 Json(
@@ -230,8 +433,8 @@ namespace THI_Analysis.Controllers
 
             SiamRedirection(HttpContext.Request.Url.AbsoluteUri);
             SetUsage(_usgAct.MemberThiScoresTab);
-            ViewBag.Project = new SelectList(db.SalesforceProjects, "ProjectKey", "ProjectName");
-            ViewBag.RefreshDate = db.ToolRefreshDates.Max(a => a.RecentRundate);
+            ViewBag.Project = new SelectList(_db.SalesforceProjects, "ProjectKey", "ProjectName");
+            ViewBag.RefreshDate = _db.ToolRefreshDates.Max(a => a.RecentRundate);
             return View();
         }
 
@@ -239,9 +442,9 @@ namespace THI_Analysis.Controllers
         {
             SiamRedirection(Request.Url.AbsoluteUri);
             SetUsage(_usgAct.ThiDataLogsTab);
-            ViewBag.Project = new SelectList(db.SalesforceProjects, "ProjectKey", "ProjectName");
+            ViewBag.Project = new SelectList(_db.SalesforceProjects, "ProjectKey", "ProjectName");
             var feedBackData =
-                db.THI_AnalysisFeedback.Include(t => t.SalesforceProject)
+                _db.THI_AnalysisFeedback.Include(t => t.SalesforceProject)
                     .OrderByDescending(model => model.AnalysisCreatedDate);
             return View(feedBackData.ToList());
         }
@@ -251,8 +454,8 @@ namespace THI_Analysis.Controllers
         {
             SiamRedirection(HttpContext.Request.Url.AbsoluteUri);
             SetUsage(_usgAct.MemberStatisticsTab);
-            ViewBag.Project = new SelectList(db.SalesforceProjects, "ProjectKey", "ProjectName");
-            ViewBag.RefreshDate = db.ToolRefreshDates.Max(a => a.RecentRundate);
+            ViewBag.Project = new SelectList(_db.SalesforceProjects, "ProjectKey", "ProjectName");
+            ViewBag.RefreshDate = _db.ToolRefreshDates.Max(a => a.RecentRundate);
             return View();
         }
 
@@ -267,8 +470,8 @@ namespace THI_Analysis.Controllers
             SetUsage(_usgAct.MemberStatisticsSelectionProject,doc);
 
             var memberInfo =
-                db.SalesforceProjects.Where(a => a.ProjectKey == project)
-                    .Join(db.CustomOPPEinfoes, a => a.ProjectKey, b => b.Project,
+                _db.SalesforceProjects.Where(a => a.ProjectKey == project)
+                    .Join(_db.CustomOPPEinfoes, a => a.ProjectKey, b => b.Project,
                         (a, b) => new {SalesforceProject = a, CustomOPPEinfo = b})
                     .Select(
                         x =>
@@ -294,7 +497,7 @@ namespace THI_Analysis.Controllers
             SetUsage(_usgAct.MemberStatisticsGeneratePatientVolumes,doc);
 
             var caseVolumes =
-                db.DischargeVolumes.Where(fa => fa.ProjectHospital == facilitySelect)
+                _db.DischargeVolumes.Where(fa => fa.ProjectHospital == facilitySelect)
                     .Select(mo => new {mo.Year, mo.Month, mo.IP_COUNT, mo.OP_COUNT})
                     .OrderByDescending(mo => new {mo.Year, mo.Month})
                     .ToList();
@@ -302,10 +505,10 @@ namespace THI_Analysis.Controllers
         }
 
         [HttpPost]
-        public JsonResult FilterHospitalsByProject(int project)
+        public JsonResult FilterHospitalsByProject(int? project)
         {
             var projectHospitaList =
-                db.ProjectHospitals.Where(a => a.Project == project)
+                _db.ProjectHospitals.Where(a => a.Project == project)
                     .Select(b => new {b.ProjectHospitalKey, b.HospitalName})
                     .ToList();
             return new JsonResult {Data = projectHospitaList, JsonRequestBehavior = JsonRequestBehavior.AllowGet};
@@ -321,19 +524,19 @@ namespace THI_Analysis.Controllers
             XDocument doc = new XDocument(root);
             SetUsage(_usgAct.ThiDataLogsFilterbyProjects, doc);
 
-            ViewBag.Project = new SelectList(db.SalesforceProjects, "ProjectKey", "ProjectName");
+            ViewBag.Project = new SelectList(_db.SalesforceProjects, "ProjectKey", "ProjectName");
 
             if (Project == 1)
             {
                 var feedBackData =
-                    db.THI_AnalysisFeedback.Include(t => t.SalesforceProject)
+                    _db.THI_AnalysisFeedback.Include(t => t.SalesforceProject)
                         .OrderByDescending(model => model.AnalysisCreatedDate);
                 return View(feedBackData.ToList());
             }
             else
             {
                 var feedBackData =
-                    db.THI_AnalysisFeedback.Include(t => t.SalesforceProject)
+                    _db.THI_AnalysisFeedback.Include(t => t.SalesforceProject)
                         .Where(model => model.Project == Project)
                         .OrderByDescending(model => model.AnalysisCreatedDate);
                 return View(feedBackData.ToList());
@@ -350,7 +553,7 @@ namespace THI_Analysis.Controllers
             root.Add(feedbackElem);
             XDocument doc = new XDocument(root);
             SetUsage(_usgAct.MemberThiFeedbackInformation, doc);
-            var feedBackData = db.THI_AnalysisFeedback.Find(id);
+            var feedBackData = _db.THI_AnalysisFeedback.Find(id);
             return View(feedBackData);
         }
 
@@ -361,20 +564,20 @@ namespace THI_Analysis.Controllers
             SiamRedirection( HttpContext.Request.Url.AbsoluteUri);
             SetUsage(_usgAct.ThiDataFeedbackTab);
 
-            ViewBag.AnalysisSummary = new SelectList(db.AnalysisSummaries, "AnalysisSummaryKey",
+            ViewBag.AnalysisSummary = new SelectList(_db.AnalysisSummaries, "AnalysisSummaryKey",
                 "AnalysisSummaryDescription");
-            ViewBag.CriticalDiagnostics = new SelectList(db.CriticalDiagnostics, "CriticalDiagnosticKey",
+            ViewBag.CriticalDiagnostics = new SelectList(_db.CriticalDiagnostics, "CriticalDiagnosticKey",
                 "CriticalDiagnosticsDescription");
-            ViewBag.DAS_Findings = new SelectList(db.DAS_Findings, "DAS_FindingsKey", "DAS_FindingsDescription");
-            ViewBag.DataElementsPresent = new SelectList(db.DataElements, "DataElementsKey", "DataElementsDescription");
-            ViewBag.DataLag = new SelectList(db.DataLags, "DataLagKey", "DataLagDescription");
-            ViewBag.DataSubmissionTimelines = new SelectList(db.DataLoadTimelinesses, "DataLoadTimelinessKey",
+            ViewBag.DAS_Findings = new SelectList(_db.DAS_Findings, "DAS_FindingsKey", "DAS_FindingsDescription");
+            ViewBag.DataElementsPresent = new SelectList(_db.DataElements, "DataElementsKey", "DataElementsDescription");
+            ViewBag.DataLag = new SelectList(_db.DataLags, "DataLagKey", "DataLagDescription");
+            ViewBag.DataSubmissionTimelines = new SelectList(_db.DataLoadTimelinesses, "DataLoadTimelinessKey",
                 "DataLoadTimelinessDescription");
-            ViewBag.MemberSupportTickets = new SelectList(db.MemberSupportTickets, "MemberSupportTicketsKey",
+            ViewBag.MemberSupportTickets = new SelectList(_db.MemberSupportTickets, "MemberSupportTicketsKey",
                 "MemberSupportTicketsDescription");
-            ViewBag.Minesweeper = new SelectList(db.Minesweepers, "MinesweeperKey", "MinesweeperDescription");
-            ViewBag.Project = new SelectList(db.SalesforceProjects, "ProjectKey", "ProjectName");
-            ViewBag.SSA_Findings = new SelectList(db.SSA_Findings, "SSA_FindingsKey", "SSA_FindingsDescription");
+            ViewBag.Minesweeper = new SelectList(_db.Minesweepers, "MinesweeperKey", "MinesweeperDescription");
+            ViewBag.Project = new SelectList(_db.SalesforceProjects, "ProjectKey", "ProjectName");
+            ViewBag.SSA_Findings = new SelectList(_db.SSA_Findings, "SSA_FindingsKey", "SSA_FindingsDescription");
             return View();
         }
 
@@ -404,8 +607,8 @@ namespace THI_Analysis.Controllers
                 && tHI_AnalysisFeedback.Project != 0 && tHI_AnalysisFeedback.Project != 1
             )
             {
-                db.THI_AnalysisFeedback.Add(tHI_AnalysisFeedback);
-                db.SaveChanges();
+                _db.THI_AnalysisFeedback.Add(tHI_AnalysisFeedback);
+                _db.SaveChanges();
                 XElement root = new XElement("Parameters");
                 XElement feedbackElem1 = new XElement("ProjectKey", tHI_AnalysisFeedback.Project);
                 XElement feedbackElem2 = new XElement("AS", tHI_AnalysisFeedback.AnalysisSummary);
@@ -456,25 +659,25 @@ namespace THI_Analysis.Controllers
                 return RedirectToAction("Index");
             }
 
-            ViewBag.AnalysisSummary = new SelectList(db.AnalysisSummaries, "AnalysisSummaryKey",
+            ViewBag.AnalysisSummary = new SelectList(_db.AnalysisSummaries, "AnalysisSummaryKey",
                 "AnalysisSummaryDescription", tHI_AnalysisFeedback.AnalysisSummary);
-            ViewBag.CriticalDiagnostics = new SelectList(db.CriticalDiagnostics, "CriticalDiagnosticKey",
+            ViewBag.CriticalDiagnostics = new SelectList(_db.CriticalDiagnostics, "CriticalDiagnosticKey",
                 "CriticalDiagnosticsDescription", tHI_AnalysisFeedback.CriticalDiagnostics);
-            ViewBag.DAS_Findings = new SelectList(db.DAS_Findings, "DAS_FindingsKey", "DAS_FindingsDescription",
+            ViewBag.DAS_Findings = new SelectList(_db.DAS_Findings, "DAS_FindingsKey", "DAS_FindingsDescription",
                 tHI_AnalysisFeedback.DAS_Findings);
-            ViewBag.DataElementsPresent = new SelectList(db.DataElements, "DataElementsKey", "DataElementsDescription",
+            ViewBag.DataElementsPresent = new SelectList(_db.DataElements, "DataElementsKey", "DataElementsDescription",
                 tHI_AnalysisFeedback.DataElementsPresent);
-            ViewBag.DataLag = new SelectList(db.DataLags, "DataLagKey", "DataLagDescription",
+            ViewBag.DataLag = new SelectList(_db.DataLags, "DataLagKey", "DataLagDescription",
                 tHI_AnalysisFeedback.DataLag);
-            ViewBag.DataSubmissionTimelines = new SelectList(db.DataLoadTimelinesses, "DataLoadTimelinessKey",
+            ViewBag.DataSubmissionTimelines = new SelectList(_db.DataLoadTimelinesses, "DataLoadTimelinessKey",
                 "DataLoadTimelinessDescription", tHI_AnalysisFeedback.DataSubmissionTimelines);
-            ViewBag.MemberSupportTickets = new SelectList(db.MemberSupportTickets, "MemberSupportTicketsKey",
+            ViewBag.MemberSupportTickets = new SelectList(_db.MemberSupportTickets, "MemberSupportTicketsKey",
                 "MemberSupportTicketsDescription", tHI_AnalysisFeedback.MemberSupportTickets);
-            ViewBag.Minesweeper = new SelectList(db.Minesweepers, "MinesweeperKey", "MinesweeperDescription",
+            ViewBag.Minesweeper = new SelectList(_db.Minesweepers, "MinesweeperKey", "MinesweeperDescription",
                 tHI_AnalysisFeedback.Minesweeper);
-            ViewBag.Project = new SelectList(db.SalesforceProjects, "ProjectKey", "ProjectName",
+            ViewBag.Project = new SelectList(_db.SalesforceProjects, "ProjectKey", "ProjectName",
                 tHI_AnalysisFeedback.Project);
-            ViewBag.SSA_Findings = new SelectList(db.SSA_Findings, "SSA_FindingsKey", "SSA_FindingsDescription",
+            ViewBag.SSA_Findings = new SelectList(_db.SSA_Findings, "SSA_FindingsKey", "SSA_FindingsDescription",
                 tHI_AnalysisFeedback.SSA_Findings);
             return View();
         }

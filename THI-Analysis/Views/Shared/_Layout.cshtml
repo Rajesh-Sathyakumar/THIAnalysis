@@ -1,21 +1,21 @@
 ﻿@using SamlHelperLibrary.Models
 @{
-    var SessionUser = string.Empty;
+    var sessionUser = string.Empty;
     if (Session != null && Session["UserSessionInfo"] != null)
     {
-        var user = ((UserSessionInfo) Session["UserSessionInfo"]).firstName;
+        var user = ((UserSessionInfo)Session["UserSessionInfo"]).firstName;
         if (user != null)
         {
-            SessionUser = user;
+            sessionUser = user;
         }
         else
         {
-            SessionUser = "Guest";
+            sessionUser = "Guest";
         }
     }
     else
     {
-        SessionUser = "Guest";
+        sessionUser = "Guest";
     }
 }
 
@@ -78,171 +78,169 @@ desired effect
 |---------------------------------------------------------|
 -->
 <body class="skin-blue sidebar-mini sidebar-collapse">
-<div class="wrapper">
+    <div class="wrapper">
 
-    <!-- Main Header -->
-    <header class="main-header">
+        <!-- Main Header -->
+        <header class="main-header">
 
-        <!-- Logo -->
-        <a href="@Url.Content("~/THI_AnalysisFeedback/")" class="logo">
-            <!-- mini logo for sidebar mini 50x50 pixels -->
-            <span class="logo-mini"><b>T</b>HI</span>
-            <!-- logo for regular state and mobile devices -->
-            <span class="logo-lg">CCC THI Analysis</span>
-        </a>
-
-        <!-- Header Navbar -->
-        <nav class="navbar navbar-static-top" role="navigation">
-            <!-- Sidebar toggle button-->
-            <a href="#" class="sidebar-toggle" data-toggle="offcanvas" role="button">
-                <span class="sr-only">Toggle navigation</span>
+            <!-- Logo -->
+            <a href="@Url.Content("~/ThiAnalysisFeedback/")" class="logo">
+                <!-- mini logo for sidebar mini 50x50 pixels -->
+                <span class="logo-mini"><b>T</b>HI</span>
+                <!-- logo for regular state and mobile devices -->
+                <span class="logo-lg">CCC THI Analysis</span>
             </a>
 
+            <!-- Header Navbar -->
+            <nav class="navbar navbar-static-top" role="navigation">
+                <!-- Sidebar toggle button-->
+                <a href="#" class="sidebar-toggle" data-toggle="offcanvas" role="button">
+                    <span class="sr-only">Toggle navigation</span>
+                </a>
 
-            <!-- Navbar Right Menu -->
-            <div class="navbar-custom-menu">
-                <ul class="nav navbar-nav">
 
-                    <!-- User Account Menu -->
-                    <li class="dropdown user user-menu">
-                        <!-- Menu Toggle Button -->
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                            <!-- The user image in the navbar-->
-                            <img src="@Url.Content("~/Content/Images/" + SessionUser.Substring(0, 1) + ".png")" class="user-image" alt="User Image">
-                            <!-- hidden-xs hides the username on small devices so only the image appears. -->
-                            <span class="hidden-xs">Hello @SessionUser !</span>
+                <!-- Navbar Right Menu -->
+                <div class="navbar-custom-menu">
+                    <ul class="nav navbar-nav">
 
+                        <!-- User Account Menu -->
+                        <li class="dropdown user user-menu">
+                            <!-- Menu Toggle Button -->
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                                <!-- The user image in the navbar-->
+                                <img src="@Url.Content("~/Content/Images/" + sessionUser.Substring(0, 1) + ".png")" class="user-image" alt="User Image">
+                                <!-- hidden-xs hides the username on small devices so only the image appears. -->
+                                <span class="hidden-xs">Hello @sessionUser !</span>
+
+                            </a>
+                        </li>
+
+                        <!-- Control Sidebar Toggle Button -->
+
+                        <li class="dropdown user user-menu">
+                            <a aria-expanded="false" data-toggle="dropdown" class="dropdown-toggle" href="#">
+                                <i class="fa fa-sign-out"></i>
+                            </a>
+                            <ul class="dropdown-menu">
+                                <!-- User image -->
+                                <!-- Menu Body -->
+                                <li class="user-body">
+                                    <div class="row">
+                                        <div class="col-xs-12 text-center">
+                                            <a href="#">Confirm Sign Out?</a>
+                                        </div>
+
+
+                                    </div>
+                                    <!-- /.row -->
+                                </li>
+                                <!-- Menu Footer-->
+                                <li class="user-footer">
+                                    <div class="pull-left">
+                                        <a href="#" class="btn btn-default btn-flat">Cancel</a>
+                                    </div>
+                                    <div class="pull-right">
+                                        <a href="@Url.Content("~/ThiAnalysisFeedback/Logout")" class="btn btn-default btn-flat">Sign out</a>
+                                    </div>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+        </header>
+        <!-- Left side column. contains the logo and sidebar -->
+        <aside class="main-sidebar">
+
+            <!-- sidebar: style can be found in sidebar.less -->
+            <section class="sidebar">
+
+                <!-- Sidebar user panel (optional) -->
+                <!-- Sidebar Menu -->
+                <ul class="sidebar-menu">
+
+                    <li class="header">Main Navigation</li>
+                    <!-- Optionally, you can add icons to the links -->
+
+
+                    <li id="thi-case-volume">
+                        <a href="@Url.Content("~/ThiAnalysisFeedback/MemberDischargeVolumes")">
+                            <i class="fa fa-line-chart"></i> <span>Member Statistics</span>
                         </a>
                     </li>
-
-                    <!-- Control Sidebar Toggle Button -->
-
-                    <li class="dropdown user user-menu">
-                        <a aria-expanded="false" data-toggle="dropdown" class="dropdown-toggle" href="#">
-                            <i class="fa fa-sign-out"></i>
+                    <li id="thi-scores">
+                        <a href="@Url.Content("~/ThiAnalysisFeedback/MemberTHIScores")">
+                            <i class="fa fa-check-square-o"></i> <span>Member THI Scores</span>
                         </a>
-                        <ul class="dropdown-menu">
-                            <!-- User image -->
-                            <!-- Menu Body -->
-                            <li class="user-body">
-                                <div class="row">
-                                    <div class="col-xs-12 text-center">
-                                        <a href="#">Confirm Sign Out?</a>
-                                    </div>
-
-
-                                </div>
-                                <!-- /.row -->
-                            </li>
-                            <!-- Menu Footer-->
-                            <li class="user-footer">
-                                <div class="pull-left">
-                                    <a href="#" class="btn btn-default btn-flat">Cancel</a>
-                                </div>
-                                <div class="pull-right">
-                                    <a href="@Url.Content("~/THI_AnalysisFeedback/Logout")" class="btn btn-default btn-flat">Sign out</a>
-                                </div>
-                            </li>
-                        </ul>
+                    </li>
+                    <li id="thi-data-logs">
+                        <a href="@Url.Content("~/ThiAnalysisFeedback/Index")">
+                            <i class="fa fa-database"></i> <span>THI Data Logs</span>
+                        </a>
+                    </li>
+                    <li id="thi-data-feed">
+                        <a href="@Url.Content("~/ThiAnalysisFeedback/Create")">
+                            <i class="fa fa-edit"></i> <span>THI Data Feedback</span>
+                        </a>
                     </li>
                 </ul>
+                <!-- /.sidebar-menu -->
+            </section>
+
+            <!-- /.sidebar -->
+        </aside>
+
+        @RenderBody()
+
+        <!-- Content Wrapper. Contains page content -->
+        <!-- /.content-wrapper -->
+        <!-- Main Footer -->
+        <footer class="main-footer">
+            <!-- To the right -->
+            <div class="pull-right hidden-xs">
+                "Putting Members First"
             </div>
-        </nav>
-    </header>
-    <!-- Left side column. contains the logo and sidebar -->
-    <aside class="main-sidebar">
+            <!-- Default to the left -->
+            <strong>Copyright &copy; 2017 <a href="https://www.advisory.com/">The Advisory Board Company</a>.</strong> All rights reserved.
+        </footer>
 
-        <!-- sidebar: style can be found in sidebar.less -->
-        <section class="sidebar">
+        <!-- /.control-sidebar -->
+        <!-- Add the sidebar's background. This div must be placed
+        immediately after the control sidebar -->
+        <div class="control-sidebar-bg"></div>
+    </div>
+    <!-- ./wrapper -->
+    <!-- REQUIRED JS SCRIPTS -->
+    <!-- jQuery 2.2.3 -->
+    <script src="@Url.Content("~/Scripts/jquery-2.2.3.min.js")"></script>
+    <!-- Bootstrap 3.3.6 -->
+    <script src="@Url.Content("~/Scripts/bootstrap.min.js")"></script>
 
-            <!-- Sidebar user panel (optional) -->
+    <!-- AdminLTE App -->
+    <script src="@Url.Content("~/Scripts/app.min.js")"></script>
 
-            <!-- Sidebar Menu -->
-            <ul class="sidebar-menu">
+    <script src="@Url.Content("~/Scripts/fastclick.js")"></script>
 
-                <li class="header">Main Navigation</li>
-                <!-- Optionally, you can add icons to the links -->
+    <script src="@Url.Content("~/Scripts/bootstrap-datepicker.js")"></script>
 
+    <script src="@Url.Content("~/Scripts/jquery.dataTables.min.js")"></script>
 
-                <li id="thi-case-volume">
-                    <a href="@Url.Content("~/THI_AnalysisFeedback/MemberDischargeVolumes")">
-                        <i class="fa fa-line-chart"></i> <span>Member Statistics</span>
-                    </a>
-                </li>
-                <li id="thi-scores">
-                    <a href="@Url.Content("~/THI_AnalysisFeedback/MemberTHIScores")">
-                        <i class="fa fa-check-square-o"></i> <span>Member THI Scores</span>
-                    </a>
-                </li>
-                <li id="thi-data-logs">
-                    <a href="@Url.Content("~/THI_AnalysisFeedback/Index")">
-                        <i class="fa fa-database"></i> <span>THI Data Logs</span>
-                    </a>
-                </li>
-                <li id="thi-data-feed">
-                    <a href="@Url.Content("~/THI_AnalysisFeedback/Create")">
-                        <i class="fa fa-edit"></i> <span>THI Data Feedback</span>
-                    </a>
-                </li>
-            </ul>
-            <!-- /.sidebar-menu -->
-        </section>
+    <script src="@Url.Content("~/Scripts/dataTables.bootstrap.min.js")"></script>
 
-        <!-- /.sidebar -->
-    </aside>
+    <script src="@Url.Content("~/Scripts/highcharts.js")"></script>
 
-    @RenderBody()
+    <script src="@Url.Content("~/Scripts/exporting.js")"></script>
 
-    <!-- Content Wrapper. Contains page content -->
+    <script src="@Url.Content("~/Scripts/handlebars.min.js")"></script>
 
-    <!-- /.content-wrapper -->
-    <!-- Main Footer -->
-    <footer class="main-footer">
-        <!-- To the right -->
-        <div class="pull-right hidden-xs">
-            "Putting Members First"
-        </div>
-        <!-- Default to the left -->
-        <strong>Copyright &copy; 2017 <a href="https://www.advisory.com/">The Advisory Board Company</a>.</strong> All rights reserved.
-    </footer>
+    <script src="https://code.highcharts.com/modules/no-data-to-display.js"></script>
 
-    <!-- /.control-sidebar -->
-    <!-- Add the sidebar's background. This div must be placed
-    immediately after the control sidebar -->
-    <div class="control-sidebar-bg"></div>
-</div>
-<!-- ./wrapper -->
-<!-- REQUIRED JS SCRIPTS -->
-<!-- jQuery 2.2.3 -->
-<script src="@Url.Content("~/Scripts/jquery-2.2.3.min.js")"></script>
-<!-- Bootstrap 3.3.6 -->
-<script src="@Url.Content("~/Scripts/bootstrap.min.js")"></script>
+    <!-- Optionally, you can add Slimscroll and FastClick plugins.
+    Both of these plugins are recommended to enhance the
+    user experience. Slimscroll is required when using the
+    fixed layout. -->
 
-<!-- AdminLTE App -->
-<script src="@Url.Content("~/Scripts/app.min.js")"></script>
-
-<script src="@Url.Content("~/Scripts/fastclick.js")"></script>
-
-<script src="@Url.Content("~/Scripts/bootstrap-datepicker.js")"></script>
-
-<script src="@Url.Content("~/Scripts/jquery.dataTables.min.js")"></script>
-
-<script src="@Url.Content("~/Scripts/dataTables.bootstrap.min.js")"></script>
-
-<script src="@Url.Content("~/Scripts/highcharts.js")"></script>
-
-<script src="@Url.Content("~/Scripts/exporting.js")"></script>
-
-<script src="@Url.Content("~/Scripts/handlebars.min.js")"></script>
-
-<script src="https://code.highcharts.com/modules/no-data-to-display.js"></script>
-
-<!-- Optionally, you can add Slimscroll and FastClick plugins.
-Both of these plugins are recommended to enhance the
-user experience. Slimscroll is required when using the
-fixed layout. -->
-
-<script type="text/javascript">
+    <script type="text/javascript">
 
     var monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "June", "July", "Aug", "Sep", "Oct", "Nov", "Dec"];
 
@@ -321,7 +319,7 @@ fixed layout. -->
         function() {
 
             var request = {
-                "url": "@Url.Content("~/THI_AnalysisFeedback/Details")",
+                "url": "@Url.Content("~/ThiAnalysisFeedback/Details")",
             "method": "POST",
             "headers": {
                 "content-type": "application/json"
@@ -422,7 +420,7 @@ fixed layout. -->
             $('#volumeParameters').append(renderingLoadingBlock(loadingId));
 
             var filterProjectJsonReq = {
-                "url": "@Url.Content("~/THI_AnalysisFeedback/FilterHospitalsByProject")",
+                "url": "@Url.Content("~/ThiAnalysisFeedback/FilterHospitalsByProject")",
                 "method": "POST",
                 "headers": {
                     "content-type": "application/json"
@@ -442,7 +440,7 @@ fixed layout. -->
             $.ajax(filterProjectJsonReq);
 
             var getMemberInfoJsonReq = {
-                "url": "@Url.Content("~/THI_AnalysisFeedback/getMemberInformation")",
+                "url": "@Url.Content("~/ThiAnalysisFeedback/getMemberInformation")",
                 "method": "POST",
                 "headers": {
                     "content-type": "application/json"
@@ -451,8 +449,8 @@ fixed layout. -->
                 "dataType": "JSON",
                 "success": function(data) {
 
-                    var Grouper3MInfo;
-                    var runAPRDRGInfo;
+                    var grouper3MInfo;
+                    var runAprdrgInfo;
                     var aprdrgAggregate;
                     var maxRefreshRateDate;
                     var customOppeCount;
@@ -462,19 +460,19 @@ fixed layout. -->
                         maxRefreshRateDate = data[0].MaxRR;
 
                         if (data[0].CCC_3M == 0) {
-                            Grouper3MInfo = "OFF";
+                            grouper3MInfo = "OFF";
                         } else if (data[0].CCC_3M == 1) {
-                            Grouper3MInfo = "ON";
+                            grouper3MInfo = "ON";
                         } else if (data[0].CCC_3M == -1) {
-                            Grouper3MInfo = "NA";
+                            grouper3MInfo = "NA";
                         }
 
                         if (data[0].RunAPRDRG == 0) {
-                            runAPRDRGInfo = "OFF";
+                            runAprdrgInfo = "OFF";
                         } else if (data[0].RunAPRDRG == 1) {
-                            runAPRDRGInfo = "ON";
+                            runAprdrgInfo = "ON";
                         } else if (data[0].RunAPRDRG == -1) {
-                            runAPRDRGInfo = "NA";
+                            runAprdrgInfo = "NA";
                         }
 
                         if (maxRefreshRateDate == null) {
@@ -489,15 +487,15 @@ fixed layout. -->
                         }
                     } else {
 
-                        Grouper3MInfo = "NA";
-                        runAPRDRGInfo = "NA";
+                        grouper3MInfo = "NA";
+                        runAprdrgInfo = "NA";
                         aprdrgAggregate = "NA";
                         maxRefreshRateDate = "NA";
                         customOppeCount = "NA";
                     }
 
-                    $('#DischargeVolumes #3mGrouper').html(Grouper3MInfo);
-                    $('#DischargeVolumes #runAPRDRG').html(runAPRDRGInfo);
+                    $('#DischargeVolumes #3mGrouper').html(grouper3MInfo);
+                    $('#DischargeVolumes #runAPRDRG').html(runAprdrgInfo);
                     $('#DischargeVolumes #customOppeCount').html(customOppeCount);
                     $('#DischargeVolumes #maxRrDate').html(maxRefreshRateDate);
                     $('#DischargeVolumes #aprdrgAggregation').html(aprdrgAggregate);
@@ -537,7 +535,7 @@ fixed layout. -->
             var selectedHospitalName = $('#facilitySelection').find('option:selected').text();
 
             var settings = {
-                "url": "@Url.Content("~/THI_AnalysisFeedback/MemberDischargeVolumes")",
+                "url": "@Url.Content("~/ThiAnalysisFeedback/MemberDischargeVolumes")",
                 "method": "POST",
                 "headers": {
                     "content-type": "application/json"
@@ -745,15 +743,15 @@ fixed layout. -->
     $('#MemberTHIScores #GenerateTHI').on('click',
         function() {
 
-            var MemberContractTableloading = "THIScoresTableloading";
-            var THIScoresTableloading = "THIScoresTableloading";
-            var THIGraphloading = "THIScoresTableloading";
+            var memberContractTableloading = "THIScoresTableloading";
+            var thiScoresTableloading = "THIScoresTableloading";
+            var thiGraphloading = "THIScoresTableloading";
 
             var $btn = $('#GenerateTHI').button('loading');
 
-            $('#MemberTHIScores #tableBox').append(renderingLoadingBlock(MemberContractTableloading));
-            $('#MemberTHIScores #MemberTHIParameterScoresDiv').append(renderingLoadingBlock(THIScoresTableloading));
-            $('#MemberTHIScores #chartBox').append(renderingLoadingBlock(THIGraphloading));
+            $('#MemberTHIScores #tableBox').append(renderingLoadingBlock(memberContractTableloading));
+            $('#MemberTHIScores #MemberTHIParameterScoresDiv').append(renderingLoadingBlock(thiScoresTableloading));
+            $('#MemberTHIScores #chartBox').append(renderingLoadingBlock(thiGraphloading));
 
 
             var project = $('#MemberTHIScores #Project').find('option:selected').attr('value');
@@ -761,7 +759,7 @@ fixed layout. -->
             var month = $('#MemberTHIScores #monthSelection').find('option:selected').attr('value');
 
             var settings = {
-                "url": "@Url.Content("~/THI_AnalysisFeedback/THIScoresGeneration")",
+                "url": "@Url.Content("~/ThiAnalysisFeedback/THIScoresGeneration")",
                 "method": "POST",
                 "headers": {
                     "content-type": "application/json"
@@ -780,9 +778,9 @@ fixed layout. -->
                 var selectedProj = $('#MemberTHIScores #Project').find('option:selected').html();
 
                 if (response.THIParamaterScores.length) {
-                    var rawTHIScoreTemplate = $('#memberTHIParameterScoresTemplate').html();
-                    var compiledTHIScoreTemplate = Handlebars.compile(rawTHIScoreTemplate);
-                    $('#MemberTHIParameterScoresTable').html(compiledTHIScoreTemplate(jsonConvert));
+                    var rawThiScoreTemplate = $('#memberTHIParameterScoresTemplate').html();
+                    var compiledThiScoreTemplate = Handlebars.compile(rawThiScoreTemplate);
+                    $('#MemberTHIParameterScoresTable').html(compiledThiScoreTemplate(jsonConvert));
                 } else {
                     memberTHIParamaterScores.clear().draw();
                 }
@@ -799,16 +797,16 @@ fixed layout. -->
                 }
 
                 if (response.ThiTrendByPeriod.length != 0) {
-                    var THIScoreJSon = [];
+                    var thiScoreJSon = [];
                     var xAxisLabels = [];
                     for (var i = 0; i < response.ThiTrendByPeriod.length; i++) {
-                        THIScoreJSon.push(response.ThiTrendByPeriod[i].THIScore);
+                        thiScoreJSon.push(response.ThiTrendByPeriod[i].THIScore);
                         xAxisLabels.push(monthNames[response.ThiTrendByPeriod[i].Month - 1] +
                             '-' +
                             response.ThiTrendByPeriod[i].Year);
                     }
 
-                    THIScoreTrend.series[0].setData(THIScoreJSon);
+                    THIScoreTrend.series[0].setData(thiScoreJSon);
 
                     THIScoreTrend.title.update({ text: selectedProj });
 
@@ -825,9 +823,9 @@ fixed layout. -->
                 }
 
 
-                $('#' + THIScoresTableloading).remove();
-                $('#' + MemberContractTableloading).remove();
-                $('#' + THIGraphloading).remove();
+                $('#' + thiScoresTableloading).remove();
+                $('#' + memberContractTableloading).remove();
+                $('#' + thiGraphloading).remove();
                 $btn.button('reset');
 
             });
@@ -867,7 +865,7 @@ fixed layout. -->
         var project = $('#MemberTHIScores #Project').find('option:selected').val();
         $('#MemberTHIScores #MoreThiDetails').button('loading');
         var settings = {
-            "url": "@Url.Content("~/THI_AnalysisFeedback/THIScoresDrillDown")",
+            "url": "@Url.Content("~/ThiAnalysisFeedback/THIScoresDrillDown")",
             "method": "POST",
             "headers": {
                 "content-type": "application/json"
@@ -939,9 +937,9 @@ fixed layout. -->
 
     $('#MemberTHIScores #Project').trigger('change');
 
-</script>
+    </script>
 
-<script id="missingDataElements" type="text/x-handlebars-template">
+    <script id="missingDataElements" type="text/x-handlebars-template">
         {{#each this}}
         <tr>
             <td>{{ip}} </td>
@@ -951,22 +949,22 @@ fixed layout. -->
         {{/each}}
     </script>
 
-<script id="dataLoadTimelinessTemplate" type="text/x-handlebars-template">
-    {{#each this}}
-    <tr>
-        <td>{{ShortDescription}} </td>
-        <td>{{MemberSupport_SupportIssueNumber}}</td>
-        <td>{{formatDate DataSubmissionTargetDate}}</td>
-        <td>{{formatDate FilesReceived}}</td>
-        <td>{{DaysLate_DataLoad}}</td>
-        <td>{{formatDate DateTimeClosed}}</td>
-        <td>{{ETLCompletion_DataLoad}}</td>
-    </tr>
-    {{/each}}
-</script>
+    <script id="dataLoadTimelinessTemplate" type="text/x-handlebars-template">
+        {{#each this}}
+        <tr>
+            <td>{{ShortDescription}} </td>
+            <td>{{MemberSupport_SupportIssueNumber}}</td>
+            <td>{{formatDate DataSubmissionTargetDate}}</td>
+            <td>{{formatDate FilesReceived}}</td>
+            <td>{{DaysLate_DataLoad}}</td>
+            <td>{{formatDate DateTimeClosed}}</td>
+            <td>{{ETLCompletion_DataLoad}}</td>
+        </tr>
+        {{/each}}
+    </script>
 
 
-<script id="missingDataElementsTemplate" type="text/x-handlebars-template">
+    <script id="missingDataElementsTemplate" type="text/x-handlebars-template">
         {{#each this}}
         <tr>
             <td>{{ShortDescription}} </td>
@@ -976,33 +974,33 @@ fixed layout. -->
         {{/each}}
     </script>
 
-<script id="projectHospitalsTemplate" type="text/x-handlebars-template">
-            <label>Facilities</label>
+    <script id="projectHospitalsTemplate" type="text/x-handlebars-template">
+        <label>Facilities</label>
         {{#if this}}
-            <select class="form-control" style="width: 100%;" name="facilitySelection" id="facilitySelection">
-                {{#each this}}
-                    <option value="{{ProjectHospitalKey}}">{{HospitalName}}</option>
-                {{/each}}
-            </select>
+        <select class="form-control" style="width: 100%;" name="facilitySelection" id="facilitySelection">
+            {{#each this}}
+            <option value="{{ProjectHospitalKey}}">{{HospitalName}}</option>
+            {{/each}}
+        </select>
         {{else}}
-            <select class="form-control" disabled ="disabled" style="width: 100%;" name="facilitySelection" id="facilitySelection">
-                <option value="0">Select a valid Project...</option>
-            </select>
+        <select class="form-control" disabled="disabled" style="width: 100%;" name="facilitySelection" id="facilitySelection">
+            <option value="0">Select a valid Project...</option>
+        </select>
         {{/if}}
     </script>
 
 
-<script id="caseVolTableTemplate" type="text/x-handlebars-template">
-        {{#each this}}    
+    <script id="caseVolTableTemplate" type="text/x-handlebars-template">
+        {{#each this}}
         <tr role="row">
-                <td class="">{{monthConvert Month}} {{Year}}</td>
-                <td>{{formatNumber IP_COUNT}}</td>
-                <td>{{formatNumber OP_COUNT}}</td>
+            <td class="">{{monthConvert Month}} {{Year}}</td>
+            <td>{{formatNumber IP_COUNT}}</td>
+            <td>{{formatNumber OP_COUNT}}</td>
         </tr>
         {{/each}}
     </script>
 
-<script id="memberTHIParameterScoresTemplate" type="text/x-handlebars-template">
+    <script id="memberTHIParameterScoresTemplate" type="text/x-handlebars-template">
         <tr role="row">
             <td class="{{formatColor THISCORE_CC}}" title="RED: 1.66 AND BELOW, YELLOW: 1.67 AND 2.04, GREEN: 2.05 AND ABOVE">{{formatTHIScores THIScore}}</td>
             <td class="{{formatColor Data_Submission_Timeliness_CC}}" title="RED: 7 AND ABOVE, YELLOW: 2.01 TO 6.99, GREEN: 2 AND BELOW">{{formatTHIScores Data_Submission_Timeliness}}</td>
@@ -1017,11 +1015,11 @@ fixed layout. -->
         </tr>
     </script>
 
-<script id="memberContractInfoTemplate" type="text/x-handlebars-template">
-         <tr role="row">
-             <td>Annual Contract Value</td>
-             <td>{{formatMoney AnnualContractValue}}</td>
-         </tr>
+    <script id="memberContractInfoTemplate" type="text/x-handlebars-template">
+        <tr role="row">
+            <td>Annual Contract Value</td>
+            <td>{{formatMoney AnnualContractValue}}</td>
+        </tr>
         <tr role="row">
             <td>Latest Contract End Date</td>
             <td>{{formatDate LatestContractEndDate}}</td>
@@ -1049,9 +1047,9 @@ fixed layout. -->
             <td>Login Count</td>
             <td>{{formatNulls LoginCount}}</td>
         </tr>
-     </script>
+    </script>
 
-<script>
+    <script>
 
     function convertDate(date) {
 
@@ -1140,29 +1138,7 @@ fixed layout. -->
             }
         });
 
-</script>
-
-@*<script>
-    var settings = {
-        "async": true,
-        "crossDomain": true,
-        "url": "https://loginbeta.advisory.com/CrimsonProvisioningService/api/User/SearchUsers",
-        "method": "POST",
-        "headers": {
-            "content-type": "application/json",
-            "version": "2",
-            "cache-control": "no-cache",
-            "postman-token": "d5cd0123-cf03-6984-c789-a502070bf1c4"
-        },
-        "data":
-            " {\r\n   \"Keyword\":\"\",\r\n   \"AccountStatus\": 1,\r\n   \"Usertype\":0,\r\n   \"SortColumn\":\"LastName,FirstName\",\r\n   \"SortDirection\":0,\r\n   \"Index\":0,\r\n   \"NoofItems\":10,\r\n   \"MemberOrgKeys\":[\r\n      \"5B95F3B2-C265-4E1A-91AB-60FC449E96EB\",\r\n   ],\r\n   \"ApplicationKey\":\"c3cc809f-9b80-438f-a20f-42e67b504cec\",\r\n   \"EnvironmentKeys\":[\r\n\t\"37b473ae-b5a5-4839-91d5-80676a86b4b9\"\r\n   ]\r\n}\r\n"
-    };
-    $.ajax(settings).done(function(response) {
-        console.log(response);
-    });
-
-</script>*@
-
+    </script>
 
 </body>
 

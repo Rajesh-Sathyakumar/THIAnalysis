@@ -232,6 +232,9 @@
     <Property Name="Username" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
     <NavigationProperty Name="ACLBridges" Relationship="Self.FK__ACLBridge__Userk__0F68A5B0" FromRole="Users" ToRole="ACLBridge" />
     <NavigationProperty Name="UsageActivityLogs" Relationship="Self.FK__UsageActi__Userk__142D5ACD" FromRole="Users" ToRole="UsageActivityLogs" />
+    <Property Name="IsActive" Type="Boolean" Nullable="false" />
+    <Property Name="Role" Type="String" MaxLength="250" FixedLength="false" Unicode="false" />
+    <Property Name="Product" Type="String" MaxLength="250" FixedLength="false" Unicode="false" />
   </EntityType>
   <EntityType Name="CCCMemberContractInfo">
     <Key>

@@ -211,6 +211,18 @@
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="Constants\UsageActivityList.cs" />
     <Compile Include="Controllers\THI_AnalysisFeedbackController.cs" />
+    <Compile Include="Dto\ConfirmUserEnrollment.cs" />
+    <Compile Include="Dto\EnrollUsersResultDto.cs" />
+    <Compile Include="Dto\EnvironmentDetail.cs" />
+    <Compile Include="Dto\ManageUserDetail.cs" />
+    <Compile Include="Dto\MemberDetail.cs" />
+    <Compile Include="Dto\SearchUsersPostData.cs" />
+    <Compile Include="Dto\UserCreation.cs" />
+    <Compile Include="Dto\UserDetail.cs" />
+    <Compile Include="Dto\UserMemberOrgKeyPair.cs" />
+    <Compile Include="Dto\UsersCount.cs" />
+    <Compile Include="Dto\UserStatus.cs" />
+    <Compile Include="Enums\UserRole.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -317,7 +329,10 @@
       <DependentUpon>THI_AnalysisFeedback.tt</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SiamRequestServiceParam.cs" />
     <Compile Include="Startup.cs" />
+    <Compile Include="Utility\UserCreationService.cs" />
+    <Compile Include="Utility\WebServiceRepository.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\AdminLTE.min.css" />

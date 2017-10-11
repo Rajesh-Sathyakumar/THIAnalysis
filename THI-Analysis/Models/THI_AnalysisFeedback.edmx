@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema Namespace="CCCOperationsModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+    <Schema Namespace="CCCOperationsModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="ACLBridge">
           <Key>
             <PropertyRef Name="ACLBridgeKey" />
@@ -203,6 +203,9 @@
           <Property Name="CreatedDate" Type="date" />
           <Property Name="UserGUID" Type="varchar(max)" />
           <Property Name="Username" Type="varchar(max)" />
+          <Property Name="IsActive" Type="bit" Nullable="false" />
+          <Property Name="Role" Type="varchar" MaxLength="250" />
+          <Property Name="Product" Type="varchar" MaxLength="250" />
         </EntityType>
         <!--Errors Found During Generation:
 warning 6002: The table/view 'CCCOperations.thi.CCCMemberContractInfo' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
@@ -753,8 +756,7 @@ warning 6002: The table/view 'CCCOperations.thi.MemberDataElements_OPPE' does no
             <End Role="THI_AnalysisFeedback" EntitySet="THI_AnalysisFeedback" />
           </AssociationSet>
         </EntityContainer>
-      </Schema>
-    </edmx:StorageModels>
+      </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="CCCOperationsModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
@@ -990,6 +992,9 @@ warning 6002: The table/view 'CCCOperations.thi.MemberDataElements_OPPE' does no
           <Property Name="Username" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
           <NavigationProperty Name="ACLBridges" Relationship="Self.FK__ACLBridge__Userk__0F68A5B0" FromRole="Users" ToRole="ACLBridge" />
           <NavigationProperty Name="UsageActivityLogs" Relationship="Self.FK__UsageActi__Userk__142D5ACD" FromRole="Users" ToRole="UsageActivityLogs" />
+          <Property Name="IsActive" Type="Boolean" Nullable="false" />
+          <Property Name="Role" Type="String" MaxLength="250" FixedLength="false" Unicode="false" />
+          <Property Name="Product" Type="String" MaxLength="250" FixedLength="false" Unicode="false" />
         </EntityType>
         <EntityType Name="CCCMemberContractInfo">
           <Key>
@@ -1649,6 +1654,9 @@ warning 6002: The table/view 'CCCOperations.thi.MemberDataElements_OPPE' does no
           <EntitySetMapping Name="Users">
             <EntityTypeMapping TypeName="CCCOperationsModel.User">
               <MappingFragment StoreEntitySet="Users">
+                <ScalarProperty Name="Product" ColumnName="Product" />
+                <ScalarProperty Name="Role" ColumnName="Role" />
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
                 <ScalarProperty Name="Userkey" ColumnName="Userkey" />
                 <ScalarProperty Name="FirstName" ColumnName="FirstName" />
                 <ScalarProperty Name="LastName" ColumnName="LastName" />

@@ -198,6 +198,9 @@
     <Property Name="CreatedDate" Type="date" />
     <Property Name="UserGUID" Type="varchar(max)" />
     <Property Name="Username" Type="varchar(max)" />
+    <Property Name="IsActive" Type="bit" Nullable="false" />
+    <Property Name="Role" Type="varchar" MaxLength="250" />
+    <Property Name="Product" Type="varchar" MaxLength="250" />
   </EntityType>
   <!--Errors Found During Generation:
 warning 6002: The table/view 'CCCOperations.thi.CCCMemberContractInfo' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->

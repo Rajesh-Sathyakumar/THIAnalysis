@@ -1,59 +1,198 @@
-﻿<div class="content-wrapper" id="editUserPermissions">
+﻿@using THI_Analysis.Dto
+@model dynamic
+
+<div class="content-wrapper" id="editUserPermissions">
 
     <section class="content">
 
         <div clas="row">
             <div class="col-md-8">
+
                 <div class="nav-tabs-custom">
                     <!-- Tabs within a box -->
                     <ul class="nav nav-tabs pull-right">
 
                         <li class="active">
-                            <a href="#" data-toggle="tab">Pending</a>
+                            <a href="#pendingUsers" data-toggle="tab">Pending</a>
                         </li>
                         <li>
-                            <a href="#" data-toggle="tab">All</a>
+                            <a href="#activeUsers" data-toggle="tab">Active</a>
                         </li>
                         <li>
-                            <a href="#" data-toggle="tab">Active</a>
+                            <a href="#inactiveUsers" data-toggle="tab">Inactive</a>
                         </li>
                         <li>
-                            <a href="#" data-toggle="tab">Inactive</a>
+                            <a href="#allUsers" data-toggle="tab">All</a>
                         </li>
 
                         <li class="pull-left header"><i class="fa fa-user-plus"></i> Manage Application User Permissions</li>
                     </ul>
-                    <div class="tab-content no-padding">
+                    <div class="box box-primary" style="overflow-y: scroll; overflow-x: hidden; height:450px;">
+                        <div class="tab-content no-padding">
+                            <div class="tab-pane active" id="pendingUsers">
+
+                                <table class="table table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th style="width: 10px">#</th>
+                                            <th>User Name</th>
+                                            <th>Email</th>
+                                            <th style="width: 40px">Role</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                    @{
+                                        var incrementor = 1;
+                                    }
+
+                                    @foreach (ManageUserDetail user in Model.pendingUsers)
+                                        {
+
+                                            <tr>
+                                                <td>
+                                                    @incrementor.ToString()
+                                                </td>
+                                                <td>
+                                                    @Html.DisplayFor(a => user.FirstName), @Html.DisplayFor(a => user.LastName)
+                                                </td>
+                                                <td>
+                                                    @Html.DisplayFor(a => user.Email)
+                                                </td>
+                                                <td>
+                                                    @Html.DisplayFor(a => user.Role)
+                                                </td>
+                                            </tr>
+
+                                            incrementor++;
+                                        }
+
+                                    </tbody>
+                                </table>
+                            </div>
+
+                            <div class="tab-pane" id="activeUsers">
+
+                                <table class="table table-striped" id="active">
+                                    <thead>
+                                        <tr>
+                                            <th style="width: 10px">#</th>
+                                            <th>User Name</th>
+                                            <th>Email</th>
+                                            <th style="width: 40px">Role</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @{
+                                            incrementor = 1;
+                                        }
+                                        @foreach (ManageUserDetail user in Model.activeUsers)
+                                        {
+
+                                            <tr>
+                                                <td>
+                                                    @incrementor.ToString()
+                                                </td>
+                                                <td>
+                                                    @Html.DisplayFor(a => user.FirstName), @Html.DisplayFor(a => user.LastName)
+                                                </td>
+                                                <td>
+                                                    @Html.DisplayFor(a => user.Email)
+                                                </td>
+                                                <td>
+                                                    @Html.DisplayFor(a => user.Role)
+                                                </td>
+                                            </tr>
+
+                                            incrementor++;
+                                        }
+
+                                    </tbody>
+                                </table>
+                            </div>
 
 
-                        <table class="table table-striped">
-                            <thead>
-                            <tr>
-                                <th style="width: 10px">#</th>
-                                <th>User Name</th>
-                                <th>Email</th>
-                                <th style="width: 40px">Role</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            <tr>
-                                <td>1.</td>
-                                <td>Update software</td>
-                                <td>
-                                    <div class="progress progress-xs">
-                                        <div class="progress-bar progress-bar-danger" style="width: 55%"></div>
-                                    </div>
-                                </td>
-                                <td>
-                                    <span class="badge bg-red">55%</span>
-                                </td>
-                            </tr>
-                            </tbody>
-                        </table>
+                            <div class="tab-pane" id="inactiveUsers">
+
+                                <table class="table table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th style="width: 10px">#</th>
+                                            <th>User Name</th>
+                                            <th>Email</th>
+                                            <th style="width: 40px">Role</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @{
+                                            incrementor = 1;
+                                        }
+                                        @foreach (ManageUserDetail user in Model.inactiveUsers)
+                                        {
+
+                                            <tr>
+                                                <td>
+                                                    @incrementor.ToString()
+                                                </td>
+                                                <td>
+                                                    @Html.DisplayFor(a => user.FirstName), @Html.DisplayFor(a => user.LastName)
+                                                </td>
+                                                <td>
+                                                    @Html.DisplayFor(a => user.Email)
+                                                </td>
+                                                <td>
+                                                    @Html.DisplayFor(a => user.Role)
+                                                </td>
+                                            </tr>
+
+                                            incrementor++;
+                                        }
+
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="tab-pane" id="allUsers">
+
+                                <table class="table table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th style="width: 10px">#</th>
+                                            <th>User Name</th>
+                                            <th>Email</th>
+                                            <th style="width: 40px">Role</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @{
+                                            incrementor = 1;
+                                        }
+                                        @foreach (ManageUserDetail user in Model.allUsers)
+                                        {
+
+                                            <tr>
+                                                <td>
+                                                    @incrementor.ToString()
+                                                </td>
+                                                <td>
+                                                    @Html.DisplayFor(a => user.LastName), @Html.DisplayFor(a => user.FirstName)
+                                                </td>
+                                                <td>
+                                                    @Html.DisplayFor(a => user.Email)
+                                                </td>
+                                                <td>
+                                                    @Html.DisplayFor(a => user.Role)
+                                                </td>
+                                            </tr>
+
+                                            incrementor++;
+                                        }
+
+                                    </tbody>
+                                </table>
+                            </div>
+                            <!-- /.box-body -->
+                        </div>
                     </div>
-                    <!-- /.box-body -->
                 </div>
-
 
             </div>
         </div>

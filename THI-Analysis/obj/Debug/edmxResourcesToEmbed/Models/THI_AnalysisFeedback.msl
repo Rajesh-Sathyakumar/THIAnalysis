@@ -210,6 +210,9 @@
     <EntitySetMapping Name="Users">
       <EntityTypeMapping TypeName="CCCOperationsModel.User">
         <MappingFragment StoreEntitySet="Users">
+          <ScalarProperty Name="Product" ColumnName="Product" />
+          <ScalarProperty Name="Role" ColumnName="Role" />
+          <ScalarProperty Name="IsActive" ColumnName="IsActive" />
           <ScalarProperty Name="Userkey" ColumnName="Userkey" />
           <ScalarProperty Name="FirstName" ColumnName="FirstName" />
           <ScalarProperty Name="LastName" ColumnName="LastName" />
