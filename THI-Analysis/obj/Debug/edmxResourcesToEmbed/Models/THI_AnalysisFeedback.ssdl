@@ -91,13 +91,12 @@
     <Property Name="MinesweeperKey" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="MinesweeperDescription" Type="nvarchar" MaxLength="100" />
   </EntityType>
-  <EntityType Name="ParameterThresholds">
+  <EntityType Name="Products">
     <Key>
-      <PropertyRef Name="PARAMETERTHRESHOLDKEY" />
+      <PropertyRef Name="ProductKey" />
     </Key>
-    <Property Name="PARAMETERTHRESHOLDKEY" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-    <Property Name="Parameter" Type="varchar(max)" />
-    <Property Name="ThresholdDescription" Type="varchar(max)" />
+    <Property Name="ProductKey" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="ProductName" Type="varchar(max)" />
   </EntityType>
   <EntityType Name="ProjectHospitals">
     <Key>
@@ -107,6 +106,13 @@
     <Property Name="Project" Type="int" Nullable="false" />
     <Property Name="HospitalName" Type="varchar" MaxLength="250" />
   </EntityType>
+  <!--Errors Found During Generation:
+warning 6013: The table/view 'CCCOperations.thi.Reference_DataElements' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
+        <EntityType Name="Reference_DataElements">
+          <Property Name="DataElement" Type="nvarchar" MaxLength="255" />
+          <Property Name="Category" Type="nvarchar" MaxLength="255" />
+          <Property Name="Module" Type="nvarchar" MaxLength="255" />
+        </EntityType>-->
   <EntityType Name="SalesforceProjects">
     <Key>
       <PropertyRef Name="ProjectKey" />
@@ -122,6 +128,7 @@
     <Property Name="PG" Type="int" />
     <Property Name="MAxRR" Type="date" />
     <Property Name="APRDRGAggregate" Type="bit" />
+    <Property Name="ProjectID" Type="varchar(max)" />
   </EntityType>
   <EntityType Name="SSA_Findings">
     <Key>
@@ -186,6 +193,13 @@
     <Property Name="SessionID" Type="varchar(max)" />
     <Property Name="AccessTime" Type="datetime" />
   </EntityType>
+  <EntityType Name="UserRoles">
+    <Key>
+      <PropertyRef Name="RoleKey" />
+    </Key>
+    <Property Name="RoleKey" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="RoleName" Type="varchar(max)" />
+  </EntityType>
   <EntityType Name="Users">
     <Key>
       <PropertyRef Name="Userkey" />
@@ -199,8 +213,8 @@
     <Property Name="UserGUID" Type="varchar(max)" />
     <Property Name="Username" Type="varchar(max)" />
     <Property Name="IsActive" Type="bit" Nullable="false" />
-    <Property Name="Role" Type="varchar" MaxLength="250" />
-    <Property Name="Product" Type="varchar" MaxLength="250" />
+    <Property Name="Role" Type="int" />
+    <Property Name="Product" Type="int" />
   </EntityType>
   <!--Errors Found During Generation:
 warning 6002: The table/view 'CCCOperations.thi.CCCMemberContractInfo' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
@@ -342,6 +356,24 @@ warning 6002: The table/view 'CCCOperations.thi.MemberDataElements_OPPE' does no
     <Property Name="Project_ProjectName" Type="nvarchar" MaxLength="255" />
     <Property Name="DataElement" Type="varchar(max)" />
     <Property Name="Category" Type="nvarchar" MaxLength="255" />
+  </EntityType>
+  <!--Errors Found During Generation:
+warning 6002: The table/view 'CCCOperations.thi.MinesweeperData' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+  <EntityType Name="MinesweeperData">
+    <Key>
+      <PropertyRef Name="projectkey" />
+    </Key>
+    <Property Name="projectkey" Type="int" Nullable="false" />
+    <Property Name="StagingServerName" Type="varchar(max)" />
+    <Property Name="dbname" Type="varchar(max)" />
+    <Property Name="issuetype" Type="varchar(max)" />
+    <Property Name="issuename" Type="varchar(max)" />
+    <Property Name="issuecount" Type="int" />
+    <Property Name="dischargecount" Type="int" />
+    <Property Name="issuemonth" Type="int" />
+    <Property Name="issueyear" Type="int" />
+    <Property Name="monthlybenchmark" Type="float" />
+    <Property Name="result" Type="bit" />
   </EntityType>
   <Association Name="FK__ACLBridge__AclKe__0E748177">
     <End Role="ACLs" Type="Self.ACLs" Multiplicity="1" />
@@ -547,6 +579,30 @@ warning 6002: The table/view 'CCCOperations.thi.MemberDataElements_OPPE' does no
       </Dependent>
     </ReferentialConstraint>
   </Association>
+  <Association Name="Users_Product_ProductKey">
+    <End Role="Products" Type="Self.Products" Multiplicity="0..1" />
+    <End Role="Users" Type="Self.Users" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Products">
+        <PropertyRef Name="ProductKey" />
+      </Principal>
+      <Dependent Role="Users">
+        <PropertyRef Name="Role" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="Users_Role_RoleKey">
+    <End Role="UserRoles" Type="Self.UserRoles" Multiplicity="0..1" />
+    <End Role="Users" Type="Self.Users" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="UserRoles">
+        <PropertyRef Name="RoleKey" />
+      </Principal>
+      <Dependent Role="Users">
+        <PropertyRef Name="Role" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
   <Function Name="ETLCompletion" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="thi">
     <Parameter Name="Proj" Type="int" Mode="In" />
     <Parameter Name="Year" Type="int" Mode="In" />
@@ -565,7 +621,7 @@ warning 6002: The table/view 'CCCOperations.thi.MemberDataElements_OPPE' does no
     <EntitySet Name="DischargeVolumes" EntityType="Self.DischargeVolumes" Schema="thi" store:Type="Tables" />
     <EntitySet Name="MemberSupportTickets" EntityType="Self.MemberSupportTickets" Schema="thi" store:Type="Tables" />
     <EntitySet Name="Minesweeper" EntityType="Self.Minesweeper" Schema="thi" store:Type="Tables" />
-    <EntitySet Name="ParameterThresholds" EntityType="Self.ParameterThresholds" Schema="thi" store:Type="Tables" />
+    <EntitySet Name="Products" EntityType="Self.Products" Schema="thi" store:Type="Tables" />
     <EntitySet Name="ProjectHospitals" EntityType="Self.ProjectHospitals" Schema="thi" store:Type="Tables" />
     <EntitySet Name="SalesforceProjects" EntityType="Self.SalesforceProjects" Schema="thi" store:Type="Tables" />
     <EntitySet Name="SSA_Findings" EntityType="Self.SSA_Findings" Schema="thi" store:Type="Tables" />
@@ -573,6 +629,7 @@ warning 6002: The table/view 'CCCOperations.thi.MemberDataElements_OPPE' does no
     <EntitySet Name="ToolRefreshDate" EntityType="Self.ToolRefreshDate" Schema="thi" store:Type="Tables" />
     <EntitySet Name="UsageActivity" EntityType="Self.UsageActivity" Schema="thi" store:Type="Tables" />
     <EntitySet Name="UsageActivityLogs" EntityType="Self.UsageActivityLogs" Schema="thi" store:Type="Tables" />
+    <EntitySet Name="UserRoles" EntityType="Self.UserRoles" Schema="thi" store:Type="Tables" />
     <EntitySet Name="Users" EntityType="Self.Users" Schema="thi" store:Type="Tables" />
     <EntitySet Name="CCCMemberContractInfo" EntityType="Self.CCCMemberContractInfo" store:Type="Views" store:Schema="thi">
       <DefiningQuery>SELECT 
@@ -682,6 +739,21 @@ warning 6002: The table/view 'CCCOperations.thi.MemberDataElements_OPPE' does no
     [MemberDataElements_OPPE].[Category] AS [Category]
     FROM [thi].[MemberDataElements_OPPE] AS [MemberDataElements_OPPE]</DefiningQuery>
     </EntitySet>
+    <EntitySet Name="MinesweeperData" EntityType="Self.MinesweeperData" store:Type="Views" store:Schema="thi">
+      <DefiningQuery>SELECT 
+    [MinesweeperData].[projectkey] AS [projectkey], 
+    [MinesweeperData].[StagingServerName] AS [StagingServerName], 
+    [MinesweeperData].[dbname] AS [dbname], 
+    [MinesweeperData].[issuetype] AS [issuetype], 
+    [MinesweeperData].[issuename] AS [issuename], 
+    [MinesweeperData].[issuecount] AS [issuecount], 
+    [MinesweeperData].[dischargecount] AS [dischargecount], 
+    [MinesweeperData].[issuemonth] AS [issuemonth], 
+    [MinesweeperData].[issueyear] AS [issueyear], 
+    [MinesweeperData].[monthlybenchmark] AS [monthlybenchmark], 
+    [MinesweeperData].[result] AS [result]
+    FROM [thi].[MinesweeperData] AS [MinesweeperData]</DefiningQuery>
+    </EntitySet>
     <AssociationSet Name="FK__ACLBridge__AclKe__0E748177" Association="Self.FK__ACLBridge__AclKe__0E748177">
       <End Role="ACLs" EntitySet="ACLs" />
       <End Role="ACLBridge" EntitySet="ACLBridge" />
@@ -749,6 +821,14 @@ warning 6002: The table/view 'CCCOperations.thi.MemberDataElements_OPPE' does no
     <AssociationSet Name="FK_SSA_Findings_SSA_FindingsKey" Association="Self.FK_SSA_Findings_SSA_FindingsKey">
       <End Role="SSA_Findings" EntitySet="SSA_Findings" />
       <End Role="THI_AnalysisFeedback" EntitySet="THI_AnalysisFeedback" />
+    </AssociationSet>
+    <AssociationSet Name="Users_Product_ProductKey" Association="Self.Users_Product_ProductKey">
+      <End Role="Products" EntitySet="Products" />
+      <End Role="Users" EntitySet="Users" />
+    </AssociationSet>
+    <AssociationSet Name="Users_Role_RoleKey" Association="Self.Users_Role_RoleKey">
+      <End Role="UserRoles" EntitySet="UserRoles" />
+      <End Role="Users" EntitySet="Users" />
     </AssociationSet>
   </EntityContainer>
 </Schema>

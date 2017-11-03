@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data.Entity;
+using System.Data.Entity.Migrations;
 using System.Dynamic;
 using System.Linq;
 using System.Net;
@@ -9,6 +11,7 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
 using System.Web;
+
 using System.Web.Mvc;
 using System.Xml.Linq;
 using SamlHelperLibrary;
@@ -16,23 +19,90 @@ using SamlHelperLibrary.Configuration;
 using SamlHelperLibrary.Models;
 using SamlHelperLibrary.Service;
 using THI_Analysis.Constants;
-using THI_Analysis.Models;
 using THI_Analysis.Dto;
+using THI_Analysis.Models;
 using THI_Analysis.Utility;
 
 namespace THI_Analysis.Controllers
 {
     public class THI_AnalysisFeedbackController : Controller
     {
+        private readonly string _crimsonProvisioningService =
+            ConfigurationManager.AppSettings["CrimsonProvisioningService"];
+
         private readonly CCCOperationsEntities _db = new CCCOperationsEntities();
-        private readonly UsageActivityList _usgAct = new UsageActivityList();
-        private readonly UserCreationService _userService = new UserCreationService();
+        private readonly Guid _environmentKey = Guid.Parse(ConfigurationManager.AppSettings["EnvironmentKey"]);
         private readonly Guid _memberOrgKey = Guid.Parse(ConfigurationManager.AppSettings["MemberOrgKey"]);
         private readonly Guid _productKey = Guid.Parse(ConfigurationManager.AppSettings["ProductKey"]);
-        private readonly Guid _environmentKey = Guid.Parse(ConfigurationManager.AppSettings["EnvironmentKey"]);
         private readonly string _siamBaseUrl = ConfigurationManager.AppSettings["SIAMBaseURL"];
-        private readonly string _crimsonProvisioningService = ConfigurationManager.AppSettings["CrimsonProvisioningService"];
+        private readonly UserCreationService _userService = new UserCreationService();
+        private readonly UsageActivityList _usgAct = new UsageActivityList();
 
+        [HttpPost]
+        public JsonResult GetUserDetails(int userId)
+        {
+            var userAcls = _db.Users.Join(_db.ACLBridges, a => a.Userkey, b => b.Userkey,
+                    (a, b) => new {Users = a, ACLBridge = b})
+                    .Where(a=> a.Users.Userkey == userId)
+                    .Select(a => new
+                    {
+                        a.ACLBridge.AclKey
+                    });
+
+            var userProduct = _db.Users.Join(_db.Products, a => a.Product, b => b.ProductKey,
+                    (a, b) => new {Users = a, Products = b})
+                .Where(a => a.Users.Userkey == userId)
+                .Select(a => a.Products.ProductKey);
+
+            var userRole = _db.Users.Join(_db.UserRoles, a => a.Role, b => b.RoleKey,
+                    (a, b) => new { Users = a, Roles = b })
+                .Where(a => a.Users.Userkey == userId)
+                .Select(a => a.Roles.RoleKey);
+
+            var roles = _db.UserRoles.Select(a => new {a.RoleKey, a.RoleName});
+
+            var products = _db.Products.Select(a => new {a.ProductKey, a.ProductName});
+
+            var acls = _db.ACLs.Select(a => new {a.AclKey, a.AclName});
+
+            return Json(new
+            {
+                UserAcls = userAcls,
+                UserProduct = userProduct,
+                UserRole = userRole,
+                Roles = roles,
+                Products = products,
+                Acls = acls
+            });
+        }
+
+        [HttpPost]
+        public void UpdateUser(ManageUserDetail userData)
+        {
+            var dbUser = _db.Users.FirstOrDefault(a => a.Userkey == userData.UserKey);
+
+            if (userData.Acls != null)
+            {
+                var userAcls = userData.Acls.Join(_db.ACLs, a => a.ToString(), b => b.AclName,
+                    (a, b) => new { ACLBridge = a, ACL = b });
+
+                foreach (var userAcl in userAcls)
+                {
+                    _db.ACLBridges.AddOrUpdate(new ACLBridge() { Userkey = userData.UserKey, AclKey = userAcl.ACL.AclKey });
+                }
+            }
+            
+            if (dbUser != null)
+            {
+                dbUser.Role = userData.UserRole;
+                dbUser.Product = userData.UserProduct;
+                dbUser.IsActive = userData.IsActive != "0";
+                dbUser.Admin = int.Parse(userData.IsAdmin);
+                _db.Entry(dbUser).State = EntityState.Modified;
+            }
+
+            _db.SaveChanges();
+        }
 
         public ActionResult EditUserPermission()
         {
@@ -54,16 +124,18 @@ namespace THI_Analysis.Controllers
                         a =>
                             new ManageUserDetail
                             {
+                                UserKey = null,
                                 FirstName = a.FirstName,
                                 LastName = a.LastName,
                                 Email = a.Email,
-                                Role = "NA",
-                                UserGuid = a.UserKey
+                                IsAdmin = "NA",
+                                UserGuid = a.UserKey,
+                                UserId = a.UserName
                             }).ToList();
 
 
-                int deactivatedUsersCount = _userService.GetDeactivatedUsersCount(
-                    new UsersCount()
+                var deactivatedUsersCount = _userService.GetDeactivatedUsersCount(
+                    new UsersCount
                     {
                         MemberOrgKeys = new[] {_memberOrgKey},
                         ApplicationKey = _productKey,
@@ -71,39 +143,33 @@ namespace THI_Analysis.Controllers
                     },
                     _siamBaseUrl + _crimsonProvisioningService,
                     "User/GetUserCountAndStatus", Session["SessionAuthToken"].ToString()
-                    );
+                );
 
-                for (int i = 0; i < deactivatedUsersCount; i += 20)
-                {
+                for (var i = 0; i < deactivatedUsersCount; i += 20)
                     deactivatedUsers.AddRange(_userService.GetDeactivatedUsers(new SearchUsersPostData
-                    {
-                        Keyword = "",
-                        AccountStatus = 5,
-                        UserType = 0,
-                        SortColumn = "LastName,FirstName",
-                        SortDirection = 0,
-                        Index = i,
-                        NoofItems = 20,
-                        MemberOrgKeys = new[] { _memberOrgKey },
-                        ApplicationKey = _productKey,
-                        EnvironmentKeys = new[] { _environmentKey }
-                    },
-                        _siamBaseUrl + _crimsonProvisioningService,
-                        "User/SearchUsers",
-                        Session["SessionAuthToken"].ToString()
-                    )
-                    .Select(
-                        a =>
-                            new ManageUserDetail
                             {
-                                FirstName = a.FirstName,
-                                LastName = a.LastName,
-                                Email = a.Email,
-                                Role = "NA",
-                                UserGuid = a.UserKey
-                            })
-                    .ToList());
-                }
+                                Keyword = "",
+                                AccountStatus = 5,
+                                UserType = 0,
+                                SortColumn = "LastName,FirstName",
+                                SortDirection = 0,
+                                Index = i,
+                                NoofItems = 20,
+                                MemberOrgKeys = new[] {_memberOrgKey},
+                                ApplicationKey = _productKey,
+                                EnvironmentKeys = new[] {_environmentKey}
+                            },
+                            _siamBaseUrl + _crimsonProvisioningService,
+                            "User/SearchUsers",
+                            Session["SessionAuthToken"].ToString()
+                        )
+                        .Select(
+                            a =>
+                                new ManageUserDetail
+                                {
+                                    UserGuid = a.UserKey                                   
+                                })
+                        .ToList());
 
                 foreach (var user in deactivatedUsers)
                 {
@@ -116,33 +182,38 @@ namespace THI_Analysis.Controllers
                         _db.SaveChanges();
                     }
                 }
-
             }
 
             userStatus.pendingUsers = getPendingUsers;
 
-            userStatus.inactiveUsers = _db.Users.Where(a => a.IsActive == false).Select(b => new ManageUserDetail()
+            userStatus.inactiveUsers = _db.Users.Where(a => a.IsActive == false).Select(b => new ManageUserDetail
             {
+                UserKey = b.Userkey,
                 FirstName = b.FirstName,
                 LastName = b.LastName,
                 Email = b.Email,
-                Role = b.Admin.ToString()
+                IsAdmin = b.Admin.ToString(),
+                UserId = b.Username
             }).ToList();
 
-            userStatus.activeUsers = _db.Users.Where(a => a.IsActive).Select(b => new ManageUserDetail()
+            userStatus.activeUsers = _db.Users.Where(a => a.IsActive).Select(b => new ManageUserDetail
             {
+                UserKey = b.Userkey,
                 FirstName = b.FirstName,
                 LastName = b.LastName,
                 Email = b.Email,
-                Role = b.Admin.ToString()
+                IsAdmin = b.Admin.ToString(),
+                UserId = b.Username
             }).ToList();
 
-            userStatus.allUsers = _db.Users.Select(b => new ManageUserDetail()
+            userStatus.allUsers = _db.Users.Select(b => new ManageUserDetail
             {
+                UserKey = b.Userkey,
                 FirstName = b.FirstName,
                 LastName = b.LastName,
                 Email = b.Email,
-                Role = b.Admin.ToString()
+                IsAdmin = b.Admin.ToString(),
+                UserId = b.Username
             }).ToList();
 
             return View(userStatus);
@@ -152,7 +223,7 @@ namespace THI_Analysis.Controllers
         {
             var cookieContainer = new CookieContainer();
 
-            var handler = new HttpClientHandler { CookieContainer = cookieContainer };
+            var handler = new HttpClientHandler {CookieContainer = cookieContainer};
 
             var httpClient = new HttpClient(handler)
             {
@@ -190,7 +261,6 @@ namespace THI_Analysis.Controllers
             }
 
             throw new WebException(response.Content.ReadAsStringAsync().Result);
-
         }
 
 
@@ -221,7 +291,7 @@ namespace THI_Analysis.Controllers
             {
                 var cas = new CasAuthenticationService(SamlHelperConfiguration.Config, UserSessionHandler.Get());
                 var httpContextBase = new HttpContextWrapper(System.Web.HttpContext.Current);
-                if (!cas.IsSAMLResponse(httpContextBase) && (Session == null || Session["UserSessionInfo"] == null))
+                if (!cas.IsSAMLResponse(httpContextBase) && (Session?["UserSessionInfo"] == null))
                 {
                     cas.RedirectUserToCasLogin(
                         _memberOrgKey,
@@ -261,19 +331,16 @@ namespace THI_Analysis.Controllers
         }
 
 
-
         [HttpPost]
         public void SetUsage(int usageActivity, XDocument paramXml = null)
         {
             if (Session?["UserSessionInfo"] != null)
             {
                 var currentUsage = new UsageActivityLog();
-                var userGuid = ((UserSessionInfo)Session["UserSessionInfo"]).userKey.ToString();
+                var userGuid = ((UserSessionInfo) Session["UserSessionInfo"]).userKey.ToString();
                 var sessionId = System.Web.HttpContext.Current.Session.SessionID;
                 if (paramXml != null)
-                {
                     currentUsage.ParameterXML = paramXml.ToString();
-                }
                 currentUsage.AccessTime = DateTime.Now;
                 currentUsage.UsageActivityKey = usageActivity;
                 currentUsage.Userkey = _db.Users.Where(a => a.UserGUID == userGuid).Max(a => a.Userkey);
@@ -281,12 +348,11 @@ namespace THI_Analysis.Controllers
                 _db.UsageActivityLogs.Add(currentUsage);
 
                 _db.SaveChanges();
-            }            
+            }
         }
 
         public void Logout()
         {
-
             SetUsage(_usgAct.LogOut);
             var cas = new CasAuthenticationService(SamlHelperConfiguration.Config, UserSessionHandler.Get());
             cas.SendCasSingleSignOut();
@@ -296,12 +362,12 @@ namespace THI_Analysis.Controllers
         [HttpPost]
         public JsonResult THIScoresDrillDown(int ProjectKey)
         {
-            XElement root = new XElement("Parameters");
-            XElement projElem = new XElement("ProjectKey", ProjectKey);
+            var root = new XElement("Parameters");
+            var projElem = new XElement("ProjectKey", ProjectKey);
             root.Add(projElem);
-            XDocument doc = new XDocument(root);
+            var doc = new XDocument(root);
             SetUsage(_usgAct.MemberThiScoresMoreDetails, doc);
-            
+
 
             var dataLoadDrill = _db.DataLoadDrills.Where(a => a.ProjectKey == ProjectKey).Select(a => new
             {
@@ -313,12 +379,12 @@ namespace THI_Analysis.Controllers
                 a.DaysLate_DataLoad,
                 a.DateTimeClosed,
                 a.ETLCompletion_DataLoad
-            }).OrderBy(a=> a.DateTimeClosed);
+            }).OrderBy(a => a.DateTimeClosed);
 
             var missingElementsIp = _db.MemberDataElements_IP.Where(a => a.ProjectKey == ProjectKey).Select(a => new
             {
                 a.DataElement
-            }).OrderBy(a=> a.DataElement);
+            }).OrderBy(a => a.DataElement);
 
             var missingElementsOp = _db.MemberDataElements_OP.Where(a => a.ProjectKey == ProjectKey).Select(a => new
             {
@@ -342,15 +408,14 @@ namespace THI_Analysis.Controllers
         [HttpPost]
         public JsonResult THIScoresGeneration(int ProjectKey, int Year, int Month)
         {
-
-            XElement root = new XElement("Parameters");
-            XElement projElem = new XElement("ProjectKey", ProjectKey);
-            XElement yrElem = new XElement("Year", Year);
-            XElement mnthElem = new XElement("Month", Month);
+            var root = new XElement("Parameters");
+            var projElem = new XElement("ProjectKey", ProjectKey);
+            var yrElem = new XElement("Year", Year);
+            var mnthElem = new XElement("Month", Month);
             root.Add(projElem);
             root.Add(yrElem);
             root.Add(mnthElem);
-            XDocument doc = new XDocument(root);
+            var doc = new XDocument(root);
             SetUsage(_usgAct.GenerateThiScore, doc);
 
             var memberInfo =
@@ -430,8 +495,7 @@ namespace THI_Analysis.Controllers
 
         public ActionResult MemberTHIScores()
         {
-
-            SiamRedirection(HttpContext.Request.Url.AbsoluteUri);
+            if (HttpContext.Request.Url != null) SiamRedirection(HttpContext.Request.Url.AbsoluteUri);
             SetUsage(_usgAct.MemberThiScoresTab);
             ViewBag.Project = new SelectList(_db.SalesforceProjects, "ProjectKey", "ProjectName");
             ViewBag.RefreshDate = _db.ToolRefreshDates.Max(a => a.RecentRundate);
@@ -440,7 +504,7 @@ namespace THI_Analysis.Controllers
 
         public ActionResult Index()
         {
-            SiamRedirection(Request.Url.AbsoluteUri);
+            if (Request.Url != null) SiamRedirection(Request.Url.AbsoluteUri);
             SetUsage(_usgAct.ThiDataLogsTab);
             ViewBag.Project = new SelectList(_db.SalesforceProjects, "ProjectKey", "ProjectName");
             var feedBackData =
@@ -452,7 +516,7 @@ namespace THI_Analysis.Controllers
 
         public ActionResult MemberDischargeVolumes()
         {
-            SiamRedirection(HttpContext.Request.Url.AbsoluteUri);
+            if (HttpContext.Request.Url != null) SiamRedirection(HttpContext.Request.Url.AbsoluteUri);
             SetUsage(_usgAct.MemberStatisticsTab);
             ViewBag.Project = new SelectList(_db.SalesforceProjects, "ProjectKey", "ProjectName");
             ViewBag.RefreshDate = _db.ToolRefreshDates.Max(a => a.RecentRundate);
@@ -462,12 +526,12 @@ namespace THI_Analysis.Controllers
         [HttpPost]
         public JsonResult getMemberInformation(int project)
         {
-            XElement root = new XElement("Parameters");
-            XElement projElem = new XElement("ProjectKey", project);
+            var root = new XElement("Parameters");
+            var projElem = new XElement("ProjectKey", project);
             root.Add(projElem);
-            XDocument doc = new XDocument(root);
+            var doc = new XDocument(root);
 
-            SetUsage(_usgAct.MemberStatisticsSelectionProject,doc);
+            SetUsage(_usgAct.MemberStatisticsSelectionProject, doc);
 
             var memberInfo =
                 _db.SalesforceProjects.Where(a => a.ProjectKey == project)
@@ -489,12 +553,11 @@ namespace THI_Analysis.Controllers
         [HttpPost]
         public JsonResult MemberDischargeVolumes(int facilitySelect)
         {
-
-            XElement root = new XElement("Parameters");
-            XElement projElem = new XElement("FacilityKey", facilitySelect);
+            var root = new XElement("Parameters");
+            var projElem = new XElement("FacilityKey", facilitySelect);
             root.Add(projElem);
-            XDocument doc = new XDocument(root);
-            SetUsage(_usgAct.MemberStatisticsGeneratePatientVolumes,doc);
+            var doc = new XDocument(root);
+            SetUsage(_usgAct.MemberStatisticsGeneratePatientVolumes, doc);
 
             var caseVolumes =
                 _db.DischargeVolumes.Where(fa => fa.ProjectHospital == facilitySelect)
@@ -518,10 +581,10 @@ namespace THI_Analysis.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Index(int? Project)
         {
-            XElement root = new XElement("Parameters");
-            XElement projElem = new XElement("ProjectKey", Project);
+            var root = new XElement("Parameters");
+            var projElem = new XElement("ProjectKey", Project);
             root.Add(projElem);
-            XDocument doc = new XDocument(root);
+            var doc = new XDocument(root);
             SetUsage(_usgAct.ThiDataLogsFilterbyProjects, doc);
 
             ViewBag.Project = new SelectList(_db.SalesforceProjects, "ProjectKey", "ProjectName");
@@ -548,10 +611,10 @@ namespace THI_Analysis.Controllers
         {
             SiamRedirection(HttpContext.Request.Url.AbsoluteUri);
 
-            XElement root = new XElement("Parameters");
-            XElement feedbackElem = new XElement("FeedbackKey", id);
+            var root = new XElement("Parameters");
+            var feedbackElem = new XElement("FeedbackKey", id);
             root.Add(feedbackElem);
-            XDocument doc = new XDocument(root);
+            var doc = new XDocument(root);
             SetUsage(_usgAct.MemberThiFeedbackInformation, doc);
             var feedBackData = _db.THI_AnalysisFeedback.Find(id);
             return View(feedBackData);
@@ -560,8 +623,7 @@ namespace THI_Analysis.Controllers
         // GET: THI_AnalysisFeedback/Create
         public ActionResult Create()
         {
-  
-            SiamRedirection( HttpContext.Request.Url.AbsoluteUri);
+            SiamRedirection(HttpContext.Request.Url.AbsoluteUri);
             SetUsage(_usgAct.ThiDataFeedbackTab);
 
             ViewBag.AnalysisSummary = new SelectList(_db.AnalysisSummaries, "AnalysisSummaryKey",
@@ -579,6 +641,13 @@ namespace THI_Analysis.Controllers
             ViewBag.Project = new SelectList(_db.SalesforceProjects, "ProjectKey", "ProjectName");
             ViewBag.SSA_Findings = new SelectList(_db.SSA_Findings, "SSA_FindingsKey", "SSA_FindingsDescription");
             return View();
+        }
+
+
+        private XElement addXmlElement(string elem, dynamic elemValue)
+        {
+            var feedbackElem = new XElement(elem, elemValue);
+            return feedbackElem;
         }
 
         // POST: THI_AnalysisFeedback/Create
@@ -609,52 +678,31 @@ namespace THI_Analysis.Controllers
             {
                 _db.THI_AnalysisFeedback.Add(tHI_AnalysisFeedback);
                 _db.SaveChanges();
-                XElement root = new XElement("Parameters");
-                XElement feedbackElem1 = new XElement("ProjectKey", tHI_AnalysisFeedback.Project);
-                XElement feedbackElem2 = new XElement("AS", tHI_AnalysisFeedback.AnalysisSummary);
-                XElement feedbackElem3 = new XElement("BA", tHI_AnalysisFeedback.BusinessAnalyst);
-                XElement feedbackElem4 = new XElement("AN", tHI_AnalysisFeedback.AnalysisNotes);
-                XElement feedbackElem5 = new XElement("AR", tHI_AnalysisFeedback.AnalysisRecommendations);
-                XElement feedbackElem6 = new XElement("DST", tHI_AnalysisFeedback.DataSubmissionTimelines);
-                XElement feedbackElem7 = new XElement("CDST", tHI_AnalysisFeedback.Comments_DataSubmissionTimelines);
-                XElement feedbackElem8 = new XElement("DL", tHI_AnalysisFeedback.DataLag);
-                XElement feedbackElem9 = new XElement("CDL", tHI_AnalysisFeedback.Comments_DataLag);
-                XElement feedbackElem10 = new XElement("CD", tHI_AnalysisFeedback.CriticalDiagnostics);
-                XElement feedbackElem11 = new XElement("CCD", tHI_AnalysisFeedback.Comments_CriticalDiagnostics);
-                XElement feedbackElem12 = new XElement("MST", tHI_AnalysisFeedback.MemberSupportTickets);
-                XElement feedbackElem13 = new XElement("CMST", tHI_AnalysisFeedback.Comments_MemberSupportTickets);
-                XElement feedbackElem14 = new XElement("DEP", tHI_AnalysisFeedback.DataElementsPresent);
-                XElement feedbackElem15 = new XElement("CDEP", tHI_AnalysisFeedback.Comments_DataElementsPresent);
-                XElement feedbackElem16 = new XElement("M", tHI_AnalysisFeedback.Minesweeper);
-                XElement feedbackElem17 = new XElement("CM", tHI_AnalysisFeedback.Comments_Minesweeper);
-                XElement feedbackElem18 = new XElement("DAS", tHI_AnalysisFeedback.DAS_Findings);
-                XElement feedbackElem19 = new XElement("CDAS", tHI_AnalysisFeedback.Comments_DAS_Findings);
-                XElement feedbackElem20 = new XElement("SSA", tHI_AnalysisFeedback.SSA_Findings);
-                XElement feedbackElem21 = new XElement("CSSA", tHI_AnalysisFeedback.Comments_SSA_Findings);
+                var root = new XElement("Parameters");
 
-                root.Add(feedbackElem1);
-                root.Add(feedbackElem2);
-                root.Add(feedbackElem3);
-                root.Add(feedbackElem4);
-                root.Add(feedbackElem5);
-                root.Add(feedbackElem6);
-                root.Add(feedbackElem7);
-                root.Add(feedbackElem8);
-                root.Add(feedbackElem9);
-                root.Add(feedbackElem10);
-                root.Add(feedbackElem11);
-                root.Add(feedbackElem12);
-                root.Add(feedbackElem13);
-                root.Add(feedbackElem14);
-                root.Add(feedbackElem15);
-                root.Add(feedbackElem16);
-                root.Add(feedbackElem17);
-                root.Add(feedbackElem18);
-                root.Add(feedbackElem19);
-                root.Add(feedbackElem20);
-                root.Add(feedbackElem21);                
+                root.Add(addXmlElement("ProjectKey", tHI_AnalysisFeedback.Project));
+                root.Add(addXmlElement("AS", tHI_AnalysisFeedback.AnalysisSummary));
+                root.Add(addXmlElement("BA", tHI_AnalysisFeedback.BusinessAnalyst));
+                root.Add(addXmlElement("AN", tHI_AnalysisFeedback.AnalysisNotes));
+                root.Add(addXmlElement("AR", tHI_AnalysisFeedback.AnalysisRecommendations));
+                root.Add(addXmlElement("DST", tHI_AnalysisFeedback.DataSubmissionTimelines));
+                root.Add(addXmlElement("CDST", tHI_AnalysisFeedback.Comments_DataSubmissionTimelines));
+                root.Add(addXmlElement("DL", tHI_AnalysisFeedback.DataLag));
+                root.Add(addXmlElement("CDL", tHI_AnalysisFeedback.Comments_DataLag));
+                root.Add(addXmlElement("CD", tHI_AnalysisFeedback.CriticalDiagnostics));
+                root.Add(addXmlElement("CCD", tHI_AnalysisFeedback.Comments_CriticalDiagnostics));
+                root.Add(addXmlElement("MST", tHI_AnalysisFeedback.MemberSupportTickets));
+                root.Add(addXmlElement("CMST", tHI_AnalysisFeedback.Comments_MemberSupportTickets));
+                root.Add(addXmlElement("DEP", tHI_AnalysisFeedback.DataElementsPresent));
+                root.Add(addXmlElement("CDEP", tHI_AnalysisFeedback.Comments_DataElementsPresent));
+                root.Add(addXmlElement("M", tHI_AnalysisFeedback.Minesweeper));
+                root.Add(addXmlElement("CM", tHI_AnalysisFeedback.Comments_Minesweeper));
+                root.Add(addXmlElement("DAS", tHI_AnalysisFeedback.DAS_Findings));
+                root.Add(addXmlElement("CDAS", tHI_AnalysisFeedback.Comments_DAS_Findings));
+                root.Add(addXmlElement("SSA", tHI_AnalysisFeedback.SSA_Findings));
+                root.Add(addXmlElement("CSSA", tHI_AnalysisFeedback.Comments_SSA_Findings));
 
-                XDocument doc = new XDocument(root);
+                var doc = new XDocument(root);
                 SetUsage(_usgAct.ThiDataFeedbackSubmission, doc);
                 return RedirectToAction("Index");
             }

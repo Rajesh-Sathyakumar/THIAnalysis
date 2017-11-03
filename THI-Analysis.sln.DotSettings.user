@@ -2,4 +2,5 @@
 	<s:String x:Key="/Default/Environment/AssemblyExplorer/XmlDocument/@EntryValue">&lt;AssemblyExplorer&gt;&#xD;
   &lt;Assembly Path="C:\Users\sathyakr\Box Sync\My C-Sharp Projects\THI\THI_Master\packages\SamlHelperLibrary.1.0.5884.30403\lib\net40\SamlHelperLibrary.dll" /&gt;&#xD;
   &lt;Assembly Path="C:\Users\sathyakr\Box Sync\My C-Sharp Projects\THI\THI_Master\packages\ComponentSpace.SAML2.1.0.0\lib\ComponentSpace.SAML2.dll" /&gt;&#xD;
+  &lt;Assembly Path="C:\Users\sathyakr\Documents\Visual Studio 2015\Projects\ABCO\CCC Services\THI-Analysis-Manage User Permissions\packages\SamlHelperLibrary.1.0.5884.30403\lib\net40\SamlHelperLibrary.dll" /&gt;&#xD;
 &lt;/AssemblyExplorer&gt;</s:String></wpf:ResourceDictionary>

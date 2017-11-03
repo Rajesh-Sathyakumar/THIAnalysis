@@ -1,17 +1,11 @@
 ﻿@using SamlHelperLibrary.Models
 @{
-    var sessionUser = string.Empty;
-    if (Session != null && Session["UserSessionInfo"] != null)
+    string sessionUser;
+
+    if (Session?["UserSessionInfo"] != null)
     {
-        var user = ((UserSessionInfo)Session["UserSessionInfo"]).firstName;
-        if (user != null)
-        {
-            sessionUser = user;
-        }
-        else
-        {
-            sessionUser = "Guest";
-        }
+        var user = ((UserSessionInfo) Session["UserSessionInfo"]).firstName;
+        sessionUser = user ?? "Guest";
     }
     else
     {
@@ -50,6 +44,9 @@
 
     <link rel="stylesheet" href="@Url.Content("~/Content/dataTables.bootstrap.css")">
 
+    <link rel="stylesheet" href="@Url.Content("~/Content/select2.min.css")"/>
+
+    <link href="@Url.Content("~/Content/multi-select.css")" rel="stylesheet" />
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
     <!--[if lt IE 9]>
@@ -78,173 +75,182 @@ desired effect
 |---------------------------------------------------------|
 -->
 <body class="skin-blue sidebar-mini sidebar-collapse">
-    <div class="wrapper">
+<div class="wrapper">
 
-        <!-- Main Header -->
-        <header class="main-header">
+    <!-- Main Header -->
+    <header class="main-header">
 
-            <!-- Logo -->
-            <a href="@Url.Content("~/ThiAnalysisFeedback/")" class="logo">
-                <!-- mini logo for sidebar mini 50x50 pixels -->
-                <span class="logo-mini"><b>T</b>HI</span>
-                <!-- logo for regular state and mobile devices -->
-                <span class="logo-lg">CCC THI Analysis</span>
+        <!-- Logo -->
+        <a href="@Url.Content("~/THI_AnalysisFeedback/")" class="logo">
+            <!-- mini logo for sidebar mini 50x50 pixels -->
+            <span class="logo-mini"><b>T</b>HI</span>
+            <!-- logo for regular state and mobile devices -->
+            <span class="logo-lg">CCC THI Analysis</span>
+        </a>
+
+        <!-- Header Navbar -->
+        <nav class="navbar navbar-static-top" role="navigation">
+            <!-- Sidebar toggle button-->
+            <a href="#" class="sidebar-toggle" data-toggle="offcanvas" role="button">
+                <span class="sr-only">Toggle navigation</span>
             </a>
 
-            <!-- Header Navbar -->
-            <nav class="navbar navbar-static-top" role="navigation">
-                <!-- Sidebar toggle button-->
-                <a href="#" class="sidebar-toggle" data-toggle="offcanvas" role="button">
-                    <span class="sr-only">Toggle navigation</span>
-                </a>
 
+            <!-- Navbar Right Menu -->
+            <div class="navbar-custom-menu">
+                <ul class="nav navbar-nav">
 
-                <!-- Navbar Right Menu -->
-                <div class="navbar-custom-menu">
-                    <ul class="nav navbar-nav">
+                    <!-- User Account Menu -->
+                    <li class="dropdown user user-menu">
+                        <!-- Menu Toggle Button -->
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                            <!-- The user image in the navbar-->
+                            <img src="@Url.Content("~/Content/Images/" + sessionUser.Substring(0, 1) + ".png")" class="user-image" alt="User Image">
+                            <!-- hidden-xs hides the username on small devices so only the image appears. -->
+                            <span class="hidden-xs">Hello @sessionUser !</span>
 
-                        <!-- User Account Menu -->
-                        <li class="dropdown user user-menu">
-                            <!-- Menu Toggle Button -->
-                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                                <!-- The user image in the navbar-->
-                                <img src="@Url.Content("~/Content/Images/" + sessionUser.Substring(0, 1) + ".png")" class="user-image" alt="User Image">
-                                <!-- hidden-xs hides the username on small devices so only the image appears. -->
-                                <span class="hidden-xs">Hello @sessionUser !</span>
-
-                            </a>
-                        </li>
-
-                        <!-- Control Sidebar Toggle Button -->
-
-                        <li class="dropdown user user-menu">
-                            <a aria-expanded="false" data-toggle="dropdown" class="dropdown-toggle" href="#">
-                                <i class="fa fa-sign-out"></i>
-                            </a>
-                            <ul class="dropdown-menu">
-                                <!-- User image -->
-                                <!-- Menu Body -->
-                                <li class="user-body">
-                                    <div class="row">
-                                        <div class="col-xs-12 text-center">
-                                            <a href="#">Confirm Sign Out?</a>
-                                        </div>
-
-
-                                    </div>
-                                    <!-- /.row -->
-                                </li>
-                                <!-- Menu Footer-->
-                                <li class="user-footer">
-                                    <div class="pull-left">
-                                        <a href="#" class="btn btn-default btn-flat">Cancel</a>
-                                    </div>
-                                    <div class="pull-right">
-                                        <a href="@Url.Content("~/ThiAnalysisFeedback/Logout")" class="btn btn-default btn-flat">Sign out</a>
-                                    </div>
-                                </li>
-                            </ul>
-                        </li>
-                    </ul>
-                </div>
-            </nav>
-        </header>
-        <!-- Left side column. contains the logo and sidebar -->
-        <aside class="main-sidebar">
-
-            <!-- sidebar: style can be found in sidebar.less -->
-            <section class="sidebar">
-
-                <!-- Sidebar user panel (optional) -->
-                <!-- Sidebar Menu -->
-                <ul class="sidebar-menu">
-
-                    <li class="header">Main Navigation</li>
-                    <!-- Optionally, you can add icons to the links -->
-
-
-                    <li id="thi-case-volume">
-                        <a href="@Url.Content("~/ThiAnalysisFeedback/MemberDischargeVolumes")">
-                            <i class="fa fa-line-chart"></i> <span>Member Statistics</span>
                         </a>
                     </li>
-                    <li id="thi-scores">
-                        <a href="@Url.Content("~/ThiAnalysisFeedback/MemberTHIScores")">
-                            <i class="fa fa-check-square-o"></i> <span>Member THI Scores</span>
+
+                    <!-- Control Sidebar Toggle Button -->
+
+                    <li class="dropdown user user-menu">
+                        <a aria-expanded="false" data-toggle="dropdown" class="dropdown-toggle" href="#">
+                            <i class="fa fa-sign-out"></i>
                         </a>
-                    </li>
-                    <li id="thi-data-logs">
-                        <a href="@Url.Content("~/ThiAnalysisFeedback/Index")">
-                            <i class="fa fa-database"></i> <span>THI Data Logs</span>
-                        </a>
-                    </li>
-                    <li id="thi-data-feed">
-                        <a href="@Url.Content("~/ThiAnalysisFeedback/Create")">
-                            <i class="fa fa-edit"></i> <span>THI Data Feedback</span>
-                        </a>
+                        <ul class="dropdown-menu">
+                            <!-- User image -->
+                            <!-- Menu Body -->
+                            <li class="user-body">
+                                <div class="row">
+                                    <div class="col-xs-12 text-center">
+                                        <a href="#">Confirm Sign Out?</a>
+                                    </div>
+
+
+                                </div>
+                                <!-- /.row -->
+                            </li>
+                            <!-- Menu Footer-->
+                            <li class="user-footer">
+                                <div class="pull-left">
+                                    <a href="#" class="btn btn-default btn-flat">Cancel</a>
+                                </div>
+                                <div class="pull-right">
+                                    <a href="@Url.Content("~/THI_AnalysisFeedback/Logout")" class="btn btn-default btn-flat">Sign out</a>
+                                </div>
+                            </li>
+                        </ul>
                     </li>
                 </ul>
-                <!-- /.sidebar-menu -->
-            </section>
-
-            <!-- /.sidebar -->
-        </aside>
-
-        @RenderBody()
-
-        <!-- Content Wrapper. Contains page content -->
-        <!-- /.content-wrapper -->
-        <!-- Main Footer -->
-        <footer class="main-footer">
-            <!-- To the right -->
-            <div class="pull-right hidden-xs">
-                "Putting Members First"
             </div>
-            <!-- Default to the left -->
-            <strong>Copyright &copy; 2017 <a href="https://www.advisory.com/">The Advisory Board Company</a>.</strong> All rights reserved.
-        </footer>
+        </nav>
+    </header>
+    <!-- Left side column. contains the logo and sidebar -->
+    <aside class="main-sidebar">
 
-        <!-- /.control-sidebar -->
-        <!-- Add the sidebar's background. This div must be placed
-        immediately after the control sidebar -->
-        <div class="control-sidebar-bg"></div>
-    </div>
-    <!-- ./wrapper -->
-    <!-- REQUIRED JS SCRIPTS -->
-    <!-- jQuery 2.2.3 -->
-    <script src="@Url.Content("~/Scripts/jquery-2.2.3.min.js")"></script>
-    <!-- Bootstrap 3.3.6 -->
-    <script src="@Url.Content("~/Scripts/bootstrap.min.js")"></script>
+        <!-- sidebar: style can be found in sidebar.less -->
+        <section class="sidebar">
 
-    <!-- AdminLTE App -->
-    <script src="@Url.Content("~/Scripts/app.min.js")"></script>
+            <!-- Sidebar user panel (optional) -->
+            <!-- Sidebar Menu -->
+            <ul class="sidebar-menu">
 
-    <script src="@Url.Content("~/Scripts/fastclick.js")"></script>
+                <li class="header">Main Navigation</li>
+                <!-- Optionally, you can add icons to the links -->
 
-    <script src="@Url.Content("~/Scripts/bootstrap-datepicker.js")"></script>
 
-    <script src="@Url.Content("~/Scripts/jquery.dataTables.min.js")"></script>
+                <li id="thi-case-volume">
+                    <a href="@Url.Content("~/THI_AnalysisFeedback/MemberDischargeVolumes")">
+                        <i class="fa fa-line-chart"></i> <span>Member Statistics</span>
+                    </a>
+                </li>
+                <li id="thi-scores">
+                    <a href="@Url.Content("~/THI_AnalysisFeedback/MemberTHIScores")">
+                        <i class="fa fa-check-square-o"></i> <span>Member THI Scores</span>
+                    </a>
+                </li>
+                <li id="thi-data-logs">
+                    <a href="@Url.Content("~/THI_AnalysisFeedback/Index")">
+                        <i class="fa fa-database"></i> <span>THI Data Logs</span>
+                    </a>
+                </li>
+                <li id="thi-data-feed">
+                    <a href="@Url.Content("~/THI_AnalysisFeedback/Create")">
+                        <i class="fa fa-edit"></i> <span>THI Data Feedback</span>
+                    </a>
+                </li>
+            </ul>
+            <!-- /.sidebar-menu -->
+        </section>
 
-    <script src="@Url.Content("~/Scripts/dataTables.bootstrap.min.js")"></script>
+        <!-- /.sidebar -->
+    </aside>
 
-    <script src="@Url.Content("~/Scripts/highcharts.js")"></script>
+    @RenderBody()
 
-    <script src="@Url.Content("~/Scripts/exporting.js")"></script>
+    <!-- Content Wrapper. Contains page content -->
+    <!-- /.content-wrapper -->
+    <!-- Main Footer -->
+    <footer class="main-footer">
+        <!-- To the right -->
+        <div class="pull-right hidden-xs">
+            "Putting Members First"
+        </div>
+        <!-- Default to the left -->
+        <strong>Copyright &copy; 2017 <a href="https://www.advisory.com/">The Advisory Board Company</a>.</strong> All rights reserved.
+    </footer>
 
-    <script src="@Url.Content("~/Scripts/handlebars.min.js")"></script>
+    <!-- /.control-sidebar -->
+    <!-- Add the sidebar's background. This div must be placed
+    immediately after the control sidebar -->
+    <div class="control-sidebar-bg"></div>
+</div>
+<!-- ./wrapper -->
+<!-- REQUIRED JS SCRIPTS -->
+<!-- jQuery 2.2.3 -->
+<script src="@Url.Content("~/Scripts/jquery-2.2.3.min.js")"></script>
+<!-- Bootstrap 3.3.6 -->
+<script src="@Url.Content("~/Scripts/bootstrap.min.js")"></script>
 
-    <script src="https://code.highcharts.com/modules/no-data-to-display.js"></script>
+<!-- AdminLTE App -->
+<script src="@Url.Content("~/Scripts/app.min.js")"></script>
 
-    <!-- Optionally, you can add Slimscroll and FastClick plugins.
-    Both of these plugins are recommended to enhance the
-    user experience. Slimscroll is required when using the
-    fixed layout. -->
+<script src="@Url.Content("~/Scripts/fastclick.js")"></script>
 
-    <script type="text/javascript">
+<script src="@Url.Content("~/Scripts/bootstrap-datepicker.js")"></script>
+
+<script src="@Url.Content("~/Scripts/jquery.dataTables.min.js")"></script>
+
+<script src="@Url.Content("~/Scripts/dataTables.bootstrap.min.js")"></script>
+
+<script src="@Url.Content("~/Scripts/highcharts.js")"></script>
+
+<script src="@Url.Content("~/Scripts/exporting.js")"></script>
+
+<script src="@Url.Content("~/Scripts/handlebars.min.js")"></script>
+
+<script src="@Url.Content("https://code.highcharts.com/modules/no-data-to-display.js")"></script>
+
+<script src="@Url.Content("~/Scripts/select2.min.js")"></script>
+
+<script src="@Url.Content("~/Scripts/jquery.multi-select.js")"></script>
+<!-- Optionally, you can add Slimscroll and FastClick plugins.
+Both of these plugins are recommended to enhance the
+user experience. Slimscroll is required when using the
+fixed layout. -->
+
+<script type="text/javascript">
 
     var monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "June", "July", "Aug", "Sep", "Oct", "Nov", "Dec"];
 
+    $('#userAcl').multiSelect();
+
     $('#thi-member-data tbody tr').css('cursor', 'pointer');
+    $('#active tbody tr').css('cursor', 'pointer');
+    $('#inactive tbody tr').css('cursor', 'pointer');
+    $('#pendingUsers tbody tr').css('cursor', 'pointer');
+    $('#allUserTable tbody tr').css('cursor', 'pointer');
 
     $('#thi-member-data').DataTable();
     var caseVolumeTable = $('#casesVolumeTable').DataTable({
@@ -306,7 +312,7 @@ desired effect
 
     $('#thi-member-data tbody').on('click',
         'tr',
-        function() {
+        function () {
 
             var redirectUrl = "Details/" + this.id;
             window.location.href = redirectUrl;
@@ -314,29 +320,8 @@ desired effect
             $('#myModal').modal('show');
         });
 
-    @*$('#thi-member-data tbody').on('click',
-        'tr',
-        function() {
-
-            var request = {
-                "url": "@Url.Content("~/ThiAnalysisFeedback/Details")",
-            "method": "POST",
-            "headers": {
-                "content-type": "application/json"
-            },
-            "data": "{ \"id\": " + this.id + " }",
-            "dataType": "JSON",
-            "success": function(data) {
-                console.log(data);
-            }
-            };
-            $.ajax(request);
-
-            $('#THIFeedbackData').modal('show');
-        });*@
-
     $('#formsubmissionmodal').on('shown.bs.modal',
-        function() {
+        function () {
             $('#submitform').focus();
         });
 
@@ -368,14 +353,14 @@ desired effect
     }
 
     function disableComments(dropDownId) {
-        $('#' + dropDownId).change(function() {
-            if ($('#' + dropDownId).val() == "1") {
+        $('#' + dropDownId).change(function () {
+            if ($('#' + dropDownId).val() === "1") {
                 $('#Comments_' + dropDownId).val("N/A");
                 $('#Comments_' + dropDownId).attr('readonly', false);
-            } else if ($('#' + dropDownId).val() == "-1") {
+            } else if ($('#' + dropDownId).val() === "-1") {
                 $('#Comments_' + dropDownId).attr('readonly', true);
             } else {
-                if ($('#Comments_' + dropDownId).val() == "N/A") {
+                if ($('#Comments_' + dropDownId).val() === "N/A") {
                     $('#Comments_' + dropDownId).val('');
                 }
                 $('#Comments_' + dropDownId).attr('readonly', false);
@@ -403,16 +388,16 @@ desired effect
     $("#MemberTHIScores #Project option[value='1']").remove();
 
 
-    $('#DischargeVolumes #wiki-help').click(function() {
+    $('#DischargeVolumes #wiki-help').click(function () {
         window.location.href = "@Url.Content("https://wiki.advisory.com/display/CPM/THI+Analysis+Tool")";
     });
 
-    $('#DischargeVolumes #Project').change(function() {
+    $('#DischargeVolumes #Project').change(function () {
 
         var selectedProj = $(this).find('option:selected').attr('value');
         var $btn = $('#DischargeVolumes #volumeParamSubmit');
 
-        if (selectedProj != 0) {
+        if (selectedProj !== 0) {
 
             var loadingId = "HospitalSelection";
             $btn.removeAttr('disabled');
@@ -420,19 +405,19 @@ desired effect
             $('#volumeParameters').append(renderingLoadingBlock(loadingId));
 
             var filterProjectJsonReq = {
-                "url": "@Url.Content("~/ThiAnalysisFeedback/FilterHospitalsByProject")",
+                "url": "@Url.Content("~/THI_AnalysisFeedback/FilterHospitalsByProject")",
                 "method": "POST",
                 "headers": {
                     "content-type": "application/json"
                 },
                 "data": "{ \"project\": " + selectedProj + " }",
                 "dataType": "JSON",
-                "success": function(data) {
+                "success": function (data) {
                     var rawHospitalTemplate = $('#projectHospitalsTemplate').html();
                     var compiledHospitalTemplate = Handlebars.compile(rawHospitalTemplate);
                     $('#projectHospitals').html(compiledHospitalTemplate(data));
                     $('#' + loadingId).remove();
-                    if ($('#DischargeVolumes #facilitySelection').find('option:selected').val() == 0) {
+                    if ($('#DischargeVolumes #facilitySelection').find('option:selected').val() === 0) {
                         $btn.attr('disabled', 'disabled');
                     }
                 }
@@ -440,14 +425,14 @@ desired effect
             $.ajax(filterProjectJsonReq);
 
             var getMemberInfoJsonReq = {
-                "url": "@Url.Content("~/ThiAnalysisFeedback/getMemberInformation")",
+                "url": "@Url.Content("~/THI_AnalysisFeedback/getMemberInformation")",
                 "method": "POST",
                 "headers": {
                     "content-type": "application/json"
                 },
                 "data": "{ \"project\": " + selectedProj + " }",
                 "dataType": "JSON",
-                "success": function(data) {
+                "success": function (data) {
 
                     var grouper3MInfo;
                     var runAprdrgInfo;
@@ -455,23 +440,23 @@ desired effect
                     var maxRefreshRateDate;
                     var customOppeCount;
 
-                    if (data.length != 0) {
+                    if (data.length !== 0) {
                         customOppeCount = Number(data[0].TotalCount.toFixed(1)).toLocaleString();
                         maxRefreshRateDate = data[0].MaxRR;
 
-                        if (data[0].CCC_3M == 0) {
+                        if (data[0].CCC_3M === 0) {
                             grouper3MInfo = "OFF";
-                        } else if (data[0].CCC_3M == 1) {
+                        } else if (data[0].CCC_3M === 1) {
                             grouper3MInfo = "ON";
-                        } else if (data[0].CCC_3M == -1) {
+                        } else if (data[0].CCC_3M === -1) {
                             grouper3MInfo = "NA";
                         }
 
-                        if (data[0].RunAPRDRG == 0) {
+                        if (data[0].RunAPRDRG === 0) {
                             runAprdrgInfo = "OFF";
-                        } else if (data[0].RunAPRDRG == 1) {
+                        } else if (data[0].RunAPRDRG === 1) {
                             runAprdrgInfo = "ON";
-                        } else if (data[0].RunAPRDRG == -1) {
+                        } else if (data[0].RunAPRDRG === -1) {
                             runAprdrgInfo = "NA";
                         }
 
@@ -480,9 +465,9 @@ desired effect
                         } else {
                             maxRefreshRateDate = convertDate(maxRefreshRateDate);
                         }
-                        if (data[0].APRDRGAggregate == 0) {
+                        if (data[0].APRDRGAggregate === 0) {
                             aprdrgAggregate = "OFF";
-                        } else if (data[0].APRDRGAggregate == 1) {
+                        } else if (data[0].APRDRGAggregate === 1) {
                             aprdrgAggregate = "ON";
                         }
                     } else {
@@ -520,7 +505,7 @@ desired effect
 
 
     $('#DischargeVolumes #volumeParamSubmit').on('click',
-        function() {
+        function () {
 
             var chartLoadingId = "loadingChart";
             var tableLoadingId = "loadingTable";
@@ -535,31 +520,31 @@ desired effect
             var selectedHospitalName = $('#facilitySelection').find('option:selected').text();
 
             var settings = {
-                "url": "@Url.Content("~/ThiAnalysisFeedback/MemberDischargeVolumes")",
+                "url": "@Url.Content("~/THI_AnalysisFeedback/MemberDischargeVolumes")",
                 "method": "POST",
                 "headers": {
                     "content-type": "application/json"
                 },
                 "data": "{ \"facilitySelect\": " + selectedHospital + " }",
                 "dataType": "JSON",
-                "success": function(data) {
+                "success": function (data) {
 
                     var jsonConvert = [];
                     var volumeGroupSelect = $('input[name=volumeGroup]:checked').attr('id');
 
-                    if (volumeGroupSelect == "Monthly") {
+                    if (volumeGroupSelect === "Monthly") {
                         jsonConvert = data;
-                    } else if (volumeGroupSelect == "Annual") {
+                    } else if (volumeGroupSelect === "Annual") {
                         for (var i = 0; i < data.length; i++) {
                             var foundYearInJson = 0;
                             for (var j = 0; j < jsonConvert.length; j++) {
-                                if (data[i].Year == jsonConvert[j].Year) {
+                                if (data[i].Year === jsonConvert[j].Year) {
                                     foundYearInJson = 1;
                                     jsonConvert[j].IP_COUNT += data[i].IP_COUNT;
                                     jsonConvert[j].OP_COUNT += data[i].OP_COUNT;
                                 }
                             }
-                            if (foundYearInJson == 0) {
+                            if (foundYearInJson === 0) {
                                 jsonConvert.push({
                                     Year: data[i].Year,
                                     IP_COUNT: data[i].IP_COUNT,
@@ -587,9 +572,9 @@ desired effect
                     for (var i = 0; i < jsonConvert.length; i++) {
                         ipCases.unshift(jsonConvert[i].IP_COUNT);
                         opCases.unshift(jsonConvert[i].OP_COUNT);
-                        if (volumeGroupSelect == "Monthly") {
+                        if (volumeGroupSelect === "Monthly") {
                             xAxisLabels.unshift(monthNames[jsonConvert[i].Month - 1] + '-' + jsonConvert[i].Year);
-                        } else if (volumeGroupSelect == "Annual") {
+                        } else if (volumeGroupSelect === "Annual") {
                             xAxisLabels.unshift(jsonConvert[i].Year);
                         }
                     }
@@ -606,7 +591,7 @@ desired effect
             $.ajax(settings);
         });
 
-    if ($('#DischargeVolumes').length != 0) {
+    if ($('#DischargeVolumes').length !== 0) {
         var volumeChart = Highcharts.chart('volumeChartElement',
         {
             credits: {
@@ -624,7 +609,7 @@ desired effect
             xAxis: {
                 allowDecimals: false,
                 labels: {
-                    formatter: function() {
+                    formatter: function () {
                         return this.value; // clean, unformatted number for year
                     }
                 }
@@ -634,7 +619,7 @@ desired effect
                     text: false
                 },
                 labels: {
-                    formatter: function() {
+                    formatter: function () {
                         return this.value / 1000 + 'k';
                     }
                 }
@@ -681,12 +666,12 @@ desired effect
 
 
     Handlebars.registerHelper('monthConvert',
-        function(month) {
+        function (month) {
             return (monthNames[month - 1]);
         });
 
 
-    if ($('#MemberTHIScores').length != 0) {
+    if ($('#MemberTHIScores').length !== 0) {
         var THIScoreTrend = Highcharts.chart('THITrendChart',
         {
             credits: {
@@ -703,7 +688,7 @@ desired effect
             xAxis: {
                 allowDecimals: false,
                 labels: {
-                    formatter: function() {
+                    formatter: function () {
                         return this.value; // clean, unformatted number for year
                     }
                 }
@@ -741,7 +726,7 @@ desired effect
     }
 
     $('#MemberTHIScores #GenerateTHI').on('click',
-        function() {
+        function () {
 
             var memberContractTableloading = "THIScoresTableloading";
             var thiScoresTableloading = "THIScoresTableloading";
@@ -759,7 +744,7 @@ desired effect
             var month = $('#MemberTHIScores #monthSelection').find('option:selected').attr('value');
 
             var settings = {
-                "url": "@Url.Content("~/ThiAnalysisFeedback/THIScoresGeneration")",
+                "url": "@Url.Content("~/THI_AnalysisFeedback/THIScoresGeneration")",
                 "method": "POST",
                 "headers": {
                     "content-type": "application/json"
@@ -772,7 +757,7 @@ desired effect
                     month +
                     "\"}"
             };
-            $.ajax(settings).done(function(response) {
+            $.ajax(settings).done(function (response) {
 
                 var jsonConvert = response.THIParamaterScores[0];
                 var selectedProj = $('#MemberTHIScores #Project').find('option:selected').html();
@@ -796,7 +781,7 @@ desired effect
                     memberValue.clear().draw();
                 }
 
-                if (response.ThiTrendByPeriod.length != 0) {
+                if (response.ThiTrendByPeriod.length !== 0) {
                     var thiScoreJSon = [];
                     var xAxisLabels = [];
                     for (var i = 0; i < response.ThiTrendByPeriod.length; i++) {
@@ -811,7 +796,7 @@ desired effect
                     THIScoreTrend.title.update({ text: selectedProj });
 
                     for (var i in response.ThiTrendByPeriod) {
-                        if (year == response.ThiTrendByPeriod[i].Year && month == response.ThiTrendByPeriod[i].Month) {
+                        if (year === response.ThiTrendByPeriod[i].Year && month === response.ThiTrendByPeriod[i].Month) {
                             THIScoreTrend.subtitle.update({ text: response.ThiTrendByPeriod[i].ProjectPhase });
                         }
                     }
@@ -845,9 +830,9 @@ desired effect
     defaultPeriodInTHIPage();
 
     $('#MemberTHIScores #Project').change(
-        function() {
+        function () {
             defaultPeriodInTHIPage();
-            if ($('#MemberTHIScores #Project').val() == 0) {
+            if ($('#MemberTHIScores #Project').val() === 0) {
                 $('#MemberTHIScores #yearSelection').attr('disabled', 'disabled');
                 $('#MemberTHIScores #monthSelection').attr('disabled', 'disabled');
                 $('#MemberTHIScores #GenerateTHI').attr('disabled', 'disabled');
@@ -860,12 +845,12 @@ desired effect
             }
         });
 
-    $('#MemberTHIScores #MoreThiDetails').click(function() {
+    $('#MemberTHIScores #MoreThiDetails').click(function () {
 
         var project = $('#MemberTHIScores #Project').find('option:selected').val();
         $('#MemberTHIScores #MoreThiDetails').button('loading');
         var settings = {
-            "url": "@Url.Content("~/ThiAnalysisFeedback/THIScoresDrillDown")",
+            "url": "@Url.Content("~/THI_AnalysisFeedback/THIScoresDrillDown")",
             "method": "POST",
             "headers": {
                 "content-type": "application/json"
@@ -874,16 +859,18 @@ desired effect
                 project +
                 "\"}"
         };
-        $.ajax(settings).done(function(response) {
+        $.ajax(settings).done(function (response) {
 
             $('#THIScoresDrillDown #ScoresDataPrj').html($('#MemberTHIScores #Project').find('option:selected').html());
             mseTable.clear().draw();
             dstTable.clear().draw();
 
             if (response != null) {
-                if (response.dlDrill.length != 0) {
-                    var template = $('#dataLoadTimelinessTemplate').html();
-                    var compiledTemplate = Handlebars.compile(template);
+                var compiledTemplate;
+                var template;
+                if (response.dlDrill.length !== 0) {
+                    template = $('#dataLoadTimelinessTemplate').html();
+                    compiledTemplate = Handlebars.compile(template);
                     $('#DataSubmimssionTimelines').html(compiledTemplate(response.dlDrill));
                 }
 
@@ -917,8 +904,8 @@ desired effect
                     });
 
                     if (maxLength > 0) {
-                        var template = $('#missingDataElements').html();
-                        var compiledTemplate = Handlebars.compile(template);
+                        template = $('#missingDataElements').html();
+                        compiledTemplate = Handlebars.compile(template);
                         $('#MissingDataElements').html(compiledTemplate(missingElementsJson));
                     }
                 }
@@ -929,6 +916,77 @@ desired effect
         });
     });
 
+    var userManageTable, userId;
+    $('#editUserPermissions tbody').on('click',
+        'tr',
+        function () {
+            userManageTable = $(this).parent().closest('div').attr('id');
+            userId = $(this).attr('value');
+
+            if (userManageTable !== "pendingUsers") {
+                var settings = {
+                    "url": "@Url.Content("~/THI_AnalysisFeedback/GetUserDetails")",
+                    "method": "POST",
+                    "headers": {
+                        "content-type": "application/json"
+                    },
+                    "data": JSON.stringify({ "userId": userId })
+                };
+
+                $.ajax(settings).done(function(response) {
+                   if (response !== null) {
+                       
+                   }
+                });
+            }
+
+            $('#userEditModal').modal();
+        });
+
+    $('#userEditModal #updateUser').on('click',
+        function() {
+
+            var role = $('#userRole').val();
+            var product = $('#userProduct').val();
+
+            var isAdmin = $('input[name=isAdmin]:checked').val();
+            var isActive = $('input[name=isActive]:checked').val();
+
+            var selectedAclTags = $('.ms-selection ul .ms-selected span');
+
+            var selectedAcls = [];
+
+            for (var i = 0; i < selectedAclTags.length; i++) {
+
+                selectedAcls.push(selectedAclTags[i].innerHTML);
+            }
+            
+            if (userManageTable !== "pendingUsers") {
+                var userDetail = {
+                    "UserKey": userId,
+                    "UserRole": role,
+                    "UserProduct": product,
+                    "IsAdmin": isAdmin,
+                    "IsActive": isActive,
+                    "Acls": selectedAcls
+                }
+
+                var settings = {
+                    "url": "@Url.Content("~/THI_AnalysisFeedback/UpdateUser")",
+                    "method": "POST",
+                    "headers": {
+                        "content-type": "application/json"
+                    },
+                    "data": JSON.stringify(userDetail)
+                };
+
+                $.ajax(settings).done(function(response) {
+                   
+                });
+            }
+        });
+
+
     //Triggering Project Dropdown To pull Default values in Member Info page
 
     $('#DischargeVolumes #Project').trigger('change');
@@ -937,9 +995,9 @@ desired effect
 
     $('#MemberTHIScores #Project').trigger('change');
 
-    </script>
+</script>
 
-    <script id="missingDataElements" type="text/x-handlebars-template">
+<script id="missingDataElements" type="text/x-handlebars-template">
         {{#each this}}
         <tr>
             <td>{{ip}} </td>
@@ -949,7 +1007,7 @@ desired effect
         {{/each}}
     </script>
 
-    <script id="dataLoadTimelinessTemplate" type="text/x-handlebars-template">
+<script id="dataLoadTimelinessTemplate" type="text/x-handlebars-template">
         {{#each this}}
         <tr>
             <td>{{ShortDescription}} </td>
@@ -964,7 +1022,7 @@ desired effect
     </script>
 
 
-    <script id="missingDataElementsTemplate" type="text/x-handlebars-template">
+<script id="missingDataElementsTemplate" type="text/x-handlebars-template">
         {{#each this}}
         <tr>
             <td>{{ShortDescription}} </td>
@@ -974,7 +1032,7 @@ desired effect
         {{/each}}
     </script>
 
-    <script id="projectHospitalsTemplate" type="text/x-handlebars-template">
+<script id="projectHospitalsTemplate" type="text/x-handlebars-template">
         <label>Facilities</label>
         {{#if this}}
         <select class="form-control" style="width: 100%;" name="facilitySelection" id="facilitySelection">
@@ -990,7 +1048,7 @@ desired effect
     </script>
 
 
-    <script id="caseVolTableTemplate" type="text/x-handlebars-template">
+<script id="caseVolTableTemplate" type="text/x-handlebars-template">
         {{#each this}}
         <tr role="row">
             <td class="">{{monthConvert Month}} {{Year}}</td>
@@ -1000,7 +1058,7 @@ desired effect
         {{/each}}
     </script>
 
-    <script id="memberTHIParameterScoresTemplate" type="text/x-handlebars-template">
+<script id="memberTHIParameterScoresTemplate" type="text/x-handlebars-template">
         <tr role="row">
             <td class="{{formatColor THISCORE_CC}}" title="RED: 1.66 AND BELOW, YELLOW: 1.67 AND 2.04, GREEN: 2.05 AND ABOVE">{{formatTHIScores THIScore}}</td>
             <td class="{{formatColor Data_Submission_Timeliness_CC}}" title="RED: 7 AND ABOVE, YELLOW: 2.01 TO 6.99, GREEN: 2 AND BELOW">{{formatTHIScores Data_Submission_Timeliness}}</td>
@@ -1015,7 +1073,7 @@ desired effect
         </tr>
     </script>
 
-    <script id="memberContractInfoTemplate" type="text/x-handlebars-template">
+<script id="memberContractInfoTemplate" type="text/x-handlebars-template">
         <tr role="row">
             <td>Annual Contract Value</td>
             <td>{{formatMoney AnnualContractValue}}</td>
@@ -1049,7 +1107,7 @@ desired effect
         </tr>
     </script>
 
-    <script>
+<script>
 
     function convertDate(date) {
 
@@ -1082,7 +1140,7 @@ desired effect
 
     Handlebars.registerHelper('formatTHIScores',
         function(number) {
-            if (number == -99999.0) {
+            if (number === -99999.0) {
                 return 'N/A';
             } else {
                 return (number.toFixed(2));
@@ -1091,7 +1149,7 @@ desired effect
 
     Handlebars.registerHelper('formatTHIScoresToInt',
         function(number) {
-            if (number == -99999.0) {
+            if (number === -99999.0) {
                 return 'N/A';
             } else {
                 return (number.toFixed(0));
@@ -1122,23 +1180,23 @@ desired effect
                 return 'N/A';
             } else {
                 return ('$ ' + Number(money.toFixed(1)).toLocaleString());
-            }
+            } 
         });
 
     Handlebars.registerHelper('formatColor',
         function(color) {
-            if (color == 'GREEN') {
+            if (color === 'GREEN') {
                 return 'bg-green';
-            } else if (color == 'YELLOW') {
+            } else if (color === 'YELLOW') {
                 return 'bg-yellow';
-            } else if (color == 'RED') {
+            } else if (color === 'RED') {
                 return 'bg-red';
             } else {
                 return '';
             }
         });
 
-    </script>
+</script>
 
 </body>
 

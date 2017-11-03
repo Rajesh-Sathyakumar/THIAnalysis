@@ -11,7 +11,7 @@ namespace THI_Analysis.Dto
 
     using Newtonsoft.Json;
 
-    using THI_Analysis.Enums;
+    using Enums;
 
     public class UserDetail
     {

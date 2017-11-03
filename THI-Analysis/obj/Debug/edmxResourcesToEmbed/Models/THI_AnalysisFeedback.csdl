@@ -104,13 +104,13 @@
     <Property Name="MinesweeperDescription" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
     <NavigationProperty Name="THI_AnalysisFeedback" Relationship="Self.FK_Minesweeper_MinesweeperKey" FromRole="Minesweeper" ToRole="THI_AnalysisFeedback" />
   </EntityType>
-  <EntityType Name="ParameterThreshold">
+  <EntityType Name="Product">
     <Key>
-      <PropertyRef Name="PARAMETERTHRESHOLDKEY" />
+      <PropertyRef Name="ProductKey" />
     </Key>
-    <Property Name="PARAMETERTHRESHOLDKEY" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-    <Property Name="Parameter" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
-    <Property Name="ThresholdDescription" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+    <Property Name="ProductKey" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="ProductName" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+    <NavigationProperty Name="Users" Relationship="Self.Users_Product_ProductKey" FromRole="Products" ToRole="Users" />
   </EntityType>
   <EntityType Name="ProjectHospital">
     <Key>
@@ -137,6 +137,7 @@
     <Property Name="PG" Type="Int32" />
     <Property Name="MAxRR" Type="DateTime" Precision="0" />
     <Property Name="APRDRGAggregate" Type="Boolean" />
+    <Property Name="ProjectID" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
     <NavigationProperty Name="CustomOPPEinfoes" Relationship="Self.FK_CustomOPPEInfo_SalesforceProjects_ProjectKey" FromRole="SalesforceProjects" ToRole="CustomOPPEinfo" />
     <NavigationProperty Name="ProjectHospitals" Relationship="Self.FK_ProjectHospitals_SalesforceProjects_ProjectKey" FromRole="SalesforceProjects" ToRole="ProjectHospitals" />
     <NavigationProperty Name="THI_AnalysisFeedback" Relationship="Self.FK_Project_ProjectKey" FromRole="SalesforceProjects" ToRole="THI_AnalysisFeedback" />
@@ -218,6 +219,14 @@
     <NavigationProperty Name="UsageActivity" Relationship="Self.FK__UsageActi__Usage__13393694" FromRole="UsageActivityLogs" ToRole="UsageActivity" />
     <NavigationProperty Name="User" Relationship="Self.FK__UsageActi__Userk__142D5ACD" FromRole="UsageActivityLogs" ToRole="Users" />
   </EntityType>
+  <EntityType Name="UserRole">
+    <Key>
+      <PropertyRef Name="RoleKey" />
+    </Key>
+    <Property Name="RoleKey" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="RoleName" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+    <NavigationProperty Name="Users" Relationship="Self.Users_Role_RoleKey" FromRole="UserRoles" ToRole="Users" />
+  </EntityType>
   <EntityType Name="User">
     <Key>
       <PropertyRef Name="Userkey" />
@@ -230,11 +239,13 @@
     <Property Name="CreatedDate" Type="DateTime" Precision="0" />
     <Property Name="UserGUID" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
     <Property Name="Username" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
-    <NavigationProperty Name="ACLBridges" Relationship="Self.FK__ACLBridge__Userk__0F68A5B0" FromRole="Users" ToRole="ACLBridge" />
-    <NavigationProperty Name="UsageActivityLogs" Relationship="Self.FK__UsageActi__Userk__142D5ACD" FromRole="Users" ToRole="UsageActivityLogs" />
     <Property Name="IsActive" Type="Boolean" Nullable="false" />
-    <Property Name="Role" Type="String" MaxLength="250" FixedLength="false" Unicode="false" />
-    <Property Name="Product" Type="String" MaxLength="250" FixedLength="false" Unicode="false" />
+    <Property Name="Role" Type="Int32" />
+    <Property Name="Product" Type="Int32" />
+    <NavigationProperty Name="ACLBridges" Relationship="Self.FK__ACLBridge__Userk__0F68A5B0" FromRole="Users" ToRole="ACLBridge" />
+    <NavigationProperty Name="Product1" Relationship="Self.Users_Product_ProductKey" FromRole="Users" ToRole="Products" />
+    <NavigationProperty Name="UsageActivityLogs" Relationship="Self.FK__UsageActi__Userk__142D5ACD" FromRole="Users" ToRole="UsageActivityLogs" />
+    <NavigationProperty Name="UserRole" Relationship="Self.Users_Role_RoleKey" FromRole="Users" ToRole="UserRoles" />
   </EntityType>
   <EntityType Name="CCCMemberContractInfo">
     <Key>
@@ -362,6 +373,22 @@
     <Property Name="Project_ProjectName" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
     <Property Name="DataElement" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
     <Property Name="Category" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+  </EntityType>
+  <EntityType Name="MinesweeperData">
+    <Key>
+      <PropertyRef Name="projectkey" />
+    </Key>
+    <Property Name="projectkey" Type="Int32" Nullable="false" />
+    <Property Name="StagingServerName" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+    <Property Name="dbname" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+    <Property Name="issuetype" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+    <Property Name="issuename" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+    <Property Name="issuecount" Type="Int32" />
+    <Property Name="dischargecount" Type="Int32" />
+    <Property Name="issuemonth" Type="Int32" />
+    <Property Name="issueyear" Type="Int32" />
+    <Property Name="monthlybenchmark" Type="Double" />
+    <Property Name="result" Type="Boolean" />
   </EntityType>
   <Association Name="FK__ACLBridge__AclKe__0E748177">
     <End Role="ACLs" Type="Self.ACL" Multiplicity="1" />
@@ -507,6 +534,18 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
+  <Association Name="Users_Product_ProductKey">
+    <End Role="Products" Type="Self.Product" Multiplicity="0..1" />
+    <End Role="Users" Type="Self.User" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Products">
+        <PropertyRef Name="ProductKey" />
+      </Principal>
+      <Dependent Role="Users">
+        <PropertyRef Name="Role" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
   <Association Name="FK_ProjectHospitals_SalesforceProjects_ProjectKey">
     <End Role="SalesforceProjects" Type="Self.SalesforceProject" Multiplicity="1" />
     <End Role="ProjectHospitals" Type="Self.ProjectHospital" Multiplicity="*" />
@@ -567,6 +606,18 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
+  <Association Name="Users_Role_RoleKey">
+    <End Role="UserRoles" Type="Self.UserRole" Multiplicity="0..1" />
+    <End Role="Users" Type="Self.User" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="UserRoles">
+        <PropertyRef Name="RoleKey" />
+      </Principal>
+      <Dependent Role="Users">
+        <PropertyRef Name="Role" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
   <EntityContainer Name="CCCOperationsEntities" annotation:LazyLoadingEnabled="true">
     <EntitySet Name="ACLBridges" EntityType="Self.ACLBridge" />
     <EntitySet Name="ACLs" EntityType="Self.ACL" />
@@ -580,7 +631,7 @@
     <EntitySet Name="DischargeVolumes" EntityType="Self.DischargeVolume" />
     <EntitySet Name="MemberSupportTickets" EntityType="Self.MemberSupportTicket" />
     <EntitySet Name="Minesweepers" EntityType="Self.Minesweeper" />
-    <EntitySet Name="ParameterThresholds" EntityType="Self.ParameterThreshold" />
+    <EntitySet Name="Products" EntityType="Self.Product" />
     <EntitySet Name="ProjectHospitals" EntityType="Self.ProjectHospital" />
     <EntitySet Name="SalesforceProjects" EntityType="Self.SalesforceProject" />
     <EntitySet Name="SSA_Findings" EntityType="Self.SSA_Findings" />
@@ -588,6 +639,7 @@
     <EntitySet Name="ToolRefreshDates" EntityType="Self.ToolRefreshDate" />
     <EntitySet Name="UsageActivities" EntityType="Self.UsageActivity" />
     <EntitySet Name="UsageActivityLogs" EntityType="Self.UsageActivityLog" />
+    <EntitySet Name="UserRoles" EntityType="Self.UserRole" />
     <EntitySet Name="Users" EntityType="Self.User" />
     <EntitySet Name="CCCMemberContractInfoes" EntityType="Self.CCCMemberContractInfo" />
     <EntitySet Name="CCCTHIScoreColors" EntityType="Self.CCCTHIScoreColor" />
@@ -596,6 +648,7 @@
     <EntitySet Name="MemberDataElements_IP" EntityType="Self.MemberDataElements_IP" />
     <EntitySet Name="MemberDataElements_OP" EntityType="Self.MemberDataElements_OP" />
     <EntitySet Name="MemberDataElements_OPPE" EntityType="Self.MemberDataElements_OPPE" />
+    <EntitySet Name="MinesweeperDatas" EntityType="Self.MinesweeperData" />
     <AssociationSet Name="FK__ACLBridge__AclKe__0E748177" Association="Self.FK__ACLBridge__AclKe__0E748177">
       <End Role="ACLs" EntitySet="ACLs" />
       <End Role="ACLBridge" EntitySet="ACLBridges" />
@@ -644,6 +697,10 @@
       <End Role="Minesweeper" EntitySet="Minesweepers" />
       <End Role="THI_AnalysisFeedback" EntitySet="THI_AnalysisFeedback" />
     </AssociationSet>
+    <AssociationSet Name="Users_Product_ProductKey" Association="Self.Users_Product_ProductKey">
+      <End Role="Products" EntitySet="Products" />
+      <End Role="Users" EntitySet="Users" />
+    </AssociationSet>
     <AssociationSet Name="FK_ProjectHospitals_SalesforceProjects_ProjectKey" Association="Self.FK_ProjectHospitals_SalesforceProjects_ProjectKey">
       <End Role="SalesforceProjects" EntitySet="SalesforceProjects" />
       <End Role="ProjectHospitals" EntitySet="ProjectHospitals" />
@@ -663,6 +720,10 @@
     <AssociationSet Name="FK__UsageActi__Userk__142D5ACD" Association="Self.FK__UsageActi__Userk__142D5ACD">
       <End Role="Users" EntitySet="Users" />
       <End Role="UsageActivityLogs" EntitySet="UsageActivityLogs" />
+    </AssociationSet>
+    <AssociationSet Name="Users_Role_RoleKey" Association="Self.Users_Role_RoleKey">
+      <End Role="UserRoles" EntitySet="UserRoles" />
+      <End Role="Users" EntitySet="Users" />
     </AssociationSet>
     <FunctionImport Name="ETLCompletion" ReturnType="Collection(CCCOperationsModel.ETLCompletion_Result)">
       <Parameter Name="Proj" Mode="In" Type="Int32" />
