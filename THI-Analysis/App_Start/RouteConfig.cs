@@ -14,6 +14,12 @@ namespace THI_Analysis
             routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
 
             routes.MapRoute(
+                    name:"UserPermissionsPageRoute",
+                    url: "{controller}/ManageAccount/EditPermissions",
+                    defaults: new { Controller = "THI_AnalysisFeedback",action = "EditUserPermission" }
+                );
+
+            routes.MapRoute(
                 name: "Default",
                 url: "{controller}/{action}/{id}",
                 defaults: new { controller = "THI_AnalysisFeedback", action = "MemberDischargeVolumes", id = UrlParameter.Optional }
