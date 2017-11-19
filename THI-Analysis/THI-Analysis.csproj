@@ -471,6 +471,8 @@
     <Content Include="Views\THI_AnalysisFeedback\MemberTHIScores.cshtml" />
     <Content Include="Views\THI_AnalysisFeedback\Details.cshtml" />
     <Content Include="Views\THI_AnalysisFeedback\EditUserPermission.cshtml" />
+    <Content Include="Views\THI_AnalysisFeedback\Unauthorized.cshtml" />
+    <Content Include="Views\THI_AnalysisFeedback\Errorpage.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

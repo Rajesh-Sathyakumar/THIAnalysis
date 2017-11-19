@@ -38,41 +38,116 @@ namespace THI_Analysis.Controllers
         private readonly UserCreationService _userService = new UserCreationService();
         private readonly UsageActivityList _usgAct = new UsageActivityList();
 
-        [HttpPost]
-        public JsonResult GetUserDetails(int userId)
+
+        public ActionResult Errorpage()
         {
-            var userAcls = _db.Users.Join(_db.ACLBridges, a => a.Userkey, b => b.Userkey,
-                    (a, b) => new {Users = a, ACLBridge = b})
-                    .Where(a=> a.Users.Userkey == userId)
-                    .Select(a => new
+            return View();
+        }
+
+
+        public ActionResult Unauthorized()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public void InsertPendingUser(ManageUserDetail userDetail)
+        {
+
+            _userService.ConfirmUsersEnrollment(new ConfirmUserEnrollment {
+                ApplicationKey = _productKey,
+                EnvironmentKey = _environmentKey,
+                UserMemberOrgKeyList = new List<UserMemberOrgKeyPair>
+                {
+                    new UserMemberOrgKeyPair
                     {
-                        a.ACLBridge.AclKey
-                    });
+                        UserKey = userDetail.UserGuid,
+                        MemberOrgKey = _memberOrgKey
+                    }
+                }
 
-            var userProduct = _db.Users.Join(_db.Products, a => a.Product, b => b.ProductKey,
-                    (a, b) => new {Users = a, Products = b})
-                .Where(a => a.Users.Userkey == userId)
-                .Select(a => a.Products.ProductKey);
+            }, _siamBaseUrl+ _crimsonProvisioningService, "User/EnrollUsers", Session["SessionAuthToken"].ToString());
 
-            var userRole = _db.Users.Join(_db.UserRoles, a => a.Role, b => b.RoleKey,
-                    (a, b) => new { Users = a, Roles = b })
-                .Where(a => a.Users.Userkey == userId)
-                .Select(a => a.Roles.RoleKey);
+            _db.Users.Add(
+                new User
+                {
+                    UserGUID = userDetail.UserGuid.ToString(),
+                    FirstName = userDetail.FirstName,
+                    LastName = userDetail.LastName,
+                    Username = userDetail.UserId,
+                    Admin = int.Parse(userDetail.IsAdmin),
+                    IsActive = (userDetail.IsActive == "1"),
+                    Email = userDetail.Email,
+                    Role = userDetail.UserRole,
+                    Product = userDetail.UserProduct,
+                    CreatedDate = DateTime.Now
+                }
 
-            var roles = _db.UserRoles.Select(a => new {a.RoleKey, a.RoleName});
+             );
 
-            var products = _db.Products.Select(a => new {a.ProductKey, a.ProductName});
+            var userKey = _db.Users.Where(a => a.UserGUID == userDetail.UserGuid.ToString()).Select(a => a.Userkey).SingleOrDefault();
 
-            var acls = _db.ACLs.Select(a => new {a.AclKey, a.AclName});
+            if (userDetail.Acls != null)
+            {
+                var userAcls = userDetail.Acls.Join(_db.ACLs, a => a.ToString(), b => b.AclName,
+                    (a, b) => new { ACLBridge = a, ACL = b });
+
+                foreach (var userAcl in userAcls)
+                {
+                    _db.ACLBridges.AddOrUpdate(new ACLBridge() { Userkey = userKey, AclKey = userAcl.ACL.AclKey });
+                }
+            }
+
+            _db.SaveChanges();
+        }
+
+
+        [HttpPost]
+        public JsonResult GetUserParameters()
+        {
+            
+            var roles = _db.UserRoles.Select(a => new { a.RoleKey, a.RoleName });
+
+            var products = _db.Products.Select(a => new { a.ProductKey, a.ProductName });
+
+            var acls = _db.ACLs.Select(a => new { a.AclKey, a.AclName });
 
             return Json(new
             {
-                UserAcls = userAcls,
-                UserProduct = userProduct,
-                UserRole = userRole,
                 Roles = roles,
                 Products = products,
                 Acls = acls
+            });
+        }
+
+
+        [HttpPost]
+        public JsonResult GetUserDetails(int userId)
+          {
+            var userAcls = _db.Users.Join(_db.ACLBridges, a => a.Userkey, b => b.Userkey,
+                        (a, b) => new { Users = a, ACLBridge = b })
+                        .Where(a => a.Users.Userkey == userId)
+                        .Select(a => a.ACLBridge.AclKey.ToString()
+                    );
+
+
+            var userDetails = _db.Users.Where(a => a.Userkey == userId).Select(a => new
+            {
+                a.FirstName,
+                a.LastName,
+                a.Username,
+                a.Email,
+                a.Admin,
+                a.IsActive,
+                a.Product,
+                a.Role
+            });
+
+
+            return Json(new
+            {
+                UserDetails = userDetails,
+                UserAcls = userAcls,
             });
         }
 
@@ -80,6 +155,9 @@ namespace THI_Analysis.Controllers
         public void UpdateUser(ManageUserDetail userData)
         {
             var dbUser = _db.Users.FirstOrDefault(a => a.Userkey == userData.UserKey);
+            var userAclKeys = dbUser.ACLBridges.Where(a => a.Userkey == userData.UserKey);
+
+            _db.ACLBridges.RemoveRange(userAclKeys);
 
             if (userData.Acls != null)
             {
@@ -103,10 +181,15 @@ namespace THI_Analysis.Controllers
 
             _db.SaveChanges();
         }
-
+        
         public ActionResult EditUserPermission()
         {
-            if (Request.Url != null) SiamRedirection(Request.Url.AbsoluteUri);
+            if (Request.Url != null) {
+                if(!SiamRedirection(Request.Url.AbsoluteUri + "?Acl=User Management"))
+                {
+                    return RedirectToAction("Unauthorized");
+                }
+            } 
 
             dynamic userStatus = new ExpandoObject();
             var getPendingUsers = new List<ManageUserDetail>();
@@ -114,7 +197,7 @@ namespace THI_Analysis.Controllers
 
             if (Session?["SessionAuthToken"] != null)
             {
-                getPendingUsers = _userService.GetUnprovisionedUsers(_memberOrgKey, _productKey, _environmentKey,
+                getPendingUsers = _userService.GetUnprovisionedUsers( _productKey, _memberOrgKey, _environmentKey,
                         _siamBaseUrl + _crimsonProvisioningService,
                         string.Concat(
                             "User/GetUnprovisionedUsersByMemberApplicationEnvironment",
@@ -240,7 +323,7 @@ namespace THI_Analysis.Controllers
             return httpClient;
         }
 
-        public string MakePostCallAndReturnCookie(SiamRequestServiceParam requestServiceParam)
+        private string MakePostCallAndReturnCookie(SiamRequestServiceParam requestServiceParam)
         {
             var cookieValue = string.Empty;
             var httpClient = ConstructRequest(requestServiceParam);
@@ -264,7 +347,7 @@ namespace THI_Analysis.Controllers
         }
 
 
-        public string PerformInitialAuthenticationAndCreateCookies(
+        private string PerformInitialAuthenticationAndCreateCookies(
             string siamApiUrl,
             string siamApiVersion,
             string samlRespone,
@@ -283,10 +366,57 @@ namespace THI_Analysis.Controllers
             return MakePostCallAndReturnCookie(requestparam);
         }
 
-
-        [HttpPost]
-        public void SiamRedirection(string returnUrl)
+        private void UpdateSessions(UserSessionInfo sessionInfo)
         {
+            if (HttpContext.Session != null)
+            {
+                HttpContext.Session.Add("UserSessionInfo", sessionInfo);
+                HttpContext.Session.Timeout = 20;
+            }
+
+            var aclAccess = new Dictionary<string, bool>();
+
+            foreach (var acls in _db.ACLs)
+            {
+                aclAccess.Add(
+                    acls.AclName, false
+                );
+            }
+
+            var user = _db.Users.Where(a => a.UserGUID == sessionInfo.userKey.ToString()).Select(a=> new {
+                a.Userkey,
+                a.IsActive,
+                a.Admin
+            }).FirstOrDefault();
+
+            if (user == null)
+            {
+                RedirectToAction("Unauthorized");
+            }
+
+            
+            Session["isAdmin"] = user.Admin;
+            Session["isActive"] = user.IsActive;
+
+            var userAcls = _db.ACLBridges.Join(_db.ACLs, a => a.AclKey, b => b.AclKey, (a, b) => new
+            {
+                userAcl = a,
+                AclMaster = b
+            }).Where(a => a.userAcl.Userkey == user.Userkey).Select(a => a.AclMaster.AclName);
+
+
+            foreach (var useracl in userAcls)
+            {
+                aclAccess[useracl] = true;
+            }
+
+            Session["userAcls"] = aclAccess;
+
+        }
+        
+        public bool SiamRedirection(string returnUrl)
+        {
+
             if (Session["UserSessionInfo"] == null)
             {
                 var cas = new CasAuthenticationService(SamlHelperConfiguration.Config, UserSessionHandler.Get());
@@ -298,9 +428,11 @@ namespace THI_Analysis.Controllers
                         _productKey,
                         _environmentKey,
                         returnUrl);
+                    return true;
                 }
                 else
                 {
+
                     var samlResponse = httpContextBase.Request.Form["SAMLResponse"];
                     var relayState = httpContextBase.Request.Form["RelayState"];
                     var samlAndRelayUrl =
@@ -315,19 +447,34 @@ namespace THI_Analysis.Controllers
 
                     if (sessionInfo != null)
                     {
-                        if (HttpContext.Session != null)
-                        {
-                            HttpContext.Session.Add("UserSessionInfo", sessionInfo);
-                            HttpContext.Session.Timeout = 20;
-                        }
+                        UpdateSessions(sessionInfo);
                         SetUsage(_usgAct.LogIn);
                     }
-                    Response.Cookies.Add(new HttpCookie("sessionId", authToken));
 
+                    Response.Cookies.Add(new HttpCookie("sessionId", authToken));
                     returnUrl = returnUrl.Replace("http://thi.advisory.com:81", "https://thi.advisory.com");
+
+                    var urlSplit = returnUrl.Split('?');
+                    returnUrl = urlSplit[0];
                     Response.Redirect(returnUrl);
                 }
+            } else
+            {
+                var urlSplit = returnUrl.Split('?');
+                returnUrl = urlSplit[0];
+                var aclName = urlSplit[1].Replace("Acl=", "");
+
+                UpdateSessions((UserSessionInfo)Session["UserSessionInfo"]);
+
+                if (Session?["userAcls"] != null && ((bool)Session["isActive"]) &&  ((int)Session["isAdmin"] == 1 ||
+                              aclName == "Member Statistics" || (aclName != "User Management" &&
+                              ((IDictionary<string, bool>)Session["userAcls"])[aclName])))
+                {
+                    return true;
+                }
             }
+
+            return false;
         }
 
 
@@ -495,7 +642,14 @@ namespace THI_Analysis.Controllers
 
         public ActionResult MemberTHIScores()
         {
-            if (HttpContext.Request.Url != null) SiamRedirection(HttpContext.Request.Url.AbsoluteUri);
+
+            if (Request.Url != null)
+            {
+                if (!SiamRedirection(Request.Url.AbsoluteUri + "?Acl=Member THI Scores"))
+                {
+                    return RedirectToAction("Unauthorized");
+                }
+            }
             SetUsage(_usgAct.MemberThiScoresTab);
             ViewBag.Project = new SelectList(_db.SalesforceProjects, "ProjectKey", "ProjectName");
             ViewBag.RefreshDate = _db.ToolRefreshDates.Max(a => a.RecentRundate);
@@ -504,7 +658,15 @@ namespace THI_Analysis.Controllers
 
         public ActionResult Index()
         {
-            if (Request.Url != null) SiamRedirection(Request.Url.AbsoluteUri);
+
+            if (Request.Url != null)
+            {
+                if (!SiamRedirection(Request.Url.AbsoluteUri + "?Acl=THI Data Logs"))
+                {
+                    return RedirectToAction("Unauthorized");
+                }
+            }
+
             SetUsage(_usgAct.ThiDataLogsTab);
             ViewBag.Project = new SelectList(_db.SalesforceProjects, "ProjectKey", "ProjectName");
             var feedBackData =
@@ -516,7 +678,14 @@ namespace THI_Analysis.Controllers
 
         public ActionResult MemberDischargeVolumes()
         {
-            if (HttpContext.Request.Url != null) SiamRedirection(HttpContext.Request.Url.AbsoluteUri);
+
+            if (Request.Url != null)
+            {
+                if (!SiamRedirection(Request.Url.AbsoluteUri + "?Acl=Member Statistics"))
+                {
+                    return RedirectToAction("Unauthorized");
+                }
+            }
             SetUsage(_usgAct.MemberStatisticsTab);
             ViewBag.Project = new SelectList(_db.SalesforceProjects, "ProjectKey", "ProjectName");
             ViewBag.RefreshDate = _db.ToolRefreshDates.Max(a => a.RecentRundate);
@@ -609,7 +778,14 @@ namespace THI_Analysis.Controllers
         // GET: THI_AnalysisFeedback/Details/5
         public ActionResult Details(int? id)
         {
-            SiamRedirection(HttpContext.Request.Url.AbsoluteUri);
+
+            if (Request.Url != null)
+            {
+                if (!SiamRedirection(Request.Url.AbsoluteUri + "?Acl=THI Data Logs"))
+                {
+                    return RedirectToAction("Unauthorized");
+                }
+            }
 
             var root = new XElement("Parameters");
             var feedbackElem = new XElement("FeedbackKey", id);
@@ -623,7 +799,14 @@ namespace THI_Analysis.Controllers
         // GET: THI_AnalysisFeedback/Create
         public ActionResult Create()
         {
-            SiamRedirection(HttpContext.Request.Url.AbsoluteUri);
+            if (Request.Url != null)
+            {
+                if (!SiamRedirection(Request.Url.AbsoluteUri + "?Acl=THI Data Feedback"))
+                {
+                    return RedirectToAction("Unauthorized");
+                }
+            }
+
             SetUsage(_usgAct.ThiDataFeedbackTab);
 
             ViewBag.AnalysisSummary = new SelectList(_db.AnalysisSummaries, "AnalysisSummaryKey",
