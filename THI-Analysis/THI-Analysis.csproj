@@ -277,7 +277,7 @@
     <Compile Include="Models\MinesweeperData.cs">
       <DependentUpon>THI_AnalysisFeedback.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\ParameterThreshold.cs">
+    <Compile Include="Models\Product.cs">
       <DependentUpon>THI_AnalysisFeedback.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\ProjectHospital.cs">
@@ -317,6 +317,9 @@
       <DependentUpon>THI_AnalysisFeedback.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\User.cs">
+      <DependentUpon>THI_AnalysisFeedback.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\UserRole.cs">
       <DependentUpon>THI_AnalysisFeedback.tt</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />

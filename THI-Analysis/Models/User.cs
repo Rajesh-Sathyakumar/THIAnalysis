@@ -35,7 +35,9 @@ namespace THI_Analysis.Models
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<ACLBridge> ACLBridges { get; set; }
+        public virtual Product Product1 { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<UsageActivityLog> UsageActivityLogs { get; set; }
+        public virtual UserRole UserRole { get; set; }
     }
 }

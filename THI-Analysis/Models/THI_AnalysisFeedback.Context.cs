@@ -31,7 +31,6 @@ namespace THI_Analysis.Models
         public virtual DbSet<ACL> ACLs { get; set; }
         public virtual DbSet<AnalysisSummary> AnalysisSummaries { get; set; }
         public virtual DbSet<CriticalDiagnostic> CriticalDiagnostics { get; set; }
-        public virtual DbSet<CustomOPPEinfo> CustomOPPEinfoes { get; set; }
         public virtual DbSet<DAS_Findings> DAS_Findings { get; set; }
         public virtual DbSet<DataElement> DataElements { get; set; }
         public virtual DbSet<DataLag> DataLags { get; set; }
@@ -39,7 +38,7 @@ namespace THI_Analysis.Models
         public virtual DbSet<DischargeVolume> DischargeVolumes { get; set; }
         public virtual DbSet<MemberSupportTicket> MemberSupportTickets { get; set; }
         public virtual DbSet<Minesweeper> Minesweepers { get; set; }
-        public virtual DbSet<ParameterThreshold> ParameterThresholds { get; set; }
+        public virtual DbSet<Product> Products { get; set; }
         public virtual DbSet<ProjectHospital> ProjectHospitals { get; set; }
         public virtual DbSet<SalesforceProject> SalesforceProjects { get; set; }
         public virtual DbSet<SSA_Findings> SSA_Findings { get; set; }
@@ -47,6 +46,7 @@ namespace THI_Analysis.Models
         public virtual DbSet<ToolRefreshDate> ToolRefreshDates { get; set; }
         public virtual DbSet<UsageActivity> UsageActivities { get; set; }
         public virtual DbSet<UsageActivityLog> UsageActivityLogs { get; set; }
+        public virtual DbSet<UserRole> UserRoles { get; set; }
         public virtual DbSet<User> Users { get; set; }
         public virtual DbSet<CCCMemberContractInfo> CCCMemberContractInfoes { get; set; }
         public virtual DbSet<CCCTHIScoreColor> CCCTHIScoreColors { get; set; }
@@ -56,6 +56,7 @@ namespace THI_Analysis.Models
         public virtual DbSet<MemberDataElements_OP> MemberDataElements_OP { get; set; }
         public virtual DbSet<MemberDataElements_OPPE> MemberDataElements_OPPE { get; set; }
         public virtual DbSet<MinesweeperData> MinesweeperDatas { get; set; }
+        public virtual DbSet<CustomOPPEinfo> CustomOPPEinfoes { get; set; }
     
         public virtual ObjectResult<ETLCompletion_Result> ETLCompletion(Nullable<int> proj, Nullable<int> year, Nullable<int> month)
         {

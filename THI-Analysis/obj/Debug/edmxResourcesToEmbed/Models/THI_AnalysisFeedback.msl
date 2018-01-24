@@ -34,16 +34,6 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
-    <EntitySetMapping Name="CustomOPPEinfoes">
-      <EntityTypeMapping TypeName="CCCOperationsModel.CustomOPPEinfo">
-        <MappingFragment StoreEntitySet="CustomOPPEinfo">
-          <ScalarProperty Name="CustomOPPEinfoKey" ColumnName="CustomOPPEinfoKey" />
-          <ScalarProperty Name="Project" ColumnName="Project" />
-          <ScalarProperty Name="TotalCount" ColumnName="TotalCount" />
-          <ScalarProperty Name="MaxRR" ColumnName="MaxRR" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
     <EntitySetMapping Name="DAS_Findings">
       <EntityTypeMapping TypeName="CCCOperationsModel.DAS_Findings">
         <MappingFragment StoreEntitySet="DAS_Findings">
@@ -104,12 +94,11 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
-    <EntitySetMapping Name="ParameterThresholds">
-      <EntityTypeMapping TypeName="CCCOperationsModel.ParameterThreshold">
-        <MappingFragment StoreEntitySet="ParameterThresholds">
-          <ScalarProperty Name="PARAMETERTHRESHOLDKEY" ColumnName="PARAMETERTHRESHOLDKEY" />
-          <ScalarProperty Name="Parameter" ColumnName="Parameter" />
-          <ScalarProperty Name="ThresholdDescription" ColumnName="ThresholdDescription" />
+    <EntitySetMapping Name="Products">
+      <EntityTypeMapping TypeName="CCCOperationsModel.Product">
+        <MappingFragment StoreEntitySet="Products">
+          <ScalarProperty Name="ProductKey" ColumnName="ProductKey" />
+          <ScalarProperty Name="ProductName" ColumnName="ProductName" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
@@ -125,7 +114,6 @@
     <EntitySetMapping Name="SalesforceProjects">
       <EntityTypeMapping TypeName="CCCOperationsModel.SalesforceProject">
         <MappingFragment StoreEntitySet="SalesforceProjects">
-          <ScalarProperty Name="ProjectID" ColumnName="ProjectID" />
           <ScalarProperty Name="ProjectKey" ColumnName="ProjectKey" />
           <ScalarProperty Name="ProjectName" ColumnName="ProjectName" />
           <ScalarProperty Name="ProdDBName" ColumnName="ProdDBName" />
@@ -137,6 +125,8 @@
           <ScalarProperty Name="PG" ColumnName="PG" />
           <ScalarProperty Name="MAxRR" ColumnName="MAxRR" />
           <ScalarProperty Name="APRDRGAggregate" ColumnName="APRDRGAggregate" />
+          <ScalarProperty Name="ProjectID" ColumnName="ProjectID" />
+          <ScalarProperty Name="ProjectPhase" ColumnName="ProjectPhase" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
@@ -208,12 +198,17 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
+    <EntitySetMapping Name="UserRoles">
+      <EntityTypeMapping TypeName="CCCOperationsModel.UserRole">
+        <MappingFragment StoreEntitySet="UserRoles">
+          <ScalarProperty Name="RoleKey" ColumnName="RoleKey" />
+          <ScalarProperty Name="RoleName" ColumnName="RoleName" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
     <EntitySetMapping Name="Users">
       <EntityTypeMapping TypeName="CCCOperationsModel.User">
         <MappingFragment StoreEntitySet="Users">
-          <ScalarProperty Name="Product" ColumnName="Product" />
-          <ScalarProperty Name="Role" ColumnName="Role" />
-          <ScalarProperty Name="IsActive" ColumnName="IsActive" />
           <ScalarProperty Name="Userkey" ColumnName="Userkey" />
           <ScalarProperty Name="FirstName" ColumnName="FirstName" />
           <ScalarProperty Name="LastName" ColumnName="LastName" />
@@ -222,6 +217,9 @@
           <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
           <ScalarProperty Name="UserGUID" ColumnName="UserGUID" />
           <ScalarProperty Name="Username" ColumnName="Username" />
+          <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+          <ScalarProperty Name="Role" ColumnName="Role" />
+          <ScalarProperty Name="Product" ColumnName="Product" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
@@ -244,8 +242,6 @@
     <EntitySetMapping Name="CCCTHIScoreColors">
       <EntityTypeMapping TypeName="CCCOperationsModel.CCCTHIScoreColor">
         <MappingFragment StoreEntitySet="CCCTHIScoreColor">
-          <ScalarProperty Name="C_CriticalInternalDiagnostics_CC" ColumnName="#CriticalInternalDiagnostics_CC" />
-          <ScalarProperty Name="C_CriticalInternalDiagnostics" ColumnName="#CriticalInternalDiagnostics" />
           <ScalarProperty Name="ProjectKey" ColumnName="ProjectKey" />
           <ScalarProperty Name="Year" ColumnName="Year" />
           <ScalarProperty Name="Month" ColumnName="Month" />
@@ -268,6 +264,8 @@
           <ScalarProperty Name="C_USE_Compass_Connect_CC" ColumnName="#USE_Compass_Connect_CC" />
           <ScalarProperty Name="C_Data_Elements_Present" ColumnName="#Data_Elements_Present" />
           <ScalarProperty Name="C_Data_Elements_Present_CC" ColumnName="#Data_Elements_Present_CC" />
+          <ScalarProperty Name="C_CriticalInternalDiagnostics" ColumnName="#CriticalInternalDiagnostics" />
+          <ScalarProperty Name="C_CriticalInternalDiagnostics_CC" ColumnName="#CriticalInternalDiagnostics_CC" />
           <ScalarProperty Name="THIScore" ColumnName="THIScore" />
           <ScalarProperty Name="THISCORE_CC" ColumnName="THISCORE_CC" />
         </MappingFragment>
@@ -276,7 +274,6 @@
     <EntitySetMapping Name="CCCTHIScores">
       <EntityTypeMapping TypeName="CCCOperationsModel.CCCTHIScore">
         <MappingFragment StoreEntitySet="CCCTHIScores">
-          <ScalarProperty Name="C_CriticalInternalDiagnostics" ColumnName="#CriticalInternalDiagnostics" />
           <ScalarProperty Name="ProjectKey" ColumnName="ProjectKey" />
           <ScalarProperty Name="Year" ColumnName="Year" />
           <ScalarProperty Name="Month" ColumnName="Month" />
@@ -289,6 +286,7 @@
           <ScalarProperty Name="C__USE_SSA" ColumnName="#_USE_SSA" />
           <ScalarProperty Name="C_USE_Compass_Connect" ColumnName="#USE_Compass_Connect" />
           <ScalarProperty Name="C_Data_Elements_Present" ColumnName="#Data_Elements_Present" />
+          <ScalarProperty Name="C_CriticalInternalDiagnostics" ColumnName="#CriticalInternalDiagnostics" />
           <ScalarProperty Name="Frequency" ColumnName="Frequency" />
           <ScalarProperty Name="THIScore" ColumnName="THIScore" />
           <ScalarProperty Name="ProjectPhase" ColumnName="ProjectPhase" />
@@ -350,6 +348,23 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
+    <EntitySetMapping Name="MinesweeperDatas">
+      <EntityTypeMapping TypeName="CCCOperationsModel.MinesweeperData">
+        <MappingFragment StoreEntitySet="MinesweeperData">
+          <ScalarProperty Name="projectkey" ColumnName="projectkey" />
+          <ScalarProperty Name="StagingServerName" ColumnName="StagingServerName" />
+          <ScalarProperty Name="dbname" ColumnName="dbname" />
+          <ScalarProperty Name="issuetype" ColumnName="issuetype" />
+          <ScalarProperty Name="issuename" ColumnName="issuename" />
+          <ScalarProperty Name="issuecount" ColumnName="issuecount" />
+          <ScalarProperty Name="dischargecount" ColumnName="dischargecount" />
+          <ScalarProperty Name="issuemonth" ColumnName="issuemonth" />
+          <ScalarProperty Name="issueyear" ColumnName="issueyear" />
+          <ScalarProperty Name="monthlybenchmark" ColumnName="monthlybenchmark" />
+          <ScalarProperty Name="result" ColumnName="result" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
     <FunctionImportMapping FunctionImportName="ETLCompletion" FunctionName="CCCOperationsModel.Store.ETLCompletion">
       <ResultMapping>
         <ComplexTypeMapping TypeName="CCCOperationsModel.ETLCompletion_Result">
@@ -363,20 +378,13 @@
         </ComplexTypeMapping>
       </ResultMapping>
     </FunctionImportMapping>
-    <EntitySetMapping Name="MinesweeperDatas">
-      <EntityTypeMapping TypeName="CCCOperationsModel.MinesweeperData">
-        <MappingFragment StoreEntitySet="MinesweeperData">
-          <ScalarProperty Name="result" ColumnName="result" />
-          <ScalarProperty Name="monthlybenchmark" ColumnName="monthlybenchmark" />
-          <ScalarProperty Name="issueyear" ColumnName="issueyear" />
-          <ScalarProperty Name="issuemonth" ColumnName="issuemonth" />
-          <ScalarProperty Name="dischargecount" ColumnName="dischargecount" />
-          <ScalarProperty Name="issuecount" ColumnName="issuecount" />
-          <ScalarProperty Name="issuename" ColumnName="issuename" />
-          <ScalarProperty Name="issuetype" ColumnName="issuetype" />
-          <ScalarProperty Name="dbname" ColumnName="dbname" />
-          <ScalarProperty Name="StagingServerName" ColumnName="StagingServerName" />
-          <ScalarProperty Name="projectkey" ColumnName="projectkey" />
+    <EntitySetMapping Name="CustomOPPEinfoes">
+      <EntityTypeMapping TypeName="CCCOperationsModel.CustomOPPEinfo">
+        <MappingFragment StoreEntitySet="CustomOPPEinfo">
+          <ScalarProperty Name="MaxRR" ColumnName="MaxRR" />
+          <ScalarProperty Name="TotalCount" ColumnName="TotalCount" />
+          <ScalarProperty Name="Project" ColumnName="Project" />
+          <ScalarProperty Name="CustomOPPEinfoKey" ColumnName="CustomOPPEinfoKey" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>

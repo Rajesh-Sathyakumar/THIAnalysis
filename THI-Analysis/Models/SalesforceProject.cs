@@ -17,9 +17,9 @@ namespace THI_Analysis.Models
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public SalesforceProject()
         {
-            this.CustomOPPEinfoes = new HashSet<CustomOPPEinfo>();
             this.ProjectHospitals = new HashSet<ProjectHospital>();
             this.THI_AnalysisFeedback = new HashSet<THI_AnalysisFeedback>();
+            this.CustomOPPEinfoes = new HashSet<CustomOPPEinfo>();
         }
     
         public int ProjectKey { get; set; }
@@ -34,12 +34,13 @@ namespace THI_Analysis.Models
         public Nullable<System.DateTime> MAxRR { get; set; }
         public Nullable<bool> APRDRGAggregate { get; set; }
         public string ProjectID { get; set; }
+        public string ProjectPhase { get; set; }
     
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<CustomOPPEinfo> CustomOPPEinfoes { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<ProjectHospital> ProjectHospitals { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<THI_AnalysisFeedback> THI_AnalysisFeedback { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<CustomOPPEinfo> CustomOPPEinfoes { get; set; }
     }
 }

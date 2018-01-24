@@ -36,9 +36,9 @@ namespace THI_Analysis.Models
         public string C_USE_Compass_Connect_CC { get; set; }
         public Nullable<double> C_Data_Elements_Present { get; set; }
         public string C_Data_Elements_Present_CC { get; set; }
-        public Nullable<double> THIScore { get; set; }
-        public string THISCORE_CC { get; set; }
         public Nullable<double> C_CriticalInternalDiagnostics { get; set; }
         public string C_CriticalInternalDiagnostics_CC { get; set; }
+        public Nullable<double> THIScore { get; set; }
+        public string THISCORE_CC { get; set; }
     }
 }

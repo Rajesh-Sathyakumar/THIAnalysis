@@ -26,9 +26,9 @@ namespace THI_Analysis.Models
         public Nullable<double> C__USE_SSA { get; set; }
         public Nullable<double> C_USE_Compass_Connect { get; set; }
         public Nullable<double> C_Data_Elements_Present { get; set; }
+        public Nullable<double> C_CriticalInternalDiagnostics { get; set; }
         public string Frequency { get; set; }
         public Nullable<double> THIScore { get; set; }
         public string ProjectPhase { get; set; }
-        public Nullable<double> C_CriticalInternalDiagnostics { get; set; }
     }
 }
