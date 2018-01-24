@@ -512,19 +512,19 @@ fixed layout. -->
                         customOppeCount = Number(data[0].TotalCount.toFixed(1)).toLocaleString();
                         maxRefreshRateDate = data[0].MaxRR;
 
-                        if (data[0].CCC_3M === 0) {
+                        if (data[0].CCC_3M === "0") {
                             grouper3MInfo = "OFF";
-                        } else if (data[0].CCC_3M === 1) {
+                        } else if (data[0].CCC_3M === "1") {
                             grouper3MInfo = "ON";
-                        } else if (data[0].CCC_3M === -1) {
+                        } else if (data[0].CCC_3M === "-1") {
                             grouper3MInfo = "NA";
                         }
 
-                        if (data[0].RunAPRDRG === 0) {
+                        if (data[0].RunAPRDRG === "0") {
                             runAprdrgInfo = "OFF";
-                        } else if (data[0].RunAPRDRG === 1) {
+                        } else if (data[0].RunAPRDRG === "1") {
                             runAprdrgInfo = "ON";
-                        } else if (data[0].RunAPRDRG === -1) {
+                        } else if (data[0].RunAPRDRG === "-1") {
                             runAprdrgInfo = "NA";
                         }
 
@@ -533,9 +533,9 @@ fixed layout. -->
                         } else {
                             maxRefreshRateDate = convertDate(maxRefreshRateDate);
                         }
-                        if (data[0].APRDRGAggregate === 0) {
+                        if (data[0].APRDRGAggregate === false) {
                             aprdrgAggregate = "OFF";
-                        } else if (data[0].APRDRGAggregate === 1) {
+                        } else if (data[0].APRDRGAggregate === true) {
                             aprdrgAggregate = "ON";
                         }
                     } else {
@@ -864,7 +864,7 @@ fixed layout. -->
                     THIScoreTrend.title.update({ text: selectedProj });
 
                     for (var i in response.ThiTrendByPeriod) {
-                        if (year === response.ThiTrendByPeriod[i].Year && month === response.ThiTrendByPeriod[i].Month) {
+                        if (year === response.ThiTrendByPeriod[i].Year.toString() && month === response.ThiTrendByPeriod[i].Month.toString()) {
                             THIScoreTrend.subtitle.update({ text: response.ThiTrendByPeriod[i].ProjectPhase });
                         }
                     }
@@ -1260,13 +1260,13 @@ fixed layout. -->
         <tr role="row">
             <td class="{{formatColor THISCORE_CC}}" title="RED: 1.66 AND BELOW, YELLOW: 1.67 AND 2.04, GREEN: 2.05 AND ABOVE">{{formatTHIScores THIScore}}</td>
             <td class="{{formatColor Data_Submission_Timeliness_CC}}" title="RED: 7 AND ABOVE, YELLOW: 2.01 TO 6.99, GREEN: 2 AND BELOW">{{formatTHIScores Data_Submission_Timeliness}}</td>
-            <td class="{{formatColor C__Member_Support_Tickets_CC}}" title="RED: 4 AND ABOVE, YELLOW: 2 TO 3, GREEN: 1">{{formatTHIScores C__Member_Support_Tickets}}</td>
-            <td class="{{formatColor C__Critical_Diagnostics_CC}}" title="RED: 5 AND ABOVE, YELLOW: 2.01 TO 4.99, GREEN: 2 AND BELOW">{{formatTHIScores C__Critical_Diagnostics}}</td>
+            <td class="{{formatColor C__Member_Support_Tickets_CC}}" title="RED: 4 AND ABOVE, YELLOW: BETWEEN 1 AND 4, GREEN: 1 AND BELOW">{{formatTHIScores C__Member_Support_Tickets}}</td>
+            <td class="{{formatColor C__Critical_Diagnostics_CC}}" title="RED: 3 AND ABOVE, YELLOW: BETWEEN 1 AND 3, GREEN: 1 AND BELOW">{{formatTHIScores C__Critical_Diagnostics}}</td>
             <td class="{{formatColor C_Ability_to_Keep_up_w_Releases_CC}}" title="RED: 61 AND ABOVE, YELLOW: 30 TO 60, GREEN: BELOW 30">{{formatTHIScores C_Ability_to_Keep_up_w_Releases}}</td>
             <td class="{{formatColor C_MineSweeper_CC}}" title="RED: 3 AND ABOVE, YELLOW: 2, GREEN: 1 AND BELOW">{{formatTHIScores C_MineSweeper}}</td>
             <td class="{{formatColor C_Data_Lag_CC}}" title="RED: (46 AND ABOVE) OR QUARTERLY, YELLOW: 21 TO 45, 20 AND BELOW">{{formatTHIScoresToInt C_Data_Lag}}</td>
             <td class="{{formatColor C__USE_SSA_CC}}" title="RED: 0, GREEN: 1">{{formatTHIScoresToInt C__USE_SSA}}</td>
-            <td class="{{formatColor C_USE_Compass_Connect_CC}}" title="RED: 0, GREEN: 1">{{formatTHIScoresToInt C_USE_Compass_Connect}}</td>
+            <td class="{{formatColor C_USE_Compass_Connect_CC}}" title="WHITE: Not Factored to THI Score">{{formatTHIScoresToInt C_USE_Compass_Connect}}</td>
             <td class="{{formatColor C_Data_Elements_Present_CC}}" title="RED: 0.8 AND BELOW, YELLOW: 0.801 TO 0.85, GREEN: 0.851 AND ABOVE">{{formatTHIScores C_Data_Elements_Present}}</td>
         </tr>
     </script>

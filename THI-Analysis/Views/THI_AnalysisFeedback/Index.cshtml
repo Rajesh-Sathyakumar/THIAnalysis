@@ -1,4 +1,9 @@
-﻿    @model IEnumerable<THI_Analysis.Models.THI_AnalysisFeedback>
+﻿@model IEnumerable<THI_Analysis.Models.THI_AnalysisFeedback>
+
+@{ 
+    SelectList Select = ViewBag.Project;
+    ViewBag.Project = Select.OrderBy(a => a.Text);
+}
 
 <div class="content-wrapper" id="indexSection">
 
