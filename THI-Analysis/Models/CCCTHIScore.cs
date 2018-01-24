@@ -29,5 +29,6 @@ namespace THI_Analysis.Models
         public string Frequency { get; set; }
         public Nullable<double> THIScore { get; set; }
         public string ProjectPhase { get; set; }
+        public Nullable<double> C_CriticalInternalDiagnostics { get; set; }
     }
 }

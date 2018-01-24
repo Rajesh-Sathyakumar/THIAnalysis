@@ -235,6 +235,7 @@ warning 6002: The table/view 'CCCOperations.thi.CCCTHIScoreColor' does not have 
       <PropertyRef Name="#_USE_SSA_CC" />
       <PropertyRef Name="#USE_Compass_Connect_CC" />
       <PropertyRef Name="#Data_Elements_Present_CC" />
+      <PropertyRef Name="#CriticalInternalDiagnostics_CC" />
       <PropertyRef Name="THISCORE_CC" />
     </Key>
     <Property Name="ProjectKey" Type="int" Nullable="false" />
@@ -259,6 +260,8 @@ warning 6002: The table/view 'CCCOperations.thi.CCCTHIScoreColor' does not have 
     <Property Name="#USE_Compass_Connect_CC" Type="varchar" MaxLength="3" Nullable="false" />
     <Property Name="#Data_Elements_Present" Type="float" />
     <Property Name="#Data_Elements_Present_CC" Type="varchar" MaxLength="6" Nullable="false" />
+    <Property Name="#CriticalInternalDiagnostics" Type="float" />
+    <Property Name="#CriticalInternalDiagnostics_CC" Type="varchar" MaxLength="3" Nullable="false" />
     <Property Name="THIScore" Type="float" />
     <Property Name="THISCORE_CC" Type="varchar" MaxLength="6" Nullable="false" />
   </EntityType>
@@ -280,6 +283,7 @@ warning 6002: The table/view 'CCCOperations.thi.CCCTHIScores' does not have a pr
     <Property Name="#_USE_SSA" Type="float" />
     <Property Name="#USE_Compass_Connect" Type="float" />
     <Property Name="#Data_Elements_Present" Type="float" />
+    <Property Name="#CriticalInternalDiagnostics" Type="float" />
     <Property Name="Frequency" Type="varchar(max)" />
     <Property Name="THIScore" Type="float" />
     <Property Name="ProjectPhase" Type="varchar(max)" />
@@ -631,6 +635,8 @@ warning 6002: The table/view 'CCCOperations.thi.MinesweeperData' does not have a
     [CCCTHIScoreColor].[#USE_Compass_Connect_CC] AS [#USE_Compass_Connect_CC], 
     [CCCTHIScoreColor].[#Data_Elements_Present] AS [#Data_Elements_Present], 
     [CCCTHIScoreColor].[#Data_Elements_Present_CC] AS [#Data_Elements_Present_CC], 
+    [CCCTHIScoreColor].[#CriticalInternalDiagnostics] AS [#CriticalInternalDiagnostics], 
+    [CCCTHIScoreColor].[#CriticalInternalDiagnostics_CC] AS [#CriticalInternalDiagnostics_CC], 
     [CCCTHIScoreColor].[THIScore] AS [THIScore], 
     [CCCTHIScoreColor].[THISCORE_CC] AS [THISCORE_CC]
     FROM [thi].[CCCTHIScoreColor] AS [CCCTHIScoreColor]</DefiningQuery>
@@ -649,6 +655,7 @@ warning 6002: The table/view 'CCCOperations.thi.MinesweeperData' does not have a
     [CCCTHIScores].[#_USE_SSA] AS [#_USE_SSA], 
     [CCCTHIScores].[#USE_Compass_Connect] AS [#USE_Compass_Connect], 
     [CCCTHIScores].[#Data_Elements_Present] AS [#Data_Elements_Present], 
+    [CCCTHIScores].[#CriticalInternalDiagnostics] AS [#CriticalInternalDiagnostics], 
     [CCCTHIScores].[Frequency] AS [Frequency], 
     [CCCTHIScores].[THIScore] AS [THIScore], 
     [CCCTHIScores].[ProjectPhase] AS [ProjectPhase]

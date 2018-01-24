@@ -244,6 +244,8 @@
     <EntitySetMapping Name="CCCTHIScoreColors">
       <EntityTypeMapping TypeName="CCCOperationsModel.CCCTHIScoreColor">
         <MappingFragment StoreEntitySet="CCCTHIScoreColor">
+          <ScalarProperty Name="C_CriticalInternalDiagnostics_CC" ColumnName="#CriticalInternalDiagnostics_CC" />
+          <ScalarProperty Name="C_CriticalInternalDiagnostics" ColumnName="#CriticalInternalDiagnostics" />
           <ScalarProperty Name="ProjectKey" ColumnName="ProjectKey" />
           <ScalarProperty Name="Year" ColumnName="Year" />
           <ScalarProperty Name="Month" ColumnName="Month" />
@@ -274,6 +276,7 @@
     <EntitySetMapping Name="CCCTHIScores">
       <EntityTypeMapping TypeName="CCCOperationsModel.CCCTHIScore">
         <MappingFragment StoreEntitySet="CCCTHIScores">
+          <ScalarProperty Name="C_CriticalInternalDiagnostics" ColumnName="#CriticalInternalDiagnostics" />
           <ScalarProperty Name="ProjectKey" ColumnName="ProjectKey" />
           <ScalarProperty Name="Year" ColumnName="Year" />
           <ScalarProperty Name="Month" ColumnName="Month" />

@@ -266,6 +266,7 @@
       <PropertyRef Name="C_USE_Compass_Connect_CC" />
       <PropertyRef Name="C_Data_Elements_Present_CC" />
       <PropertyRef Name="THISCORE_CC" />
+      <PropertyRef Name="C_CriticalInternalDiagnostics_CC" />
     </Key>
     <Property Name="ProjectKey" Type="Int32" Nullable="false" />
     <Property Name="Year" Type="Int32" />
@@ -291,6 +292,8 @@
     <Property Name="C_Data_Elements_Present_CC" Type="String" MaxLength="6" FixedLength="false" Unicode="false" Nullable="false" />
     <Property Name="THIScore" Type="Double" />
     <Property Name="THISCORE_CC" Type="String" MaxLength="6" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="C_CriticalInternalDiagnostics" Type="Double" />
+    <Property Name="C_CriticalInternalDiagnostics_CC" Type="String" Nullable="false" MaxLength="3" FixedLength="false" Unicode="false" />
   </EntityType>
   <EntityType Name="CCCTHIScore">
     <Key>
@@ -311,6 +314,7 @@
     <Property Name="Frequency" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
     <Property Name="THIScore" Type="Double" />
     <Property Name="ProjectPhase" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+    <Property Name="C_CriticalInternalDiagnostics" Type="Double" />
   </EntityType>
   <EntityType Name="DataLoadDrill">
     <Key>

@@ -51,34 +51,34 @@ namespace THI_Analysis.Controllers
         public void SiamRedirection(string returnUrl)
         {
 
-            if (Session["UserSessionInfo"] == null)
-            {
-                var cas = new CasAuthenticationService(SamlHelperConfiguration.Config, UserSessionHandler.Get());
-                var httpContextBase = new HttpContextWrapper(System.Web.HttpContext.Current);
-                if (!cas.IsSAMLResponse(httpContextBase) && (Session == null || Session["UserSessionInfo"] == null))
-                {
-                    cas.RedirectUserToCasLogin(
-                        new Guid("5B95F3B2-C265-4E1A-91AB-60FC449E96EB"),
-                        new Guid("85346158-DB2E-49CE-80AC-0E868527DF2B"),
-                        new Guid("37B473AE-B5A5-4839-91D5-80676A86B4B9"),
-                        returnUrl);
-                }
-                else
-                {
-                    var sessionInfo = cas.GetSessionFromSaml(httpContextBase);
+            //if (Session["UserSessionInfo"] == null)
+            //{
+            //    var cas = new CasAuthenticationService(SamlHelperConfiguration.Config, UserSessionHandler.Get());
+            //    var httpContextBase = new HttpContextWrapper(System.Web.HttpContext.Current);
+            //    if (!cas.IsSAMLResponse(httpContextBase) && (Session == null || Session["UserSessionInfo"] == null))
+            //    {
+            //        cas.RedirectUserToCasLogin(
+            //            new Guid("5B95F3B2-C265-4E1A-91AB-60FC449E96EB"),
+            //            new Guid("85346158-DB2E-49CE-80AC-0E868527DF2B"),
+            //            new Guid("37B473AE-B5A5-4839-91D5-80676A86B4B9"),
+            //            returnUrl);
+            //    }
+            //    else
+            //    {
+            //        var sessionInfo = cas.GetSessionFromSaml(httpContextBase);
 
-                    if (sessionInfo != null)
-                    {
-                        HttpContext.Session.Add("UserSessionInfo", sessionInfo);
-                        HttpContext.Session.Timeout = 20;
-                        SetUsage(_usgAct.LogIn);
-                    }
+            //        if (sessionInfo != null)
+            //        {
+            //            HttpContext.Session.Add("UserSessionInfo", sessionInfo);
+            //            HttpContext.Session.Timeout = 20;
+            //            SetUsage(_usgAct.LogIn);
+            //        }
 
-                    returnUrl = returnUrl.Replace("http://thi.advisory.com:81", "https://thi.advisory.com");
+            //        returnUrl = returnUrl.Replace("http://thi.advisory.com:81", "https://thi.advisory.com");
 
-                    Response.Redirect(returnUrl);
-                }
-            }
+            //        Response.Redirect(returnUrl);
+            //    }
+            //}
         }
 
         public void Logout()
@@ -215,6 +215,11 @@ namespace THI_Analysis.Controllers
                         a.CCCTHIScoreColors.C_Data_Elements_Present,
                         a.CCCTHIScoreColors.C_Data_Elements_Present_CC
                         ,
+
+                        a.CCCTHIScoreColors.C_CriticalInternalDiagnostics,
+                        a.CCCTHIScoreColors.C_CriticalInternalDiagnostics_CC
+                        ,
+
                         a.CCCTHIScoreColors.THIScore,
                         a.CCCTHIScoreColors.THISCORE_CC
                     });

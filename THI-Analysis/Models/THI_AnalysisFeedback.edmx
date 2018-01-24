@@ -240,6 +240,7 @@ warning 6002: The table/view 'CCCOperations.thi.CCCTHIScoreColor' does not have 
             <PropertyRef Name="#_USE_SSA_CC" />
             <PropertyRef Name="#USE_Compass_Connect_CC" />
             <PropertyRef Name="#Data_Elements_Present_CC" />
+            <PropertyRef Name="#CriticalInternalDiagnostics_CC" />
             <PropertyRef Name="THISCORE_CC" />
           </Key>
           <Property Name="ProjectKey" Type="int" Nullable="false" />
@@ -264,6 +265,8 @@ warning 6002: The table/view 'CCCOperations.thi.CCCTHIScoreColor' does not have 
           <Property Name="#USE_Compass_Connect_CC" Type="varchar" MaxLength="3" Nullable="false" />
           <Property Name="#Data_Elements_Present" Type="float" />
           <Property Name="#Data_Elements_Present_CC" Type="varchar" MaxLength="6" Nullable="false" />
+          <Property Name="#CriticalInternalDiagnostics" Type="float" />
+          <Property Name="#CriticalInternalDiagnostics_CC" Type="varchar" MaxLength="3" Nullable="false" />
           <Property Name="THIScore" Type="float" />
           <Property Name="THISCORE_CC" Type="varchar" MaxLength="6" Nullable="false" />
         </EntityType>
@@ -285,6 +288,7 @@ warning 6002: The table/view 'CCCOperations.thi.CCCTHIScores' does not have a pr
           <Property Name="#_USE_SSA" Type="float" />
           <Property Name="#USE_Compass_Connect" Type="float" />
           <Property Name="#Data_Elements_Present" Type="float" />
+          <Property Name="#CriticalInternalDiagnostics" Type="float" />
           <Property Name="Frequency" Type="varchar(max)" />
           <Property Name="THIScore" Type="float" />
           <Property Name="ProjectPhase" Type="varchar(max)" />
@@ -636,6 +640,8 @@ warning 6002: The table/view 'CCCOperations.thi.MinesweeperData' does not have a
     [CCCTHIScoreColor].[#USE_Compass_Connect_CC] AS [#USE_Compass_Connect_CC], 
     [CCCTHIScoreColor].[#Data_Elements_Present] AS [#Data_Elements_Present], 
     [CCCTHIScoreColor].[#Data_Elements_Present_CC] AS [#Data_Elements_Present_CC], 
+    [CCCTHIScoreColor].[#CriticalInternalDiagnostics] AS [#CriticalInternalDiagnostics], 
+    [CCCTHIScoreColor].[#CriticalInternalDiagnostics_CC] AS [#CriticalInternalDiagnostics_CC], 
     [CCCTHIScoreColor].[THIScore] AS [THIScore], 
     [CCCTHIScoreColor].[THISCORE_CC] AS [THISCORE_CC]
     FROM [thi].[CCCTHIScoreColor] AS [CCCTHIScoreColor]</DefiningQuery>
@@ -654,6 +660,7 @@ warning 6002: The table/view 'CCCOperations.thi.MinesweeperData' does not have a
     [CCCTHIScores].[#_USE_SSA] AS [#_USE_SSA], 
     [CCCTHIScores].[#USE_Compass_Connect] AS [#USE_Compass_Connect], 
     [CCCTHIScores].[#Data_Elements_Present] AS [#Data_Elements_Present], 
+    [CCCTHIScores].[#CriticalInternalDiagnostics] AS [#CriticalInternalDiagnostics], 
     [CCCTHIScores].[Frequency] AS [Frequency], 
     [CCCTHIScores].[THIScore] AS [THIScore], 
     [CCCTHIScores].[ProjectPhase] AS [ProjectPhase]
@@ -1060,6 +1067,7 @@ warning 6002: The table/view 'CCCOperations.thi.MinesweeperData' does not have a
             <PropertyRef Name="C_USE_Compass_Connect_CC" />
             <PropertyRef Name="C_Data_Elements_Present_CC" />
             <PropertyRef Name="THISCORE_CC" />
+            <PropertyRef Name="C_CriticalInternalDiagnostics_CC" />
           </Key>
           <Property Name="ProjectKey" Type="Int32" Nullable="false" />
           <Property Name="Year" Type="Int32" />
@@ -1085,6 +1093,8 @@ warning 6002: The table/view 'CCCOperations.thi.MinesweeperData' does not have a
           <Property Name="C_Data_Elements_Present_CC" Type="String" MaxLength="6" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="THIScore" Type="Double" />
           <Property Name="THISCORE_CC" Type="String" MaxLength="6" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="C_CriticalInternalDiagnostics" Type="Double" />
+          <Property Name="C_CriticalInternalDiagnostics_CC" Type="String" Nullable="false" MaxLength="3" FixedLength="false" Unicode="false" />
         </EntityType>
         <EntityType Name="CCCTHIScore">
           <Key>
@@ -1105,6 +1115,7 @@ warning 6002: The table/view 'CCCOperations.thi.MinesweeperData' does not have a
           <Property Name="Frequency" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
           <Property Name="THIScore" Type="Double" />
           <Property Name="ProjectPhase" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="C_CriticalInternalDiagnostics" Type="Double" />
         </EntityType>
         <EntityType Name="DataLoadDrill">
           <Key>
@@ -1740,6 +1751,8 @@ warning 6002: The table/view 'CCCOperations.thi.MinesweeperData' does not have a
           <EntitySetMapping Name="CCCTHIScoreColors">
             <EntityTypeMapping TypeName="CCCOperationsModel.CCCTHIScoreColor">
               <MappingFragment StoreEntitySet="CCCTHIScoreColor">
+                <ScalarProperty Name="C_CriticalInternalDiagnostics_CC" ColumnName="#CriticalInternalDiagnostics_CC" />
+                <ScalarProperty Name="C_CriticalInternalDiagnostics" ColumnName="#CriticalInternalDiagnostics" />
                 <ScalarProperty Name="ProjectKey" ColumnName="ProjectKey" />
                 <ScalarProperty Name="Year" ColumnName="Year" />
                 <ScalarProperty Name="Month" ColumnName="Month" />
@@ -1770,6 +1783,7 @@ warning 6002: The table/view 'CCCOperations.thi.MinesweeperData' does not have a
           <EntitySetMapping Name="CCCTHIScores">
             <EntityTypeMapping TypeName="CCCOperationsModel.CCCTHIScore">
               <MappingFragment StoreEntitySet="CCCTHIScores">
+                <ScalarProperty Name="C_CriticalInternalDiagnostics" ColumnName="#CriticalInternalDiagnostics" />
                 <ScalarProperty Name="ProjectKey" ColumnName="ProjectKey" />
                 <ScalarProperty Name="Year" ColumnName="Year" />
                 <ScalarProperty Name="Month" ColumnName="Month" />
