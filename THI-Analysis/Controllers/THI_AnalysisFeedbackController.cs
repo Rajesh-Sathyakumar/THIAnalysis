@@ -142,7 +142,7 @@ namespace THI_Analysis.Controllers
 
                 minesweeperData =
                         db.MinesweeperDatas.Where(
-                                a => a.projectkey == ProjectKey && a.issuemonth == maxMonth)
+                                a => a.projectkey == ProjectKey && a.issueyear == maxYear && a.issuemonth == maxMonth)
                             .Select(
                                 x => new
                                 {
