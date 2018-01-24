@@ -124,6 +124,7 @@
     <EntitySetMapping Name="SalesforceProjects">
       <EntityTypeMapping TypeName="CCCOperationsModel.SalesforceProject">
         <MappingFragment StoreEntitySet="SalesforceProjects">
+          <ScalarProperty Name="ProjectID" ColumnName="ProjectID" />
           <ScalarProperty Name="ProjectKey" ColumnName="ProjectKey" />
           <ScalarProperty Name="ProjectName" ColumnName="ProjectName" />
           <ScalarProperty Name="ProdDBName" ColumnName="ProdDBName" />
@@ -218,6 +219,9 @@
     <EntitySetMapping Name="Users">
       <EntityTypeMapping TypeName="CCCOperationsModel.User">
         <MappingFragment StoreEntitySet="Users">
+          <ScalarProperty Name="Product" ColumnName="Product" />
+          <ScalarProperty Name="Role" ColumnName="Role" />
+          <ScalarProperty Name="IsActive" ColumnName="IsActive" />
           <ScalarProperty Name="Userkey" ColumnName="Userkey" />
           <ScalarProperty Name="FirstName" ColumnName="FirstName" />
           <ScalarProperty Name="LastName" ColumnName="LastName" />
@@ -384,5 +388,22 @@
         </ComplexTypeMapping>
       </ResultMapping>
     </FunctionImportMapping>
+    <EntitySetMapping Name="MinesweeperDatas">
+      <EntityTypeMapping TypeName="CCCOperationsModel.MinesweeperData">
+        <MappingFragment StoreEntitySet="MinesweeperData">
+          <ScalarProperty Name="result" ColumnName="result" />
+          <ScalarProperty Name="monthlybenchmark" ColumnName="monthlybenchmark" />
+          <ScalarProperty Name="issueyear" ColumnName="issueyear" />
+          <ScalarProperty Name="issuemonth" ColumnName="issuemonth" />
+          <ScalarProperty Name="dischargecount" ColumnName="dischargecount" />
+          <ScalarProperty Name="issuecount" ColumnName="issuecount" />
+          <ScalarProperty Name="issuename" ColumnName="issuename" />
+          <ScalarProperty Name="issuetype" ColumnName="issuetype" />
+          <ScalarProperty Name="dbname" ColumnName="dbname" />
+          <ScalarProperty Name="StagingServerName" ColumnName="StagingServerName" />
+          <ScalarProperty Name="projectkey" ColumnName="projectkey" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
   </EntityContainerMapping>
 </Mapping>

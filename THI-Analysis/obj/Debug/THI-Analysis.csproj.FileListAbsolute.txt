@@ -423,6 +423,7 @@ C:\Users\sathyakr\Downloads\THI-Analysis\THI-Analysis-Dynamic_Member_THI_Modal\T
 C:\Users\sathyakr\Downloads\THI-Analysis\THI-Analysis-Dynamic_Member_THI_Modal\THI-Analysis\obj\Debug\THI-Analysis.csprojResolveAssemblyReference.cache
 C:\Users\sathyakr\Downloads\THI-Analysis\THI-Analysis-Dynamic_Member_THI_Modal\THI-Analysis\obj\Debug\THI-Analysis.dll
 C:\Users\sathyakr\Downloads\THI-Analysis\THI-Analysis-Dynamic_Member_THI_Modal\THI-Analysis\obj\Debug\THI-Analysis.pdb
+<<<<<<< HEAD
 C:\Users\sathyakr\Documents\Visual Studio 2015\Projects\ABCO\CCC Services\THI-Analysis-Manage User Permissions\THI-Analysis\bin\ApplicationInsights.config
 C:\Users\sathyakr\Documents\Visual Studio 2015\Projects\ABCO\CCC Services\THI-Analysis-Manage User Permissions\THI-Analysis\bin\roslyn\csc.exe
 C:\Users\sathyakr\Documents\Visual Studio 2015\Projects\ABCO\CCC Services\THI-Analysis-Manage User Permissions\THI-Analysis\bin\roslyn\Microsoft.Build.Tasks.CodeAnalysis.dll
@@ -595,3 +596,90 @@ C:\Users\sathyakr\Documents\Visual Studio 2015\Projects\ABCO\CCC Services\THI-An
 \\atxentwfps-p02\users\sathyakr\Desktop\THI-Analysis\THI-Analysis-ManageUserPermissions\THI-Analysis\obj\Debug\THI-Analysis.csprojResolveAssemblyReference.cache
 \\atxentwfps-p02\users\sathyakr\Desktop\THI-Analysis\THI-Analysis-ManageUserPermissions\THI-Analysis\obj\Debug\THI-Analysis.dll
 \\atxentwfps-p02\users\sathyakr\Desktop\THI-Analysis\THI-Analysis-ManageUserPermissions\THI-Analysis\obj\Debug\THI-Analysis.pdb
+=======
+\\atxentwfps-p02\users\sathyakr\Desktop\THI\THI Analysis_Minesweeper\THI-Analysis\bin\ApplicationInsights.config
+\\atxentwfps-p02\users\sathyakr\Desktop\THI\THI Analysis_Minesweeper\THI-Analysis\bin\roslyn\csc.exe
+\\atxentwfps-p02\users\sathyakr\Desktop\THI\THI Analysis_Minesweeper\THI-Analysis\bin\roslyn\Microsoft.Build.Tasks.CodeAnalysis.dll
+\\atxentwfps-p02\users\sathyakr\Desktop\THI\THI Analysis_Minesweeper\THI-Analysis\bin\roslyn\Microsoft.CodeAnalysis.CSharp.dll
+\\atxentwfps-p02\users\sathyakr\Desktop\THI\THI Analysis_Minesweeper\THI-Analysis\bin\roslyn\Microsoft.CodeAnalysis.dll
+\\atxentwfps-p02\users\sathyakr\Desktop\THI\THI Analysis_Minesweeper\THI-Analysis\bin\roslyn\Microsoft.CodeAnalysis.VisualBasic.dll
+\\atxentwfps-p02\users\sathyakr\Desktop\THI\THI Analysis_Minesweeper\THI-Analysis\bin\roslyn\Microsoft.CSharp.Core.targets
+\\atxentwfps-p02\users\sathyakr\Desktop\THI\THI Analysis_Minesweeper\THI-Analysis\bin\roslyn\Microsoft.VisualBasic.Core.targets
+\\atxentwfps-p02\users\sathyakr\Desktop\THI\THI Analysis_Minesweeper\THI-Analysis\bin\roslyn\System.Collections.Immutable.dll
+\\atxentwfps-p02\users\sathyakr\Desktop\THI\THI Analysis_Minesweeper\THI-Analysis\bin\roslyn\System.Reflection.Metadata.dll
+\\atxentwfps-p02\users\sathyakr\Desktop\THI\THI Analysis_Minesweeper\THI-Analysis\bin\roslyn\vbc.exe
+\\atxentwfps-p02\users\sathyakr\Desktop\THI\THI Analysis_Minesweeper\THI-Analysis\bin\roslyn\VBCSCompiler.exe
+\\atxentwfps-p02\users\sathyakr\Desktop\THI\THI Analysis_Minesweeper\THI-Analysis\bin\roslyn\VBCSCompiler.exe.config
+\\atxentwfps-p02\users\sathyakr\Desktop\THI\THI Analysis_Minesweeper\THI-Analysis\bin\THI-Analysis.dll.config
+\\atxentwfps-p02\users\sathyakr\Desktop\THI\THI Analysis_Minesweeper\THI-Analysis\bin\THI-Analysis.dll
+\\atxentwfps-p02\users\sathyakr\Desktop\THI\THI Analysis_Minesweeper\THI-Analysis\bin\THI-Analysis.pdb
+\\atxentwfps-p02\users\sathyakr\Desktop\THI\THI Analysis_Minesweeper\THI-Analysis\bin\ComponentSpace.SAML2.dll
+\\atxentwfps-p02\users\sathyakr\Desktop\THI\THI Analysis_Minesweeper\THI-Analysis\bin\EntityFramework.dll
+\\atxentwfps-p02\users\sathyakr\Desktop\THI\THI Analysis_Minesweeper\THI-Analysis\bin\EntityFramework.SqlServer.dll
+\\atxentwfps-p02\users\sathyakr\Desktop\THI\THI Analysis_Minesweeper\THI-Analysis\bin\Microsoft.AI.Agent.Intercept.dll
+\\atxentwfps-p02\users\sathyakr\Desktop\THI\THI Analysis_Minesweeper\THI-Analysis\bin\Microsoft.AI.DependencyCollector.dll
+\\atxentwfps-p02\users\sathyakr\Desktop\THI\THI Analysis_Minesweeper\THI-Analysis\bin\Microsoft.AI.PerfCounterCollector.dll
+\\atxentwfps-p02\users\sathyakr\Desktop\THI\THI Analysis_Minesweeper\THI-Analysis\bin\Microsoft.AI.ServerTelemetryChannel.dll
+\\atxentwfps-p02\users\sathyakr\Desktop\THI\THI Analysis_Minesweeper\THI-Analysis\bin\Microsoft.AI.Web.dll
+\\atxentwfps-p02\users\sathyakr\Desktop\THI\THI Analysis_Minesweeper\THI-Analysis\bin\Microsoft.AI.WindowsServer.dll
+\\atxentwfps-p02\users\sathyakr\Desktop\THI\THI Analysis_Minesweeper\THI-Analysis\bin\Microsoft.ApplicationInsights.dll
+\\atxentwfps-p02\users\sathyakr\Desktop\THI\THI Analysis_Minesweeper\THI-Analysis\bin\Microsoft.AspNet.Identity.Core.dll
+\\atxentwfps-p02\users\sathyakr\Desktop\THI\THI Analysis_Minesweeper\THI-Analysis\bin\Microsoft.AspNet.Identity.EntityFramework.dll
+\\atxentwfps-p02\users\sathyakr\Desktop\THI\THI Analysis_Minesweeper\THI-Analysis\bin\Microsoft.AspNet.Identity.Owin.dll
+\\atxentwfps-p02\users\sathyakr\Desktop\THI\THI Analysis_Minesweeper\THI-Analysis\bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll
+\\atxentwfps-p02\users\sathyakr\Desktop\THI\THI Analysis_Minesweeper\THI-Analysis\bin\Microsoft.Owin.dll
+\\atxentwfps-p02\users\sathyakr\Desktop\THI\THI Analysis_Minesweeper\THI-Analysis\bin\Microsoft.Owin.Host.SystemWeb.dll
+\\atxentwfps-p02\users\sathyakr\Desktop\THI\THI Analysis_Minesweeper\THI-Analysis\bin\Microsoft.Owin.Security.Cookies.dll
+\\atxentwfps-p02\users\sathyakr\Desktop\THI\THI Analysis_Minesweeper\THI-Analysis\bin\Microsoft.Owin.Security.dll
+\\atxentwfps-p02\users\sathyakr\Desktop\THI\THI Analysis_Minesweeper\THI-Analysis\bin\Microsoft.Owin.Security.Facebook.dll
+\\atxentwfps-p02\users\sathyakr\Desktop\THI\THI Analysis_Minesweeper\THI-Analysis\bin\Microsoft.Owin.Security.Google.dll
+\\atxentwfps-p02\users\sathyakr\Desktop\THI\THI Analysis_Minesweeper\THI-Analysis\bin\Microsoft.Owin.Security.MicrosoftAccount.dll
+\\atxentwfps-p02\users\sathyakr\Desktop\THI\THI Analysis_Minesweeper\THI-Analysis\bin\Microsoft.Owin.Security.OAuth.dll
+\\atxentwfps-p02\users\sathyakr\Desktop\THI\THI Analysis_Minesweeper\THI-Analysis\bin\Microsoft.Owin.Security.Twitter.dll
+\\atxentwfps-p02\users\sathyakr\Desktop\THI\THI Analysis_Minesweeper\THI-Analysis\bin\Microsoft.Web.Infrastructure.dll
+\\atxentwfps-p02\users\sathyakr\Desktop\THI\THI Analysis_Minesweeper\THI-Analysis\bin\Newtonsoft.Json.dll
+\\atxentwfps-p02\users\sathyakr\Desktop\THI\THI Analysis_Minesweeper\THI-Analysis\bin\Owin.dll
+\\atxentwfps-p02\users\sathyakr\Desktop\THI\THI Analysis_Minesweeper\THI-Analysis\bin\SamlHelperLibrary.dll
+\\atxentwfps-p02\users\sathyakr\Desktop\THI\THI Analysis_Minesweeper\THI-Analysis\bin\System.Net.Http.Formatting.dll
+\\atxentwfps-p02\users\sathyakr\Desktop\THI\THI Analysis_Minesweeper\THI-Analysis\bin\System.Web.Helpers.dll
+\\atxentwfps-p02\users\sathyakr\Desktop\THI\THI Analysis_Minesweeper\THI-Analysis\bin\System.Web.Http.dll
+\\atxentwfps-p02\users\sathyakr\Desktop\THI\THI Analysis_Minesweeper\THI-Analysis\bin\System.Web.Mvc.dll
+\\atxentwfps-p02\users\sathyakr\Desktop\THI\THI Analysis_Minesweeper\THI-Analysis\bin\System.Web.Optimization.dll
+\\atxentwfps-p02\users\sathyakr\Desktop\THI\THI Analysis_Minesweeper\THI-Analysis\bin\System.Web.Razor.dll
+\\atxentwfps-p02\users\sathyakr\Desktop\THI\THI Analysis_Minesweeper\THI-Analysis\bin\System.Web.WebPages.Deployment.dll
+\\atxentwfps-p02\users\sathyakr\Desktop\THI\THI Analysis_Minesweeper\THI-Analysis\bin\System.Web.WebPages.dll
+\\atxentwfps-p02\users\sathyakr\Desktop\THI\THI Analysis_Minesweeper\THI-Analysis\bin\System.Web.WebPages.Razor.dll
+\\atxentwfps-p02\users\sathyakr\Desktop\THI\THI Analysis_Minesweeper\THI-Analysis\bin\WebGrease.dll
+\\atxentwfps-p02\users\sathyakr\Desktop\THI\THI Analysis_Minesweeper\THI-Analysis\bin\Microsoft.AI.DependencyCollector.xml
+\\atxentwfps-p02\users\sathyakr\Desktop\THI\THI Analysis_Minesweeper\THI-Analysis\bin\Microsoft.AI.ServerTelemetryChannel.xml
+\\atxentwfps-p02\users\sathyakr\Desktop\THI\THI Analysis_Minesweeper\THI-Analysis\bin\Microsoft.AI.Web.xml
+\\atxentwfps-p02\users\sathyakr\Desktop\THI\THI Analysis_Minesweeper\THI-Analysis\bin\Microsoft.AI.WindowsServer.xml
+\\atxentwfps-p02\users\sathyakr\Desktop\THI\THI Analysis_Minesweeper\THI-Analysis\bin\Microsoft.ApplicationInsights.xml
+\\atxentwfps-p02\users\sathyakr\Desktop\THI\THI Analysis_Minesweeper\THI-Analysis\bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.xml
+\\atxentwfps-p02\users\sathyakr\Desktop\THI\THI Analysis_Minesweeper\THI-Analysis\bin\System.Net.Http.Formatting.xml
+\\atxentwfps-p02\users\sathyakr\Desktop\THI\THI Analysis_Minesweeper\THI-Analysis\bin\System.Web.Http.xml
+\\atxentwfps-p02\users\sathyakr\Desktop\THI\THI Analysis_Minesweeper\THI-Analysis\bin\System.Web.Helpers.xml
+\\atxentwfps-p02\users\sathyakr\Desktop\THI\THI Analysis_Minesweeper\THI-Analysis\bin\System.Web.Mvc.xml
+\\atxentwfps-p02\users\sathyakr\Desktop\THI\THI Analysis_Minesweeper\THI-Analysis\bin\System.Web.Optimization.xml
+\\atxentwfps-p02\users\sathyakr\Desktop\THI\THI Analysis_Minesweeper\THI-Analysis\bin\System.Web.Razor.xml
+\\atxentwfps-p02\users\sathyakr\Desktop\THI\THI Analysis_Minesweeper\THI-Analysis\bin\System.Web.WebPages.xml
+\\atxentwfps-p02\users\sathyakr\Desktop\THI\THI Analysis_Minesweeper\THI-Analysis\bin\System.Web.WebPages.Deployment.xml
+\\atxentwfps-p02\users\sathyakr\Desktop\THI\THI Analysis_Minesweeper\THI-Analysis\bin\System.Web.WebPages.Razor.xml
+\\atxentwfps-p02\users\sathyakr\Desktop\THI\THI Analysis_Minesweeper\THI-Analysis\bin\Newtonsoft.Json.xml
+\\atxentwfps-p02\users\sathyakr\Desktop\THI\THI Analysis_Minesweeper\THI-Analysis\bin\EntityFramework.xml
+\\atxentwfps-p02\users\sathyakr\Desktop\THI\THI Analysis_Minesweeper\THI-Analysis\bin\EntityFramework.SqlServer.xml
+\\atxentwfps-p02\users\sathyakr\Desktop\THI\THI Analysis_Minesweeper\THI-Analysis\bin\Microsoft.AspNet.Identity.Core.xml
+\\atxentwfps-p02\users\sathyakr\Desktop\THI\THI Analysis_Minesweeper\THI-Analysis\bin\Microsoft.AspNet.Identity.Owin.xml
+\\atxentwfps-p02\users\sathyakr\Desktop\THI\THI Analysis_Minesweeper\THI-Analysis\bin\Microsoft.AspNet.Identity.EntityFramework.xml
+\\atxentwfps-p02\users\sathyakr\Desktop\THI\THI Analysis_Minesweeper\THI-Analysis\bin\Microsoft.Owin.xml
+\\atxentwfps-p02\users\sathyakr\Desktop\THI\THI Analysis_Minesweeper\THI-Analysis\bin\Microsoft.Owin.Host.SystemWeb.xml
+\\atxentwfps-p02\users\sathyakr\Desktop\THI\THI Analysis_Minesweeper\THI-Analysis\bin\Microsoft.Owin.Security.xml
+\\atxentwfps-p02\users\sathyakr\Desktop\THI\THI Analysis_Minesweeper\THI-Analysis\bin\Microsoft.Owin.Security.Facebook.xml
+\\atxentwfps-p02\users\sathyakr\Desktop\THI\THI Analysis_Minesweeper\THI-Analysis\bin\Microsoft.Owin.Security.Cookies.xml
+\\atxentwfps-p02\users\sathyakr\Desktop\THI\THI Analysis_Minesweeper\THI-Analysis\bin\Microsoft.Owin.Security.OAuth.xml
+\\atxentwfps-p02\users\sathyakr\Desktop\THI\THI Analysis_Minesweeper\THI-Analysis\bin\Microsoft.Owin.Security.Google.xml
+\\atxentwfps-p02\users\sathyakr\Desktop\THI\THI Analysis_Minesweeper\THI-Analysis\bin\Microsoft.Owin.Security.Twitter.xml
+\\atxentwfps-p02\users\sathyakr\Desktop\THI\THI Analysis_Minesweeper\THI-Analysis\bin\Microsoft.Owin.Security.MicrosoftAccount.xml
+\\atxentwfps-p02\users\sathyakr\Desktop\THI\THI Analysis_Minesweeper\THI-Analysis\obj\Debug\THI-Analysis.dll
+\\atxentwfps-p02\users\sathyakr\Desktop\THI\THI Analysis_Minesweeper\THI-Analysis\obj\Debug\THI-Analysis.pdb
+>>>>>>> d3d303c074310edc6a844126373f0306cfdabf95

@@ -269,7 +269,7 @@ warning 6002: The table/view 'CCCOperations.thi.CCCTHIScoreColor' does not have 
     <Property Name="#_USE_SSA" Type="float" />
     <Property Name="#_USE_SSA_CC" Type="varchar" MaxLength="6" Nullable="false" />
     <Property Name="#USE_Compass_Connect" Type="float" />
-    <Property Name="#USE_Compass_Connect_CC" Type="varchar" MaxLength="6" Nullable="false" />
+    <Property Name="#USE_Compass_Connect_CC" Type="varchar" MaxLength="3" Nullable="false" />
     <Property Name="#Data_Elements_Present" Type="float" />
     <Property Name="#Data_Elements_Present_CC" Type="varchar" MaxLength="6" Nullable="false" />
     <Property Name="THIScore" Type="float" />
