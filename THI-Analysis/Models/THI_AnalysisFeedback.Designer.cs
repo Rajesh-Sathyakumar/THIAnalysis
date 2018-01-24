@@ -1,4 +1,4 @@
-﻿// T4 code generation is enabled for model 'C:\Users\sathyakr\Desktop\Google Drive\C_Drive\My Coding Space\My C-Sharp Projects\THI\THI_Master\THI-Analysis\Models\THI_AnalysisFeedback.edmx'. 
+﻿// T4 code generation is enabled for model '\\atxentwfps-p02\users\sathyakr\Desktop\THI\THI Analysis_Minesweeper\THI-Analysis\Models\THI_AnalysisFeedback.edmx'. 
 // To enable legacy code generation, change the value of the 'Code Generation Strategy' designer
 // property to 'Legacy ObjectContext'. This property is available in the Properties Window when the model
 // is open in the designer.

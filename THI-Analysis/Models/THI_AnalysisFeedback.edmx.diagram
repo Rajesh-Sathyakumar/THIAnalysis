@@ -50,6 +50,7 @@
         <AssociationConnector Association="CCCOperationsModel.FK_SSA_Findings_SSA_FindingsKey" ManuallyRouted="false" />
         <AssociationConnector Association="CCCOperationsModel.FK__UsageActi__Usage__13393694" ManuallyRouted="false" />
         <AssociationConnector Association="CCCOperationsModel.FK__UsageActi__Userk__142D5ACD" ManuallyRouted="false" />
+        <EntityTypeShape EntityType="CCCOperationsModel.MinesweeperData" Width="1.5" PointX="13.375" PointY="12.75" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

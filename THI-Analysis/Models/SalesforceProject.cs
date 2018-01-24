@@ -33,6 +33,7 @@ namespace THI_Analysis.Models
         public Nullable<int> PG { get; set; }
         public Nullable<System.DateTime> MAxRR { get; set; }
         public Nullable<bool> APRDRGAggregate { get; set; }
+        public string ProjectID { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<CustomOPPEinfo> CustomOPPEinfoes { get; set; }

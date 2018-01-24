@@ -260,6 +260,17 @@ fixed layout. -->
         }
     });
 
+    var minesweeperTable = $('#MinesweeperTable').DataTable({
+        "searching": false,
+        "ordering": false,
+        "paging": false,
+        "lengthChange": false,
+        "bInfo": false,
+        "oLanguage": {
+            "sEmptyTable": "<center><b>No Data to display</b></center>"
+        }
+    });
+
     var memberValue = $('#MemberContract').DataTable({
         "searching": false,
         "ordering": false,
@@ -881,12 +892,19 @@ fixed layout. -->
             $('#THIScoresDrillDown #ScoresDataPrj').html($('#MemberTHIScores #Project').find('option:selected').html());
             mseTable.clear().draw();
             dstTable.clear().draw();
+            minesweeperTable.clear().draw();
 
             if (response != null) {
                 if (response.dlDrill.length != 0) {
                     var template = $('#dataLoadTimelinessTemplate').html();
                     var compiledTemplate = Handlebars.compile(template);
                     $('#DataSubmimssionTimelines').html(compiledTemplate(response.dlDrill));
+                }
+
+                if (response.MinesweeperData!==null && response.MinesweeperData.length !== 0) {
+                    var minesweeperTemplate = $('#MinesweeperTemplate').html();
+                    var minesweeperCompiledTemplate = Handlebars.compile(minesweeperTemplate);
+                    $('#MinesweeperData').html(minesweeperCompiledTemplate(response.MinesweeperData));
                 }
 
                 var ipElement, opElement, oppeElement;
@@ -961,6 +979,18 @@ fixed layout. -->
         <td>{{DaysLate_DataLoad}}</td>
         <td>{{formatDate DateTimeClosed}}</td>
         <td>{{ETLCompletion_DataLoad}}</td>
+    </tr>
+    {{/each}}
+</script>
+
+<script id="MinesweeperTemplate" type="text/x-handlebars-template">
+    {{#each this}}
+    <tr>
+        <td>{{issuetype}} </td>
+        <td>{{issuename}}</td>
+        <td>{{issuecount}}</td>
+        <td>{{dischargecount}}</td>
+        <td>{{formatTHIScores monthlybenchmark}}</td>
     </tr>
     {{/each}}
 </script>

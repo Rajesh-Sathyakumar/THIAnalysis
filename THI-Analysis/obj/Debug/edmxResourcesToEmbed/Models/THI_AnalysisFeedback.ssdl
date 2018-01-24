@@ -122,6 +122,7 @@
     <Property Name="PG" Type="int" />
     <Property Name="MAxRR" Type="date" />
     <Property Name="APRDRGAggregate" Type="bit" />
+    <Property Name="ProjectID" Type="varchar(max)" />
   </EntityType>
   <EntityType Name="SSA_Findings">
     <Key>
@@ -198,6 +199,9 @@
     <Property Name="CreatedDate" Type="date" />
     <Property Name="UserGUID" Type="varchar(max)" />
     <Property Name="Username" Type="varchar(max)" />
+    <Property Name="IsActive" Type="bit" Nullable="false" />
+    <Property Name="Role" Type="int" />
+    <Property Name="Product" Type="int" />
   </EntityType>
   <!--Errors Found During Generation:
 warning 6002: The table/view 'CCCOperations.thi.CCCMemberContractInfo' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
@@ -252,7 +256,7 @@ warning 6002: The table/view 'CCCOperations.thi.CCCTHIScoreColor' does not have 
     <Property Name="#_USE_SSA" Type="float" />
     <Property Name="#_USE_SSA_CC" Type="varchar" MaxLength="6" Nullable="false" />
     <Property Name="#USE_Compass_Connect" Type="float" />
-    <Property Name="#USE_Compass_Connect_CC" Type="varchar" MaxLength="6" Nullable="false" />
+    <Property Name="#USE_Compass_Connect_CC" Type="varchar" MaxLength="3" Nullable="false" />
     <Property Name="#Data_Elements_Present" Type="float" />
     <Property Name="#Data_Elements_Present_CC" Type="varchar" MaxLength="6" Nullable="false" />
     <Property Name="THIScore" Type="float" />
@@ -339,6 +343,24 @@ warning 6002: The table/view 'CCCOperations.thi.MemberDataElements_OPPE' does no
     <Property Name="Project_ProjectName" Type="nvarchar" MaxLength="255" />
     <Property Name="DataElement" Type="varchar(max)" />
     <Property Name="Category" Type="nvarchar" MaxLength="255" />
+  </EntityType>
+  <!--Errors Found During Generation:
+warning 6002: The table/view 'CCCOperations.thi.MinesweeperData' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+  <EntityType Name="MinesweeperData">
+    <Key>
+      <PropertyRef Name="projectkey" />
+    </Key>
+    <Property Name="projectkey" Type="int" Nullable="false" />
+    <Property Name="StagingServerName" Type="varchar(max)" />
+    <Property Name="dbname" Type="varchar(max)" />
+    <Property Name="issuetype" Type="varchar(max)" />
+    <Property Name="issuename" Type="varchar(max)" />
+    <Property Name="issuecount" Type="int" />
+    <Property Name="dischargecount" Type="int" />
+    <Property Name="issuemonth" Type="int" />
+    <Property Name="issueyear" Type="int" />
+    <Property Name="monthlybenchmark" Type="float" />
+    <Property Name="result" Type="bit" />
   </EntityType>
   <Association Name="FK__ACLBridge__AclKe__0E748177">
     <End Role="ACLs" Type="Self.ACLs" Multiplicity="1" />
@@ -678,6 +700,21 @@ warning 6002: The table/view 'CCCOperations.thi.MemberDataElements_OPPE' does no
     [MemberDataElements_OPPE].[DataElement] AS [DataElement], 
     [MemberDataElements_OPPE].[Category] AS [Category]
     FROM [thi].[MemberDataElements_OPPE] AS [MemberDataElements_OPPE]</DefiningQuery>
+    </EntitySet>
+    <EntitySet Name="MinesweeperData" EntityType="Self.MinesweeperData" store:Type="Views" store:Schema="thi">
+      <DefiningQuery>SELECT 
+    [MinesweeperData].[projectkey] AS [projectkey], 
+    [MinesweeperData].[StagingServerName] AS [StagingServerName], 
+    [MinesweeperData].[dbname] AS [dbname], 
+    [MinesweeperData].[issuetype] AS [issuetype], 
+    [MinesweeperData].[issuename] AS [issuename], 
+    [MinesweeperData].[issuecount] AS [issuecount], 
+    [MinesweeperData].[dischargecount] AS [dischargecount], 
+    [MinesweeperData].[issuemonth] AS [issuemonth], 
+    [MinesweeperData].[issueyear] AS [issueyear], 
+    [MinesweeperData].[monthlybenchmark] AS [monthlybenchmark], 
+    [MinesweeperData].[result] AS [result]
+    FROM [thi].[MinesweeperData] AS [MinesweeperData]</DefiningQuery>
     </EntitySet>
     <AssociationSet Name="FK__ACLBridge__AclKe__0E748177" Association="Self.FK__ACLBridge__AclKe__0E748177">
       <End Role="ACLs" EntitySet="ACLs" />

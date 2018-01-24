@@ -93,6 +93,7 @@ namespace THI_Analysis.Controllers
         [HttpPost]
         public JsonResult THIScoresDrillDown(int ProjectKey)
         {
+            dynamic minesweeperData = null;
             XElement root = new XElement("Parameters");
             XElement projElem = new XElement("ProjectKey", ProjectKey);
             root.Add(projElem);
@@ -127,12 +128,41 @@ namespace THI_Analysis.Controllers
                 a.DataElement
             }).OrderBy(a => a.DataElement);
 
+            var projectMinesweeperData = db.MinesweeperDatas.Where(a => a.projectkey == ProjectKey);
+
+            if (projectMinesweeperData.Count() != 0)
+            {
+                var maxYear = int.Parse(projectMinesweeperData.Max(a => a.issueyear).ToString());
+
+                var minesweeperRecentYearData =
+                    db.MinesweeperDatas.Where(
+                        a => a.projectkey == ProjectKey && a.issueyear == maxYear);
+
+                var maxMonth = int.Parse(minesweeperRecentYearData.Max(a => a.issuemonth).ToString());
+
+                minesweeperData =
+                        db.MinesweeperDatas.Where(
+                                a => a.projectkey == ProjectKey && a.issuemonth == maxMonth)
+                            .Select(
+                                x => new
+                                {
+                                    x.issuename,
+                                    x.issuetype,
+                                    x.issuecount,
+                                    x.dischargecount,
+                                    x.monthlybenchmark
+                                });
+            }
+
+            
+
             return Json(new
             {
                 dlDrill = dataLoadDrill,
                 MissingIp = missingElementsIp,
                 MissingOp = missingElementsOp,
-                MissingOppe = missingElementsOppe
+                MissingOppe = missingElementsOppe,
+                MinesweeperData = minesweeperData
             }, JsonRequestBehavior.AllowGet);
         }
 

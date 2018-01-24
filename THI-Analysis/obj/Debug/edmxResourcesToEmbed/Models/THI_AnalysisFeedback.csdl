@@ -140,6 +140,7 @@
     <NavigationProperty Name="CustomOPPEinfoes" Relationship="Self.FK_CustomOPPEInfo_SalesforceProjects_ProjectKey" FromRole="SalesforceProjects" ToRole="CustomOPPEinfo" />
     <NavigationProperty Name="ProjectHospitals" Relationship="Self.FK_ProjectHospitals_SalesforceProjects_ProjectKey" FromRole="SalesforceProjects" ToRole="ProjectHospitals" />
     <NavigationProperty Name="THI_AnalysisFeedback" Relationship="Self.FK_Project_ProjectKey" FromRole="SalesforceProjects" ToRole="THI_AnalysisFeedback" />
+    <Property Name="ProjectID" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
   </EntityType>
   <EntityType Name="SSA_Findings">
     <Key>
@@ -232,6 +233,9 @@
     <Property Name="Username" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
     <NavigationProperty Name="ACLBridges" Relationship="Self.FK__ACLBridge__Userk__0F68A5B0" FromRole="Users" ToRole="ACLBridge" />
     <NavigationProperty Name="UsageActivityLogs" Relationship="Self.FK__UsageActi__Userk__142D5ACD" FromRole="Users" ToRole="UsageActivityLogs" />
+    <Property Name="IsActive" Type="Boolean" Nullable="false" />
+    <Property Name="Role" Type="Int32" />
+    <Property Name="Product" Type="Int32" />
   </EntityType>
   <EntityType Name="CCCMemberContractInfo">
     <Key>
@@ -282,7 +286,7 @@
     <Property Name="C__USE_SSA" Type="Double" />
     <Property Name="C__USE_SSA_CC" Type="String" MaxLength="6" FixedLength="false" Unicode="false" Nullable="false" />
     <Property Name="C_USE_Compass_Connect" Type="Double" />
-    <Property Name="C_USE_Compass_Connect_CC" Type="String" MaxLength="6" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="C_USE_Compass_Connect_CC" Type="String" MaxLength="3" FixedLength="false" Unicode="false" Nullable="false" />
     <Property Name="C_Data_Elements_Present" Type="Double" />
     <Property Name="C_Data_Elements_Present_CC" Type="String" MaxLength="6" FixedLength="false" Unicode="false" Nullable="false" />
     <Property Name="THIScore" Type="Double" />
@@ -666,6 +670,7 @@
       <Parameter Name="Year" Mode="In" Type="Int32" />
       <Parameter Name="Month" Mode="In" Type="Int32" />
     </FunctionImport>
+    <EntitySet Name="MinesweeperDatas" EntityType="CCCOperationsModel.MinesweeperData" />
   </EntityContainer>
   <ComplexType Name="ETLCompletion_Result">
     <Property Type="String" Name="Project_ProjectName" Nullable="true" MaxLength="255" />
@@ -676,4 +681,20 @@
     <Property Type="Double" Name="Avg_ETLDurationn_DataLoad" Nullable="true" />
     <Property Type="Double" Name="FilesLate_DataLoad" Nullable="true" />
   </ComplexType>
+  <EntityType Name="MinesweeperData">
+    <Key>
+      <PropertyRef Name="projectkey" />
+    </Key>
+    <Property Name="projectkey" Type="Int32" Nullable="false" />
+    <Property Name="StagingServerName" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+    <Property Name="dbname" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+    <Property Name="issuetype" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+    <Property Name="issuename" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+    <Property Name="issuecount" Type="Int32" />
+    <Property Name="dischargecount" Type="Int32" />
+    <Property Name="issuemonth" Type="Int32" />
+    <Property Name="issueyear" Type="Int32" />
+    <Property Name="monthlybenchmark" Type="Double" />
+    <Property Name="result" Type="Boolean" />
+  </EntityType>
 </Schema>

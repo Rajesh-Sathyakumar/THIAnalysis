@@ -29,6 +29,9 @@ namespace THI_Analysis.Models
         public Nullable<System.DateTime> CreatedDate { get; set; }
         public string UserGUID { get; set; }
         public string Username { get; set; }
+        public bool IsActive { get; set; }
+        public Nullable<int> Role { get; set; }
+        public Nullable<int> Product { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<ACLBridge> ACLBridges { get; set; }

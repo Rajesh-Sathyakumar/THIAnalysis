@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema Namespace="CCCOperationsModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+    <Schema Namespace="CCCOperationsModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="ACLBridge">
           <Key>
             <PropertyRef Name="ACLBridgeKey" />
@@ -127,6 +127,7 @@
           <Property Name="PG" Type="int" />
           <Property Name="MAxRR" Type="date" />
           <Property Name="APRDRGAggregate" Type="bit" />
+          <Property Name="ProjectID" Type="varchar(max)" />
         </EntityType>
         <EntityType Name="SSA_Findings">
           <Key>
@@ -203,6 +204,9 @@
           <Property Name="CreatedDate" Type="date" />
           <Property Name="UserGUID" Type="varchar(max)" />
           <Property Name="Username" Type="varchar(max)" />
+          <Property Name="IsActive" Type="bit" Nullable="false" />
+          <Property Name="Role" Type="int" />
+          <Property Name="Product" Type="int" />
         </EntityType>
         <!--Errors Found During Generation:
 warning 6002: The table/view 'CCCOperations.thi.CCCMemberContractInfo' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
@@ -257,7 +261,7 @@ warning 6002: The table/view 'CCCOperations.thi.CCCTHIScoreColor' does not have 
           <Property Name="#_USE_SSA" Type="float" />
           <Property Name="#_USE_SSA_CC" Type="varchar" MaxLength="6" Nullable="false" />
           <Property Name="#USE_Compass_Connect" Type="float" />
-          <Property Name="#USE_Compass_Connect_CC" Type="varchar" MaxLength="6" Nullable="false" />
+          <Property Name="#USE_Compass_Connect_CC" Type="varchar" MaxLength="3" Nullable="false" />
           <Property Name="#Data_Elements_Present" Type="float" />
           <Property Name="#Data_Elements_Present_CC" Type="varchar" MaxLength="6" Nullable="false" />
           <Property Name="THIScore" Type="float" />
@@ -344,6 +348,24 @@ warning 6002: The table/view 'CCCOperations.thi.MemberDataElements_OPPE' does no
           <Property Name="Project_ProjectName" Type="nvarchar" MaxLength="255" />
           <Property Name="DataElement" Type="varchar(max)" />
           <Property Name="Category" Type="nvarchar" MaxLength="255" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'CCCOperations.thi.MinesweeperData' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="MinesweeperData">
+          <Key>
+            <PropertyRef Name="projectkey" />
+          </Key>
+          <Property Name="projectkey" Type="int" Nullable="false" />
+          <Property Name="StagingServerName" Type="varchar(max)" />
+          <Property Name="dbname" Type="varchar(max)" />
+          <Property Name="issuetype" Type="varchar(max)" />
+          <Property Name="issuename" Type="varchar(max)" />
+          <Property Name="issuecount" Type="int" />
+          <Property Name="dischargecount" Type="int" />
+          <Property Name="issuemonth" Type="int" />
+          <Property Name="issueyear" Type="int" />
+          <Property Name="monthlybenchmark" Type="float" />
+          <Property Name="result" Type="bit" />
         </EntityType>
         <Association Name="FK__ACLBridge__AclKe__0E748177">
           <End Role="ACLs" Type="Self.ACLs" Multiplicity="1" />
@@ -684,6 +706,21 @@ warning 6002: The table/view 'CCCOperations.thi.MemberDataElements_OPPE' does no
     [MemberDataElements_OPPE].[Category] AS [Category]
     FROM [thi].[MemberDataElements_OPPE] AS [MemberDataElements_OPPE]</DefiningQuery>
           </EntitySet>
+          <EntitySet Name="MinesweeperData" EntityType="Self.MinesweeperData" store:Type="Views" store:Schema="thi">
+            <DefiningQuery>SELECT 
+    [MinesweeperData].[projectkey] AS [projectkey], 
+    [MinesweeperData].[StagingServerName] AS [StagingServerName], 
+    [MinesweeperData].[dbname] AS [dbname], 
+    [MinesweeperData].[issuetype] AS [issuetype], 
+    [MinesweeperData].[issuename] AS [issuename], 
+    [MinesweeperData].[issuecount] AS [issuecount], 
+    [MinesweeperData].[dischargecount] AS [dischargecount], 
+    [MinesweeperData].[issuemonth] AS [issuemonth], 
+    [MinesweeperData].[issueyear] AS [issueyear], 
+    [MinesweeperData].[monthlybenchmark] AS [monthlybenchmark], 
+    [MinesweeperData].[result] AS [result]
+    FROM [thi].[MinesweeperData] AS [MinesweeperData]</DefiningQuery>
+          </EntitySet>
           <AssociationSet Name="FK__ACLBridge__AclKe__0E748177" Association="Self.FK__ACLBridge__AclKe__0E748177">
             <End Role="ACLs" EntitySet="ACLs" />
             <End Role="ACLBridge" EntitySet="ACLBridge" />
@@ -753,8 +790,7 @@ warning 6002: The table/view 'CCCOperations.thi.MemberDataElements_OPPE' does no
             <End Role="THI_AnalysisFeedback" EntitySet="THI_AnalysisFeedback" />
           </AssociationSet>
         </EntityContainer>
-      </Schema>
-    </edmx:StorageModels>
+      </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="CCCOperationsModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
@@ -898,6 +934,7 @@ warning 6002: The table/view 'CCCOperations.thi.MemberDataElements_OPPE' does no
           <NavigationProperty Name="CustomOPPEinfoes" Relationship="Self.FK_CustomOPPEInfo_SalesforceProjects_ProjectKey" FromRole="SalesforceProjects" ToRole="CustomOPPEinfo" />
           <NavigationProperty Name="ProjectHospitals" Relationship="Self.FK_ProjectHospitals_SalesforceProjects_ProjectKey" FromRole="SalesforceProjects" ToRole="ProjectHospitals" />
           <NavigationProperty Name="THI_AnalysisFeedback" Relationship="Self.FK_Project_ProjectKey" FromRole="SalesforceProjects" ToRole="THI_AnalysisFeedback" />
+          <Property Name="ProjectID" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
         </EntityType>
         <EntityType Name="SSA_Findings">
           <Key>
@@ -990,6 +1027,9 @@ warning 6002: The table/view 'CCCOperations.thi.MemberDataElements_OPPE' does no
           <Property Name="Username" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
           <NavigationProperty Name="ACLBridges" Relationship="Self.FK__ACLBridge__Userk__0F68A5B0" FromRole="Users" ToRole="ACLBridge" />
           <NavigationProperty Name="UsageActivityLogs" Relationship="Self.FK__UsageActi__Userk__142D5ACD" FromRole="Users" ToRole="UsageActivityLogs" />
+          <Property Name="IsActive" Type="Boolean" Nullable="false" />
+          <Property Name="Role" Type="Int32" />
+          <Property Name="Product" Type="Int32" />
         </EntityType>
         <EntityType Name="CCCMemberContractInfo">
           <Key>
@@ -1040,7 +1080,7 @@ warning 6002: The table/view 'CCCOperations.thi.MemberDataElements_OPPE' does no
           <Property Name="C__USE_SSA" Type="Double" />
           <Property Name="C__USE_SSA_CC" Type="String" MaxLength="6" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="C_USE_Compass_Connect" Type="Double" />
-          <Property Name="C_USE_Compass_Connect_CC" Type="String" MaxLength="6" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="C_USE_Compass_Connect_CC" Type="String" MaxLength="3" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="C_Data_Elements_Present" Type="Double" />
           <Property Name="C_Data_Elements_Present_CC" Type="String" MaxLength="6" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="THIScore" Type="Double" />
@@ -1424,6 +1464,7 @@ warning 6002: The table/view 'CCCOperations.thi.MemberDataElements_OPPE' does no
             <Parameter Name="Year" Mode="In" Type="Int32" />
             <Parameter Name="Month" Mode="In" Type="Int32" />
           </FunctionImport>
+          <EntitySet Name="MinesweeperDatas" EntityType="CCCOperationsModel.MinesweeperData" />
         </EntityContainer>
         <ComplexType Name="ETLCompletion_Result">
           <Property Type="String" Name="Project_ProjectName" Nullable="true" MaxLength="255" />
@@ -1434,6 +1475,22 @@ warning 6002: The table/view 'CCCOperations.thi.MemberDataElements_OPPE' does no
           <Property Type="Double" Name="Avg_ETLDurationn_DataLoad" Nullable="true" />
           <Property Type="Double" Name="FilesLate_DataLoad" Nullable="true" />
         </ComplexType>
+        <EntityType Name="MinesweeperData">
+          <Key>
+            <PropertyRef Name="projectkey" />
+          </Key>
+          <Property Name="projectkey" Type="Int32" Nullable="false" />
+          <Property Name="StagingServerName" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="dbname" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="issuetype" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="issuename" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="issuecount" Type="Int32" />
+          <Property Name="dischargecount" Type="Int32" />
+          <Property Name="issuemonth" Type="Int32" />
+          <Property Name="issueyear" Type="Int32" />
+          <Property Name="monthlybenchmark" Type="Double" />
+          <Property Name="result" Type="Boolean" />
+        </EntityType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -1564,6 +1621,7 @@ warning 6002: The table/view 'CCCOperations.thi.MemberDataElements_OPPE' does no
           <EntitySetMapping Name="SalesforceProjects">
             <EntityTypeMapping TypeName="CCCOperationsModel.SalesforceProject">
               <MappingFragment StoreEntitySet="SalesforceProjects">
+                <ScalarProperty Name="ProjectID" ColumnName="ProjectID" />
                 <ScalarProperty Name="ProjectKey" ColumnName="ProjectKey" />
                 <ScalarProperty Name="ProjectName" ColumnName="ProjectName" />
                 <ScalarProperty Name="ProdDBName" ColumnName="ProdDBName" />
@@ -1649,6 +1707,9 @@ warning 6002: The table/view 'CCCOperations.thi.MemberDataElements_OPPE' does no
           <EntitySetMapping Name="Users">
             <EntityTypeMapping TypeName="CCCOperationsModel.User">
               <MappingFragment StoreEntitySet="Users">
+                <ScalarProperty Name="Product" ColumnName="Product" />
+                <ScalarProperty Name="Role" ColumnName="Role" />
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
                 <ScalarProperty Name="Userkey" ColumnName="Userkey" />
                 <ScalarProperty Name="FirstName" ColumnName="FirstName" />
                 <ScalarProperty Name="LastName" ColumnName="LastName" />
@@ -1795,6 +1856,23 @@ warning 6002: The table/view 'CCCOperations.thi.MemberDataElements_OPPE' does no
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
+          <EntitySetMapping Name="MinesweeperDatas">
+            <EntityTypeMapping TypeName="CCCOperationsModel.MinesweeperData">
+              <MappingFragment StoreEntitySet="MinesweeperData">
+                <ScalarProperty Name="result" ColumnName="result" />
+                <ScalarProperty Name="monthlybenchmark" ColumnName="monthlybenchmark" />
+                <ScalarProperty Name="issueyear" ColumnName="issueyear" />
+                <ScalarProperty Name="issuemonth" ColumnName="issuemonth" />
+                <ScalarProperty Name="dischargecount" ColumnName="dischargecount" />
+                <ScalarProperty Name="issuecount" ColumnName="issuecount" />
+                <ScalarProperty Name="issuename" ColumnName="issuename" />
+                <ScalarProperty Name="issuetype" ColumnName="issuetype" />
+                <ScalarProperty Name="dbname" ColumnName="dbname" />
+                <ScalarProperty Name="StagingServerName" ColumnName="StagingServerName" />
+                <ScalarProperty Name="projectkey" ColumnName="projectkey" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

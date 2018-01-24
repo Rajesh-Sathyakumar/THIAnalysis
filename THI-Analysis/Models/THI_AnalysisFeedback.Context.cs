@@ -55,6 +55,7 @@ namespace THI_Analysis.Models
         public virtual DbSet<MemberDataElements_IP> MemberDataElements_IP { get; set; }
         public virtual DbSet<MemberDataElements_OP> MemberDataElements_OP { get; set; }
         public virtual DbSet<MemberDataElements_OPPE> MemberDataElements_OPPE { get; set; }
+        public virtual DbSet<MinesweeperData> MinesweeperDatas { get; set; }
     
         public virtual ObjectResult<ETLCompletion_Result> ETLCompletion(Nullable<int> proj, Nullable<int> year, Nullable<int> month)
         {
