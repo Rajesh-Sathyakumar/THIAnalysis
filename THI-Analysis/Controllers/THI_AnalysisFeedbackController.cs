@@ -416,65 +416,65 @@ namespace THI_Analysis.Controllers
         
         public bool SiamRedirection(string returnUrl)
         {
-            //if (Session["UserSessionInfo"] == null)
-            //{
-            //    var cas = new CasAuthenticationService(SamlHelperConfiguration.Config, UserSessionHandler.Get());
-            //    var httpContextBase = new HttpContextWrapper(System.Web.HttpContext.Current);
-            //    if (!cas.IsSAMLResponse(httpContextBase) && (Session?["UserSessionInfo"] == null))
-            //    {
-            //        cas.RedirectUserToCasLogin(
-            //            _memberOrgKey,
-            //            _productKey,
-            //            _environmentKey,
-            //            returnUrl);
-            //        return true;
-            //    }
-            //    else
-            //    {
+            if (Session["UserSessionInfo"] == null)
+            {
+                var cas = new CasAuthenticationService(SamlHelperConfiguration.Config, UserSessionHandler.Get());
+                var httpContextBase = new HttpContextWrapper(System.Web.HttpContext.Current);
+                if (!cas.IsSAMLResponse(httpContextBase) && (Session?["UserSessionInfo"] == null))
+                {
+                    cas.RedirectUserToCasLogin(
+                        _memberOrgKey,
+                        _productKey,
+                        _environmentKey,
+                        returnUrl);
+                    return true;
+                }
+                else
+                {
 
-            //        var samlResponse = httpContextBase.Request.Form["SAMLResponse"];
-            //        var relayState = httpContextBase.Request.Form["RelayState"];
-            //        var samlAndRelayUrl =
-            //            $"SAMLResponse={HttpUtility.UrlEncode(samlResponse)}&RelayState={HttpUtility.UrlEncode(relayState)}";
-            //        var authToken = PerformInitialAuthenticationAndCreateCookies(
-            //            _siamBaseUrl + _crimsonProvisioningService,
-            //            "2",
-            //            samlAndRelayUrl,
-            //            10000000);
-            //        Session["SessionAuthToken"] = authToken;
-            //        var sessionInfo = cas.GetSessionFromSaml(httpContextBase);
+                    var samlResponse = httpContextBase.Request.Form["SAMLResponse"];
+                    var relayState = httpContextBase.Request.Form["RelayState"];
+                    var samlAndRelayUrl =
+                        $"SAMLResponse={HttpUtility.UrlEncode(samlResponse)}&RelayState={HttpUtility.UrlEncode(relayState)}";
+                    var authToken = PerformInitialAuthenticationAndCreateCookies(
+                        _siamBaseUrl + _crimsonProvisioningService,
+                        "2",
+                        samlAndRelayUrl,
+                        10000000);
+                    Session["SessionAuthToken"] = authToken;
+                    var sessionInfo = cas.GetSessionFromSaml(httpContextBase);
 
-            //        if (sessionInfo != null)
-            //        {
-            //            UpdateSessions(sessionInfo);
-            //            SetUsage(_usgAct.LogIn);
-            //        }
+                    if (sessionInfo != null)
+                    {
+                        UpdateSessions(sessionInfo);
+                        SetUsage(_usgAct.LogIn);
+                    }
 
-            //        Response.Cookies.Add(new HttpCookie("sessionId", authToken));
-            //        returnUrl = returnUrl.Replace("http://thi.advisory.com:81", "https://thi.advisory.com");
+                    Response.Cookies.Add(new HttpCookie("sessionId", authToken));
+                    returnUrl = returnUrl.Replace("http://thi.advisory.com:81", "https://thi.advisory.com");
 
-            //        var urlSplit = returnUrl.Split('?');
-            //        returnUrl = urlSplit[0];
-            //        Response.Redirect(returnUrl);
-            //    }
-            //} else
-            //{
-            //    var urlSplit = returnUrl.Split('?');
-            //    returnUrl = urlSplit[0];
-            //    var aclName = urlSplit[1].Replace("Acl=", "");
+                    var urlSplit = returnUrl.Split('?');
+                    returnUrl = urlSplit[0];
+                    Response.Redirect(returnUrl);
+                }
+            }
+            else
+            {
+                var urlSplit = returnUrl.Split('?');
+                returnUrl = urlSplit[0];
+                var aclName = urlSplit[1].Replace("Acl=", "");
 
-            //    UpdateSessions((UserSessionInfo)Session["UserSessionInfo"]);
+                UpdateSessions((UserSessionInfo)Session["UserSessionInfo"]);
 
-            //    if (Session?["userAcls"] != null && ((bool)Session["isActive"]) &&  ((int)Session["isAdmin"] == 1 ||
-            //                  aclName == "Member Statistics" || (aclName != "User Management" &&
-            //                  ((IDictionary<string, bool>)Session["userAcls"])[aclName])))
-            //    {
-            //        return true;
-            //    }
-            //}
+                if (Session?["userAcls"] != null && ((bool)Session["isActive"]) && ((int)Session["isAdmin"] == 1 ||
+                              aclName == "Member Statistics" || (aclName != "User Management" &&
+                              ((IDictionary<string, bool>)Session["userAcls"])[aclName])))
+                {
+                    return true;
+                }
+            }
 
-            //return false;
-            return true;
+            return false;
         }
 
 
