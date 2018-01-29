@@ -1,62 +1,372 @@
-﻿<div class="content-wrapper" id="editUserPermissions">
+﻿@using THI_Analysis.Dto
+@model dynamic
+
+<div class="content-wrapper" id="editUserPermissions">
 
     <section class="content">
 
-        <div clas="row">
+        <div class="row">
             <div class="col-md-8">
+
                 <div class="nav-tabs-custom">
                     <!-- Tabs within a box -->
-                    <ul class="nav nav-tabs pull-right">
+                    <ul class="nav nav-tabs pull-right" id="userSel">
 
-                        <li class="active">
-                            <a href="#" data-toggle="tab">Pending</a>
+                        <li class="active" data-tab="pendingUsers">
+                            <a href="#pendingUsers" data-toggle="tab">Pending</a>
                         </li>
-                        <li>
-                            <a href="#" data-toggle="tab">All</a>
+                        <li data-tab="activeUsers">
+                            <a href="#activeUsers" data-toggle="tab">Active</a>
                         </li>
-                        <li>
-                            <a href="#" data-toggle="tab">Active</a>
+                        <li data-tab="inactiveUsers">
+                            <a href="#inactiveUsers" data-toggle="tab">Inactive</a>
                         </li>
-                        <li>
-                            <a href="#" data-toggle="tab">Inactive</a>
+                        <li data-tab="allUsers">
+                            <a href="#allUsers" data-toggle="tab">All</a>
                         </li>
 
                         <li class="pull-left header"><i class="fa fa-user-plus"></i> Manage Application User Permissions</li>
                     </ul>
-                    <div class="tab-content no-padding">
+                    <div class="box box-primary" style="overflow-y: scroll; overflow-x: hidden;">
+                        <div class="box-body">
+                            <div class="tab-content no-padding">
+                                <div class="col-md-12 tab-pane active" id="pendingUsers">
+
+                                    <table class="table table-hover" id="pending">
+                                        <thead>
+                                        <tr>
+                                            <th style="width: 10px">#</th>
+                                            <th>User Name</th>
+                                            <th>Email</th>
+                                            <th style="width: 40px">IsAdmin</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        @{
+                                            var incrementor = 1;
+                                        }
+
+                                        @foreach (ManageUserDetail user in Model.pendingUsers)
+                                        {
+
+                                            <tr value="@user.UserId" data-guid="@Html.DisplayFor(a=> user.UserGuid)">
+                                                <td>
+                                                    @incrementor.ToString()
+                                                </td>
+                                                <td name="fullName">
+                                                    @Html.DisplayFor(a => user.FirstName), @Html.DisplayFor(a => user.LastName)
+                                                </td>
+                                                <td name="email">
+                                                    @Html.DisplayFor(a => user.Email)
+                                                </td>
+                                                <td>
+                                                    @if (user.IsAdmin == "1")
+                                                    {
+                                                        <span>Yes</span>
+                                                    }
+                                                    else if (user.IsAdmin == "0")
+                                                    {
+                                                        <span>No</span>
+                                                    }
+                                                    else
+                                                    {
+                                                        <span>NA</span>
+                                                    }
+                                                </td>
+                                            </tr>
+
+                                            incrementor++;
+                                        }
+
+                                        </tbody>
+                                    </table>
+                                </div>
+
+                                <div class="col-md-12 tab-pane"  id="activeUsers">
+
+                                    <table class="table table-hover" id="active">
+                                        <thead>
+                                        <tr>
+                                            <th style="width: 10px">#</th>
+                                            <th>User Name</th>
+                                            <th>Email</th>
+                                            <th style="width: 40px">IsAdmin</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        @{
+                                            incrementor = 1;
+                                        }
+                                        @foreach (ManageUserDetail user in Model.activeUsers)
+                                        {
+
+                                            <tr value="@user.UserKey">
+                                                <td>
+                                                    @incrementor.ToString()
+                                                </td>
+                                                <td name="fullName">
+                                                    @Html.DisplayFor(a => user.FirstName), @Html.DisplayFor(a => user.LastName)
+                                                </td>
+                                                <td name="email">
+                                                    @Html.DisplayFor(a => user.Email)
+                                                </td>
+                                                <td>
+                                                    @if (user.IsAdmin == "1")
+                                                    {
+                                                        <span>Yes</span>
+                                                    }
+                                                    else if (user.IsAdmin == "0")
+                                                    {
+                                                        <span>No</span>
+                                                    }
+                                                    else
+                                                    {
+                                                        <span>NA</span>
+                                                    }
+                                                </td>
+                                            </tr>
+
+                                            incrementor++;
+                                        }
+
+                                        </tbody>
+                                    </table>
+                                </div>
 
 
-                        <table class="table table-striped">
-                            <thead>
-                            <tr>
-                                <th style="width: 10px">#</th>
-                                <th>User Name</th>
-                                <th>Email</th>
-                                <th style="width: 40px">Role</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            <tr>
-                                <td>1.</td>
-                                <td>Update software</td>
-                                <td>
-                                    <div class="progress progress-xs">
-                                        <div class="progress-bar progress-bar-danger" style="width: 55%"></div>
-                                    </div>
-                                </td>
-                                <td>
-                                    <span class="badge bg-red">55%</span>
-                                </td>
-                            </tr>
-                            </tbody>
-                        </table>
+                                <div class="col-md-12 tab-pane"  id="inactiveUsers">
+
+                                    <table class="table table-hover" id="inactive">
+                                        <thead>
+                                        <tr>
+                                            <th style="width: 10px">#</th>
+                                            <th>User Name</th>
+                                            <th>Email</th>
+                                            <th style="width: 40px">IsAdmin</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        @{
+                                            incrementor = 1;
+                                        }
+                                        @foreach (ManageUserDetail user in Model.inactiveUsers)
+                                        {
+
+                                            <tr value="@user.UserKey">
+                                                <td>
+                                                    @incrementor.ToString()
+                                                </td>
+                                                <td name="fullName">
+                                                    @Html.DisplayFor(a => user.FirstName), @Html.DisplayFor(a => user.LastName)
+                                                </td>
+                                                <td name="email">
+                                                    @Html.DisplayFor(a => user.Email)
+                                                </td>
+                                                <td>
+                                                    @if (user.IsAdmin == "1")
+                                                    {
+                                                        <span>Yes</span>
+                                                    }
+                                                    else if (user.IsAdmin == "0")
+                                                    {
+                                                        <span>No</span>
+                                                    }
+                                                    else
+                                                    {
+                                                        <span>NA</span>
+                                                    }
+                                                </td>
+                                            </tr>
+
+                                            incrementor++;
+                                        }
+
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div class="col-md-12 tab-pane"  id="allUsers">
+
+                                    <table class="table table-hover" id="all">
+                                        <thead>
+                                        <tr>
+                                            <th style="width: 10px">#</th>
+                                            <th>User Name</th>
+                                            <th>Email</th>
+                                            <th style="width: 40px">IsAdmin</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        @{
+                                            incrementor = 1;
+                                        }
+                                        @foreach (ManageUserDetail user in Model.allUsers)
+                                        {
+
+                                            <tr value="@user.UserKey">
+                                                <td>
+                                                    @incrementor.ToString()
+                                                </td>
+                                                <td name="fullName">
+                                                    @Html.DisplayFor(a => user.LastName), @Html.DisplayFor(a => user.FirstName)
+                                                </td>
+                                                <td name="email">
+                                                    @Html.DisplayFor(a => user.Email)
+                                                </td>
+                                                <td>
+                                                    @if (user.IsAdmin == "1")
+                                                    {
+                                                        <span>Yes</span>
+                                                    }
+                                                    else if (user.IsAdmin == "0")
+                                                    {
+                                                        <span>No</span>
+                                                    }
+                                                    else
+                                                    {
+                                                        <span>NA</span>
+                                                    }
+                                                </td>
+                                            </tr>
+
+                                            incrementor++;
+                                        }
+
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <!-- /.box-body -->
+                            </div>    
+                        </div>
+                        
                     </div>
-                    <!-- /.box-body -->
                 </div>
-
 
             </div>
         </div>
     </section>
 
+</div>
+
+
+
+<div class="modal fade" id="userEditModal">
+    <div class="modal-dialog modal-lg">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <section class="content-header">
+                    <h1>
+                        <span id="userName"></span>
+                        <small>Edit User Details</small>
+                    </h1>
+                </section>
+            </div>
+            <div class="modal-body">
+                <section class="content">
+                    
+                    <div class="row">
+                        <div class="col-xs-6">
+                            <div class="form-group">
+                                <label>User Name</label>
+                                <input type="text" class="form-control" id="userId" disabled/>
+                            </div>
+                        </div>
+               
+                            <div class="col-xs-6">
+                                <div class="form-group">
+                                    <label>Email ID</label>
+                                    <input type="text" class="form-control" id="userEmail" disabled />
+                                </div>
+                            </div>
+                  
+                        <!-- /.col -->
+                    </div>
+
+                    <div class="row">
+                        <div class="col-xs-6">
+                            <div class="form-group">
+                                <label>Role</label>
+                                <select class="form-control 
+                                        select2" style="width: 100%;" id="userRole">
+                                    
+                                </select>
+                               
+                            </div>
+                        </div>
+                        <div class="col-xs-6">
+                            <div class="form-group">
+                                <label>Product</label>
+                                <select class="form-control" style="width: 100%;" id="userProduct">
+                                  
+                                </select>   
+                               
+                            </div>
+                        </div>
+                        <!-- /.col -->
+                    </div>
+        
+                    
+                    <div class="row">
+                        <div class="col-xs-6">
+                            <div class="form-group">
+                                <label>Access Control List</label>
+                                <select class="form-control" multiple="multiple" data-placeholder="Select a State"
+                                        style="width: 100%;" id="userAcl">
+                                   
+                                </select>
+                                
+                            </div>
+                        </div>
+                        
+                        <div class="col-xs-6">
+                     
+                                <div class="form-group" style="text-align: center" id="isAdmin">
+                                    <label>Administrator Permissions</label>
+                                    <div>
+                                        <div class="btn-group" data-toggle="buttons">
+                                            <label class="btn btn-primary active" id="adminOn">
+                                                <input type="radio" name="isAdmin" autocomplete="off" value="1"> Yes
+                                            </label>
+                                            <label class="btn btn-primary"  id="adminOff">
+                                                <input type="radio" name="isAdmin" value="0" autocomplete="off"> No
+                                            </label>
+                                        </div>
+                                    </div>
+                                  
+                                </div>
+                                               
+                                <div class="form-group" style="text-align: center" id="isActive">
+                                    <label>Activity Status</label>
+                                    <div>
+                                        <div class="btn-group" data-toggle="buttons">
+                                            <label class="btn btn-primary active" id="activeOn">
+                                                <input type="radio" name="isActive" autocomplete="off" value="1" > Active
+                                            </label>
+                                            <label class="btn btn-primary" id="activeOff">
+                                                <input type="radio" name="isActive" value="0" autocomplete="off"> InActive
+                                            </label>
+                                        </div>
+                                    </div>
+                            </div>      
+                            
+                            <br/>
+                            
+                            <div class="col-md-2"></div>
+                            <div class="col-xs-4">
+                                <button type="button" class="btn btn-block btn-primary btn-sm"  id="updateUser">Update</button>
+                            </div>
+                            <div class="col-xs-4">
+                                <button type="button" class="btn btn-block btn-primary btn-sm" data-dismiss="modal">Cancel</button>
+                            </div>
+                            <div class="col-md-2"></div>
+                                       
+                        </div>
+                        <!-- /.col -->
+                     </div>
+
+                    <!-- /.row -->
+                </section>
+            </div>
+        </div>
+    </div>
 </div>

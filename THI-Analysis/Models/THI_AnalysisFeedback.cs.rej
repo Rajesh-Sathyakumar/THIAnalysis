@@ -1,9 +1,0 @@
-diff a/THI-Analysis/Models/THI_AnalysisFeedback.cs b/THI-Analysis/Models/THI_AnalysisFeedback.cs	(rejected hunks)
-@@ -15,7 +15,6 @@
-     public partial class THI_AnalysisFeedback
-     {
-         public int AnalysisFeedbackKey { get; set; }
--
-         public int Project { get; set; }
-         public int AnalysisSummary { get; set; }
-         public System.DateTime AnalysisCreatedDate { get; set; }

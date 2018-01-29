@@ -48,6 +48,14 @@
       <HintPath>..\packages\ComponentSpace.SAML2.1.0.0\lib\ComponentSpace.SAML2.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="Microsoft.AI.Agent.Intercept, Version=2.0.6.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.ApplicationInsights.Agent.Intercept.2.0.6\lib\net45\Microsoft.AI.Agent.Intercept.dll</HintPath>
       <Private>True</Private>
@@ -157,12 +165,6 @@
     <Reference Include="Newtonsoft.Json">
       <HintPath>..\packages\Newtonsoft.Json.6.0.4\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
-    <Reference Include="EntityFramework">
-      <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.dll</HintPath>
-    </Reference>
-    <Reference Include="EntityFramework.SqlServer">
-      <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.SqlServer.dll</HintPath>
-    </Reference>
     <Reference Include="Microsoft.AspNet.Identity.Core">
       <HintPath>..\packages\Microsoft.AspNet.Identity.Core.2.2.1\lib\net45\Microsoft.AspNet.Identity.Core.dll</HintPath>
     </Reference>
@@ -211,6 +213,18 @@
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="Constants\UsageActivityList.cs" />
     <Compile Include="Controllers\THI_AnalysisFeedbackController.cs" />
+    <Compile Include="Dto\ConfirmUserEnrollment.cs" />
+    <Compile Include="Dto\EnrollUsersResultDto.cs" />
+    <Compile Include="Dto\EnvironmentDetail.cs" />
+    <Compile Include="Dto\ManageUserDetail.cs" />
+    <Compile Include="Dto\MemberDetail.cs" />
+    <Compile Include="Dto\SearchUsersPostData.cs" />
+    <Compile Include="Dto\UserCreation.cs" />
+    <Compile Include="Dto\UserDetail.cs" />
+    <Compile Include="Dto\UserMemberOrgKeyPair.cs" />
+    <Compile Include="Dto\UsersCount.cs" />
+    <Compile Include="Dto\UserStatus.cs" />
+    <Compile Include="Enums\UserRole.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -323,7 +337,10 @@
       <DependentUpon>THI_AnalysisFeedback.tt</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SiamRequestServiceParam.cs" />
     <Compile Include="Startup.cs" />
+    <Compile Include="Utility\UserCreationService.cs" />
+    <Compile Include="Utility\WebServiceRepository.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\AdminLTE.min.css" />
@@ -354,6 +371,7 @@
     <Content Include="Content\Images\Q.png" />
     <Content Include="Content\Images\R.png" />
     <Content Include="Content\Images\S.png" />
+    <Content Include="Content\Images\switch.png" />
     <Content Include="Content\Images\T.png" />
     <Content Include="Content\Images\U.png" />
     <Content Include="Content\Images\V.png" />
@@ -362,6 +380,8 @@
     <Content Include="Content\Images\Y.png" />
     <Content Include="Content\Images\Z.png" />
     <Content Include="Content\ionicons.min.css" />
+    <Content Include="Content\multi-select.css" />
+    <Content Include="Content\select2.min.css" />
     <Content Include="Content\skin-blue.min.css" />
     <Content Include="Content\user2-160x160.jpg" />
     <Content Include="favicon.ico" />
@@ -423,6 +443,7 @@
     <None Include="Scripts\jquery.validate-vsdoc.js" />
     <Content Include="Scripts\jquery-2.2.3.min.js" />
     <Content Include="Scripts\jquery.dataTables.min.js" />
+    <Content Include="Scripts\jquery.multi-select.js" />
     <Content Include="Scripts\jquery.validate.js" />
     <Content Include="Scripts\jquery.validate.min.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.js" />
@@ -430,6 +451,7 @@
     <Content Include="Scripts\modernizr-2.6.2.js" />
     <Content Include="Scripts\respond.js" />
     <Content Include="Scripts\respond.min.js" />
+    <Content Include="Scripts\select2.min.js" />
     <Content Include="Scripts\_references.js" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
@@ -449,6 +471,8 @@
     <Content Include="Views\THI_AnalysisFeedback\MemberTHIScores.cshtml" />
     <Content Include="Views\THI_AnalysisFeedback\Details.cshtml" />
     <Content Include="Views\THI_AnalysisFeedback\EditUserPermission.cshtml" />
+    <Content Include="Views\THI_AnalysisFeedback\Unauthorized.cshtml" />
+    <Content Include="Views\THI_AnalysisFeedback\Errorpage.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -1,21 +1,15 @@
 ﻿@using SamlHelperLibrary.Models
 @{
-    var SessionUser = string.Empty;
-    if (Session != null && Session["UserSessionInfo"] != null)
+    string sessionUser;
+
+    if (Session?["UserSessionInfo"] != null)
     {
         var user = ((UserSessionInfo) Session["UserSessionInfo"]).firstName;
-        if (user != null)
-        {
-            SessionUser = user;
-        }
-        else
-        {
-            SessionUser = "Guest";
-        }
+        sessionUser = user ?? "Guest";
     }
     else
     {
-        SessionUser = "Guest";
+        sessionUser = "Guest";
     }
 }
 
@@ -50,6 +44,9 @@
 
     <link rel="stylesheet" href="@Url.Content("~/Content/dataTables.bootstrap.css")">
 
+    <link rel="stylesheet" href="@Url.Content("~/Content/select2.min.css")"/>
+
+    <link href="@Url.Content("~/Content/multi-select.css")" rel="stylesheet" />
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
     <!--[if lt IE 9]>
@@ -108,11 +105,12 @@ desired effect
                         <!-- Menu Toggle Button -->
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                             <!-- The user image in the navbar-->
-                            <img src="@Url.Content("~/Content/Images/" + SessionUser.Substring(0, 1) + ".png")" class="user-image" alt="User Image">
+                            <img src="@Url.Content("~/Content/Images/" + sessionUser.Substring(0, 1) + ".png")" class="user-image" alt="User Image">
                             <!-- hidden-xs hides the username on small devices so only the image appears. -->
-                            <span class="hidden-xs">Hello @SessionUser !</span>
+                            <span class="hidden-xs">Hello @sessionUser !</span>
 
                         </a>
+
                     </li>
 
                     <!-- Control Sidebar Toggle Button -->
@@ -122,14 +120,24 @@ desired effect
                             <i class="fa fa-sign-out"></i>
                         </a>
                         <ul class="dropdown-menu">
-                            <!-- User image -->
-                            <!-- Menu Body -->
+
+                            @if ( Session?["isAdmin"]!=null && (int)Session["isAdmin"] == 1)
+                            {
+                                <li class="user-body">
+                                    <div class="row">
+                                        <div class="col-xs-12 text-center">
+                                            <a href="@Url.Content("~/THI_AnalysisFeedback/EditUserPermission")">
+                                                <i class="fa fa-users text-aqua"></i> User Management
+                                            </a>
+                                        </div>
+                                    </div>
+                                </li>
+                            }
                             <li class="user-body">
                                 <div class="row">
                                     <div class="col-xs-12 text-center">
                                         <a href="#">Confirm Sign Out?</a>
                                     </div>
-
 
                                 </div>
                                 <!-- /.row -->
@@ -156,7 +164,6 @@ desired effect
         <section class="sidebar">
 
             <!-- Sidebar user panel (optional) -->
-
             <!-- Sidebar Menu -->
             <ul class="sidebar-menu">
 
@@ -169,21 +176,34 @@ desired effect
                         <i class="fa fa-line-chart"></i> <span>Member Statistics</span>
                     </a>
                 </li>
-                <li id="thi-scores">
-                    <a href="@Url.Content("~/THI_AnalysisFeedback/MemberTHIScores")">
-                        <i class="fa fa-check-square-o"></i> <span>Member THI Scores</span>
-                    </a>
-                </li>
-                <li id="thi-data-logs">
-                    <a href="@Url.Content("~/THI_AnalysisFeedback/Index")">
-                        <i class="fa fa-database"></i> <span>THI Data Logs</span>
-                    </a>
-                </li>
-                <li id="thi-data-feed">
-                    <a href="@Url.Content("~/THI_AnalysisFeedback/Create")">
-                        <i class="fa fa-edit"></i> <span>THI Data Feedback</span>
-                    </a>
-                </li>
+
+                @if ( Session?["userAcls"]!=null &&  ((IDictionary<string, bool>)Session["userAcls"])["Member THI Scores"])
+                {
+                    <li id="thi-scores">
+                        <a href="@Url.Content("~/THI_AnalysisFeedback/MemberTHIScores")">
+                            <i class="fa fa-check-square-o"></i> <span>Member THI Scores</span>
+                        </a>
+                    </li>
+                }
+
+                @if (Session?["userAcls"] != null && ((IDictionary<string, bool>)Session["userAcls"])["THI Data Logs"])
+                {
+                    <li id="thi-data-logs">
+                        <a href="@Url.Content("~/THI_AnalysisFeedback/Index")">
+                            <i class="fa fa-database"></i> <span>THI Data Logs</span>
+                        </a>
+                    </li>
+                }
+
+                @if (Session?["userAcls"] != null && ((IDictionary<string, bool>)Session["userAcls"])["THI Data Feedback"])
+                {
+                    <li id="thi-data-feed">
+                        <a href="@Url.Content("~/THI_AnalysisFeedback/Create")">
+                            <i class="fa fa-edit"></i> <span>THI Data Feedback</span>
+                        </a>
+                    </li>
+                }  
+               
             </ul>
             <!-- /.sidebar-menu -->
         </section>
@@ -194,7 +214,6 @@ desired effect
     @RenderBody()
 
     <!-- Content Wrapper. Contains page content -->
-
     <!-- /.content-wrapper -->
     <!-- Main Footer -->
     <footer class="main-footer">
@@ -235,8 +254,11 @@ desired effect
 
 <script src="@Url.Content("~/Scripts/handlebars.min.js")"></script>
 
-<script src="https://code.highcharts.com/modules/no-data-to-display.js"></script>
+<script src="@Url.Content("https://code.highcharts.com/modules/no-data-to-display.js")"></script>
 
+<script src="@Url.Content("~/Scripts/select2.min.js")"></script>
+
+<script src="@Url.Content("~/Scripts/jquery.multi-select.js")"></script>
 <!-- Optionally, you can add Slimscroll and FastClick plugins.
 Both of these plugins are recommended to enhance the
 user experience. Slimscroll is required when using the
@@ -247,8 +269,58 @@ fixed layout. -->
     var monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "June", "July", "Aug", "Sep", "Oct", "Nov", "Dec"];
 
     $('#thi-member-data tbody tr').css('cursor', 'pointer');
+    $('#active tbody tr').css('cursor', 'pointer');
+    $('#inactive tbody tr').css('cursor', 'pointer');
+    $('#pendingUsers tbody tr').css('cursor', 'pointer');
+    $('#allUserTable tbody tr').css('cursor', 'pointer');
 
     $('#thi-member-data').DataTable();
+
+
+    var allUsersTable = $('#all').DataTable({
+        "searching": true,
+        "ordering": false,
+        "paging": true,
+        "lengthChange": false,
+        "bInfo": false,
+        "oLanguage": {
+            "sEmptyTable": "<center><b>No Data to display</b></center>"
+        }
+    });
+
+    var activeUsersTable = $('#active').DataTable({
+        "searching": true,
+        "ordering": false,
+        "paging": true,
+        "lengthChange": false,
+        "bInfo": false,
+        "oLanguage": {
+            "sEmptyTable": "<center><b>No Data to display</b></center>"
+        }
+    });
+
+    var inactiveUsersTable = $('#inactive').DataTable({
+        "searching": true,
+        "ordering": false,
+        "paging": true,
+        "lengthChange": false,
+        "bInfo": false,
+        "oLanguage": {
+            "sEmptyTable": "<center><b>No Data to display</b></center>"
+        }
+    });
+
+    var pendingUsersTable = $('#pending').DataTable({
+        "searching": true,
+        "ordering": false,
+        "paging": true,
+        "lengthChange": false,
+        "bInfo": false,
+        "oLanguage": {
+            "sEmptyTable": "<center><b>No Data to display</b></center>"
+        }
+    });
+
     var caseVolumeTable = $('#casesVolumeTable').DataTable({
         "searching": false,
         "ordering": false,
@@ -319,7 +391,7 @@ fixed layout. -->
 
     $('#thi-member-data tbody').on('click',
         'tr',
-        function() {
+        function () {
 
             var redirectUrl = "Details/" + this.id;
             window.location.href = redirectUrl;
@@ -327,29 +399,8 @@ fixed layout. -->
             $('#myModal').modal('show');
         });
 
-    @*$('#thi-member-data tbody').on('click',
-        'tr',
-        function() {
-
-            var request = {
-                "url": "@Url.Content("~/THI_AnalysisFeedback/Details")",
-            "method": "POST",
-            "headers": {
-                "content-type": "application/json"
-            },
-            "data": "{ \"id\": " + this.id + " }",
-            "dataType": "JSON",
-            "success": function(data) {
-                console.log(data);
-            }
-            };
-            $.ajax(request);
-
-            $('#THIFeedbackData').modal('show');
-        });*@
-
     $('#formsubmissionmodal').on('shown.bs.modal',
-        function() {
+        function () {
             $('#submitform').focus();
         });
 
@@ -381,14 +432,14 @@ fixed layout. -->
     }
 
     function disableComments(dropDownId) {
-        $('#' + dropDownId).change(function() {
-            if ($('#' + dropDownId).val() == "1") {
+        $('#' + dropDownId).change(function () {
+            if ($('#' + dropDownId).val() === "1") {
                 $('#Comments_' + dropDownId).val("N/A");
                 $('#Comments_' + dropDownId).attr('readonly', false);
-            } else if ($('#' + dropDownId).val() == "-1") {
+            } else if ($('#' + dropDownId).val() === "-1") {
                 $('#Comments_' + dropDownId).attr('readonly', true);
             } else {
-                if ($('#Comments_' + dropDownId).val() == "N/A") {
+                if ($('#Comments_' + dropDownId).val() === "N/A") {
                     $('#Comments_' + dropDownId).val('');
                 }
                 $('#Comments_' + dropDownId).attr('readonly', false);
@@ -416,16 +467,16 @@ fixed layout. -->
     $("#MemberTHIScores #Project option[value='1']").remove();
 
 
-    $('#DischargeVolumes #wiki-help').click(function() {
+    $('#DischargeVolumes #wiki-help').click(function () {
         window.location.href = "@Url.Content("https://wiki.advisory.com/display/CPM/THI+Analysis+Tool")";
     });
 
-    $('#DischargeVolumes #Project').change(function() {
+    $('#DischargeVolumes #Project').change(function () {
 
         var selectedProj = $(this).find('option:selected').attr('value');
         var $btn = $('#DischargeVolumes #volumeParamSubmit');
 
-        if (selectedProj != 0) {
+        if (selectedProj !== 0) {
 
             var loadingId = "HospitalSelection";
             $btn.removeAttr('disabled');
@@ -440,12 +491,12 @@ fixed layout. -->
                 },
                 "data": "{ \"project\": " + selectedProj + " }",
                 "dataType": "JSON",
-                "success": function(data) {
+                "success": function (data) {
                     var rawHospitalTemplate = $('#projectHospitalsTemplate').html();
                     var compiledHospitalTemplate = Handlebars.compile(rawHospitalTemplate);
                     $('#projectHospitals').html(compiledHospitalTemplate(data));
                     $('#' + loadingId).remove();
-                    if ($('#DischargeVolumes #facilitySelection').find('option:selected').val() == 0) {
+                    if ($('#DischargeVolumes #facilitySelection').find('option:selected').val() === 0) {
                         $btn.attr('disabled', 'disabled');
                     }
                 }
@@ -460,32 +511,32 @@ fixed layout. -->
                 },
                 "data": "{ \"project\": " + selectedProj + " }",
                 "dataType": "JSON",
-                "success": function(data) {
+                "success": function (data) {
 
-                    var Grouper3MInfo;
-                    var runAPRDRGInfo;
+                    var grouper3MInfo;
+                    var runAprdrgInfo;
                     var aprdrgAggregate;
                     var maxRefreshRateDate;
                     var customOppeCount;
 
-                    if (data.length != 0) {
+                    if (data.length !== 0) {
                         customOppeCount = Number(data[0].TotalCount.toFixed(1)).toLocaleString();
                         maxRefreshRateDate = data[0].MaxRR;
 
-                        if (data[0].CCC_3M == 0) {
-                            Grouper3MInfo = "OFF";
-                        } else if (data[0].CCC_3M == 1) {
-                            Grouper3MInfo = "ON";
-                        } else if (data[0].CCC_3M == -1) {
-                            Grouper3MInfo = "NA";
+                        if (data[0].CCC_3M === "0") {
+                            grouper3MInfo = "OFF";
+                        } else if (data[0].CCC_3M === "1") {
+                            grouper3MInfo = "ON";
+                        } else if (data[0].CCC_3M === "-1") {
+                            grouper3MInfo = "NA";
                         }
 
-                        if (data[0].RunAPRDRG == 0) {
-                            runAPRDRGInfo = "OFF";
-                        } else if (data[0].RunAPRDRG == 1) {
-                            runAPRDRGInfo = "ON";
-                        } else if (data[0].RunAPRDRG == -1) {
-                            runAPRDRGInfo = "NA";
+                        if (data[0].RunAPRDRG === "0") {
+                            runAprdrgInfo = "OFF";
+                        } else if (data[0].RunAPRDRG === "1") {
+                            runAprdrgInfo = "ON";
+                        } else if (data[0].RunAPRDRG === "-1") {
+                            runAprdrgInfo = "NA";
                         }
 
                         if (maxRefreshRateDate == null) {
@@ -493,22 +544,22 @@ fixed layout. -->
                         } else {
                             maxRefreshRateDate = convertDate(maxRefreshRateDate);
                         }
-                        if (data[0].APRDRGAggregate == 0) {
+                        if (data[0].APRDRGAggregate === false) {
                             aprdrgAggregate = "OFF";
-                        } else if (data[0].APRDRGAggregate == 1) {
+                        } else if (data[0].APRDRGAggregate === true) {
                             aprdrgAggregate = "ON";
                         }
                     } else {
 
-                        Grouper3MInfo = "NA";
-                        runAPRDRGInfo = "NA";
+                        grouper3MInfo = "NA";
+                        runAprdrgInfo = "NA";
                         aprdrgAggregate = "NA";
                         maxRefreshRateDate = "NA";
                         customOppeCount = "NA";
                     }
 
-                    $('#DischargeVolumes #3mGrouper').html(Grouper3MInfo);
-                    $('#DischargeVolumes #runAPRDRG').html(runAPRDRGInfo);
+                    $('#DischargeVolumes #3mGrouper').html(grouper3MInfo);
+                    $('#DischargeVolumes #runAPRDRG').html(runAprdrgInfo);
                     $('#DischargeVolumes #customOppeCount').html(customOppeCount);
                     $('#DischargeVolumes #maxRrDate').html(maxRefreshRateDate);
                     $('#DischargeVolumes #aprdrgAggregation').html(aprdrgAggregate);
@@ -533,7 +584,7 @@ fixed layout. -->
 
 
     $('#DischargeVolumes #volumeParamSubmit').on('click',
-        function() {
+        function () {
 
             var chartLoadingId = "loadingChart";
             var tableLoadingId = "loadingTable";
@@ -555,24 +606,24 @@ fixed layout. -->
                 },
                 "data": "{ \"facilitySelect\": " + selectedHospital + " }",
                 "dataType": "JSON",
-                "success": function(data) {
+                "success": function (data) {
 
                     var jsonConvert = [];
                     var volumeGroupSelect = $('input[name=volumeGroup]:checked').attr('id');
 
-                    if (volumeGroupSelect == "Monthly") {
+                    if (volumeGroupSelect === "Monthly") {
                         jsonConvert = data;
-                    } else if (volumeGroupSelect == "Annual") {
+                    } else if (volumeGroupSelect === "Annual") {
                         for (var i = 0; i < data.length; i++) {
                             var foundYearInJson = 0;
                             for (var j = 0; j < jsonConvert.length; j++) {
-                                if (data[i].Year == jsonConvert[j].Year) {
+                                if (data[i].Year === jsonConvert[j].Year) {
                                     foundYearInJson = 1;
                                     jsonConvert[j].IP_COUNT += data[i].IP_COUNT;
                                     jsonConvert[j].OP_COUNT += data[i].OP_COUNT;
                                 }
                             }
-                            if (foundYearInJson == 0) {
+                            if (foundYearInJson === 0) {
                                 jsonConvert.push({
                                     Year: data[i].Year,
                                     IP_COUNT: data[i].IP_COUNT,
@@ -600,9 +651,9 @@ fixed layout. -->
                     for (var i = 0; i < jsonConvert.length; i++) {
                         ipCases.unshift(jsonConvert[i].IP_COUNT);
                         opCases.unshift(jsonConvert[i].OP_COUNT);
-                        if (volumeGroupSelect == "Monthly") {
+                        if (volumeGroupSelect === "Monthly") {
                             xAxisLabels.unshift(monthNames[jsonConvert[i].Month - 1] + '-' + jsonConvert[i].Year);
-                        } else if (volumeGroupSelect == "Annual") {
+                        } else if (volumeGroupSelect === "Annual") {
                             xAxisLabels.unshift(jsonConvert[i].Year);
                         }
                     }
@@ -619,7 +670,7 @@ fixed layout. -->
             $.ajax(settings);
         });
 
-    if ($('#DischargeVolumes').length != 0) {
+    if ($('#DischargeVolumes').length !== 0) {
         var volumeChart = Highcharts.chart('volumeChartElement',
         {
             credits: {
@@ -637,7 +688,7 @@ fixed layout. -->
             xAxis: {
                 allowDecimals: false,
                 labels: {
-                    formatter: function() {
+                    formatter: function () {
                         return this.value; // clean, unformatted number for year
                     }
                 }
@@ -647,7 +698,7 @@ fixed layout. -->
                     text: false
                 },
                 labels: {
-                    formatter: function() {
+                    formatter: function () {
                         return this.value / 1000 + 'k';
                     }
                 }
@@ -694,12 +745,12 @@ fixed layout. -->
 
 
     Handlebars.registerHelper('monthConvert',
-        function(month) {
+        function (month) {
             return (monthNames[month - 1]);
         });
 
 
-    if ($('#MemberTHIScores').length != 0) {
+    if ($('#MemberTHIScores').length !== 0) {
         var THIScoreTrend = Highcharts.chart('THITrendChart',
         {
             credits: {
@@ -716,7 +767,7 @@ fixed layout. -->
             xAxis: {
                 allowDecimals: false,
                 labels: {
-                    formatter: function() {
+                    formatter: function () {
                         return this.value; // clean, unformatted number for year
                     }
                 }
@@ -754,17 +805,17 @@ fixed layout. -->
     }
 
     $('#MemberTHIScores #GenerateTHI').on('click',
-        function() {
+        function () {
 
-            var MemberContractTableloading = "THIScoresTableloading";
-            var THIScoresTableloading = "THIScoresTableloading";
-            var THIGraphloading = "THIScoresTableloading";
+            var memberContractTableloading = "THIScoresTableloading";
+            var thiScoresTableloading = "THIScoresTableloading";
+            var thiGraphloading = "THIScoresTableloading";
 
             var $btn = $('#GenerateTHI').button('loading');
 
-            $('#MemberTHIScores #tableBox').append(renderingLoadingBlock(MemberContractTableloading));
-            $('#MemberTHIScores #MemberTHIParameterScoresDiv').append(renderingLoadingBlock(THIScoresTableloading));
-            $('#MemberTHIScores #chartBox').append(renderingLoadingBlock(THIGraphloading));
+            $('#MemberTHIScores #tableBox').append(renderingLoadingBlock(memberContractTableloading));
+            $('#MemberTHIScores #MemberTHIParameterScoresDiv').append(renderingLoadingBlock(thiScoresTableloading));
+            $('#MemberTHIScores #chartBox').append(renderingLoadingBlock(thiGraphloading));
 
 
             var project = $('#MemberTHIScores #Project').find('option:selected').attr('value');
@@ -785,15 +836,15 @@ fixed layout. -->
                     month +
                     "\"}"
             };
-            $.ajax(settings).done(function(response) {
+            $.ajax(settings).done(function (response) {
 
                 var jsonConvert = response.THIParamaterScores[0];
                 var selectedProj = $('#MemberTHIScores #Project').find('option:selected').html();
 
                 if (response.THIParamaterScores.length) {
-                    var rawTHIScoreTemplate = $('#memberTHIParameterScoresTemplate').html();
-                    var compiledTHIScoreTemplate = Handlebars.compile(rawTHIScoreTemplate);
-                    $('#MemberTHIParameterScoresTable').html(compiledTHIScoreTemplate(jsonConvert));
+                    var rawThiScoreTemplate = $('#memberTHIParameterScoresTemplate').html();
+                    var compiledThiScoreTemplate = Handlebars.compile(rawThiScoreTemplate);
+                    $('#MemberTHIParameterScoresTable').html(compiledThiScoreTemplate(jsonConvert));
                 } else {
                     memberTHIParamaterScores.clear().draw();
                 }
@@ -809,22 +860,22 @@ fixed layout. -->
                     memberValue.clear().draw();
                 }
 
-                if (response.ThiTrendByPeriod.length != 0) {
-                    var THIScoreJSon = [];
+                if (response.ThiTrendByPeriod.length !== 0) {
+                    var thiScoreJSon = [];
                     var xAxisLabels = [];
                     for (var i = 0; i < response.ThiTrendByPeriod.length; i++) {
-                        THIScoreJSon.push(response.ThiTrendByPeriod[i].THIScore);
+                        thiScoreJSon.push(response.ThiTrendByPeriod[i].THIScore);
                         xAxisLabels.push(monthNames[response.ThiTrendByPeriod[i].Month - 1] +
                             '-' +
                             response.ThiTrendByPeriod[i].Year);
                     }
 
-                    THIScoreTrend.series[0].setData(THIScoreJSon);
+                    THIScoreTrend.series[0].setData(thiScoreJSon);
 
                     THIScoreTrend.title.update({ text: selectedProj });
 
                     for (var i in response.ThiTrendByPeriod) {
-                        if (year == response.ThiTrendByPeriod[i].Year && month == response.ThiTrendByPeriod[i].Month) {
+                        if (year === response.ThiTrendByPeriod[i].Year.toString() && month === response.ThiTrendByPeriod[i].Month.toString()) {
                             THIScoreTrend.subtitle.update({ text: response.ThiTrendByPeriod[i].ProjectPhase });
                         }
                     }
@@ -836,9 +887,9 @@ fixed layout. -->
                 }
 
 
-                $('#' + THIScoresTableloading).remove();
-                $('#' + MemberContractTableloading).remove();
-                $('#' + THIGraphloading).remove();
+                $('#' + thiScoresTableloading).remove();
+                $('#' + memberContractTableloading).remove();
+                $('#' + thiGraphloading).remove();
                 $btn.button('reset');
 
             });
@@ -858,9 +909,9 @@ fixed layout. -->
     defaultPeriodInTHIPage();
 
     $('#MemberTHIScores #Project').change(
-        function() {
+        function () {
             defaultPeriodInTHIPage();
-            if ($('#MemberTHIScores #Project').val() == 0) {
+            if ($('#MemberTHIScores #Project').val() === 0) {
                 $('#MemberTHIScores #yearSelection').attr('disabled', 'disabled');
                 $('#MemberTHIScores #monthSelection').attr('disabled', 'disabled');
                 $('#MemberTHIScores #GenerateTHI').attr('disabled', 'disabled');
@@ -873,7 +924,7 @@ fixed layout. -->
             }
         });
 
-    $('#MemberTHIScores #MoreThiDetails').click(function() {
+    $('#MemberTHIScores #MoreThiDetails').click(function () {
 
         var project = $('#MemberTHIScores #Project').find('option:selected').val();
         $('#MemberTHIScores #MoreThiDetails').button('loading');
@@ -887,7 +938,7 @@ fixed layout. -->
                 project +
                 "\"}"
         };
-        $.ajax(settings).done(function(response) {
+        $.ajax(settings).done(function (response) {
 
             $('#THIScoresDrillDown #ScoresDataPrj').html($('#MemberTHIScores #Project').find('option:selected').html());
             mseTable.clear().draw();
@@ -895,9 +946,11 @@ fixed layout. -->
             minesweeperTable.clear().draw();
 
             if (response != null) {
-                if (response.dlDrill.length != 0) {
-                    var template = $('#dataLoadTimelinessTemplate').html();
-                    var compiledTemplate = Handlebars.compile(template);
+                var compiledTemplate;
+                var template;
+                if (response.dlDrill.length !== 0) {
+                    template = $('#dataLoadTimelinessTemplate').html();
+                    compiledTemplate = Handlebars.compile(template);
                     $('#DataSubmimssionTimelines').html(compiledTemplate(response.dlDrill));
                 }
 
@@ -937,8 +990,8 @@ fixed layout. -->
                     });
 
                     if (maxLength > 0) {
-                        var template = $('#missingDataElements').html();
-                        var compiledTemplate = Handlebars.compile(template);
+                        template = $('#missingDataElements').html();
+                        compiledTemplate = Handlebars.compile(template);
                         $('#MissingDataElements').html(compiledTemplate(missingElementsJson));
                     }
                 }
@@ -949,6 +1002,189 @@ fixed layout. -->
         });
     });
 
+    var userManageTable, userId, currElem,fn,ln;
+    $('#editUserPermissions tbody').on('click',
+        'tr',
+        function () {
+
+            var settings = {
+                "url": "@Url.Content("~/THI_AnalysisFeedback/GetUserParameters")",
+                "method": "POST",
+                "headers": {
+                    "content-type": "application/json"
+                }
+            };
+
+            userManageTable = $('#userSel li[class=active]').attr('data-tab');
+            userId = $(this).attr('value');
+            currElem = $(this);
+
+            $.ajax(settings).done(function (response) {
+                if (response.Roles.length !== 0) {
+                    var template = $('#userRolesTemplate').html();
+                    var compiledTemplate = Handlebars.compile(template);
+                    $('#userEditModal #userRole').html(compiledTemplate(response.Roles));
+                }
+
+                if (response.Products.length !== 0) {
+                    var template = $('#productsTemplate').html();
+                    var compiledTemplate = Handlebars.compile(template);
+                    $('#userEditModal #userProduct').html(compiledTemplate(response.Products));
+                }
+
+                if (response.Acls.length !== 0) {
+                    var template = $('#aclsTemplate').html();
+                    var compiledTemplate = Handlebars.compile(template);
+                    $('#userEditModal #userAcl').html(compiledTemplate(response.Acls));
+
+                    $('#userEditModal #userAcl').multiSelect('destroy');
+                    $('#userEditModal #userAcl').multiSelect();
+                }
+
+
+                if (userManageTable !== "pendingUsers") {
+                    var settings = {
+                        "url": "@Url.Content("~/THI_AnalysisFeedback/GetUserDetails")",
+                    "method": "POST",
+                    "headers": {
+                        "content-type": "application/json"
+                    },
+                    "data": JSON.stringify({ "userId": userId })
+                };
+
+                $.ajax(settings).done(function(response) {
+                    if (response !== null) {
+                        var userDetails = response.UserDetails[0];
+                        $('#userEditModal #userName').html(userDetails.FirstName +' '+userDetails.LastName);
+                        $('#userEditModal input[id=userId]').val(userDetails.Username);
+                        $('#userEditModal input[id=userEmail]').val(userDetails.Email);
+
+
+                        if (userDetails.Admin === 1) {
+                            $('#userEditModal #adminOn').addClass('active focus');
+                            $('#userEditModal #adminOff').removeClass('active focus');
+                        }
+
+                        else {
+                            $('#userEditModal #adminOff').addClass('active focus')
+                            $('#userEditModal #adminOn').removeClass('active focus')
+                        }
+
+
+                        if (userDetails.IsActive === true){
+                            $('#userEditModal #activeOn').addClass('active focus');
+                            $('#userEditModal #activeOff').removeClass('active focus');
+                        }
+                        
+                        else{
+                            $('#userEditModal #activeOff').addClass('active focus')
+                            $('#userEditModal #activeOn').removeClass('active focus')
+                        }
+
+                        $('#userEditModal #userRole').val(userDetails.Role);
+                        $('#userEditModal #userProduct').val(userDetails.Product);
+                        $('#userEditModal #userAcl').multiSelect('select', response.UserAcls);
+                    }
+                });
+            }
+
+                else {
+                    var fullname = currElem.find('td[name=fullName]').html();
+                    fullname = fullname.split(',');
+                    fn = $.trim(fullname[0]);
+                    ln = $.trim(fullname[1]);
+
+                    var em = $.trim(currElem.find('td[name=email]').html());
+
+                    $('#userEditModal #userName').html(fn + ' ' + ln);
+                    $('#userEditModal input[id=userId]').val(userId);
+                    $('#userEditModal input[id=userEmail]').val(em);
+
+                }
+            });
+                
+
+            $('#userEditModal').modal();
+        });
+
+    $('#userEditModal #updateUser').on('click',
+        function() {
+            var role = $('#userRole').val();
+            var product = $('#userProduct').val();
+
+            var isAdmin = $('#isAdmin .active input').attr('value');
+            var isActive = $('#isActive .active input').attr('value');
+
+            var selectedAclTags = $('.ms-selection ul .ms-selected span');
+            var email = $('#userEditModal #userEmail').val();
+
+            var selectedAcls = [];
+
+            for (var i = 0; i < selectedAclTags.length; i++) {
+
+                selectedAcls.push(selectedAclTags[i].innerHTML);
+            }
+            
+            if (userManageTable !== "pendingUsers") {
+                var userDetail = {
+                    "UserKey": userId,
+                    "UserRole": role,
+                    "UserProduct": product,
+                    "IsAdmin": isAdmin,
+                    "IsActive": isActive,
+                    "Acls": selectedAcls
+                }
+
+                var settings = {
+                    "url": "@Url.Content("~/THI_AnalysisFeedback/UpdateUser")",
+                    "method": "POST",
+                    "headers": {
+                        "content-type": "application/json"
+                    },
+                    "data": JSON.stringify(userDetail)
+                };
+
+                $.ajax(settings).done(function(response) {
+                    $('#userEditModal').modal('toggle');
+                    alert('User Updated Successfully!!');
+                    location.reload();
+                });
+            } else {
+
+                var guid = currElem.attr('data-guid');
+
+                var userDetail = {
+                    "FirstName": fn,
+                    "LastName": ln,
+                    "UserId": userId,
+                    "UserRole": role,
+                    "UserProduct": product,
+                    "IsAdmin": isAdmin,
+                    "IsActive": isActive,
+                    "Acls": selectedAcls,
+                    "UserGuid": guid,
+                    "Email": email
+                }
+
+                var settings = {
+                    "url": "@Url.Content("~/THI_AnalysisFeedback/InsertPendingUser")",
+                "method": "POST",
+                "headers": {
+                    "content-type": "application/json"
+                },
+                "data": JSON.stringify(userDetail)
+            };
+
+            $.ajax(settings).done(function(response) {
+                $('#userEditModal').modal('toggle');
+                alert('User Updated Successfully!!');
+                location.reload();
+            });
+
+            }
+        });
+
+
     //Triggering Project Dropdown To pull Default values in Member Info page
 
     $('#DischargeVolumes #Project').trigger('change');
@@ -958,6 +1194,24 @@ fixed layout. -->
     $('#MemberTHIScores #Project').trigger('change');
 
 </script>
+
+<script id="userRolesTemplate" type="text/x-handlebars-template">
+    {{#each this}}
+    <option value="{{RoleKey}}">{{RoleName}}</option>
+    {{/each}}
+</script>
+
+    <script id="productsTemplate" type="text/x-handlebars-template">
+        {{#each this}}
+        <option value="{{ProductKey}}">{{ProductName}}</option>
+        {{/each}}
+    </script>
+
+    <script id="aclsTemplate" type="text/x-handlebars-template">
+        {{#each this}}
+        <option value="{{AclKey}}">{{AclName}}</option>
+        {{/each}}
+    </script>
 
 <script id="missingDataElements" type="text/x-handlebars-template">
         {{#each this}}
@@ -970,18 +1224,18 @@ fixed layout. -->
     </script>
 
 <script id="dataLoadTimelinessTemplate" type="text/x-handlebars-template">
-    {{#each this}}
-    <tr>
-        <td>{{ShortDescription}} </td>
-        <td>{{MemberSupport_SupportIssueNumber}}</td>
-        <td>{{formatDate DataSubmissionTargetDate}}</td>
-        <td>{{formatDate FilesReceived}}</td>
-        <td>{{DaysLate_DataLoad}}</td>
-        <td>{{formatDate DateTimeClosed}}</td>
-        <td>{{ETLCompletion_DataLoad}}</td>
-    </tr>
-    {{/each}}
-</script>
+        {{#each this}}
+        <tr>
+            <td>{{ShortDescription}} </td>
+            <td>{{MemberSupport_SupportIssueNumber}}</td>
+            <td>{{formatDate DataSubmissionTargetDate}}</td>
+            <td>{{formatDate FilesReceived}}</td>
+            <td>{{DaysLate_DataLoad}}</td>
+            <td>{{formatDate DateTimeClosed}}</td>
+            <td>{{ETLCompletion_DataLoad}}</td>
+        </tr>
+        {{/each}}
+    </script>
 
 <script id="MinesweeperTemplate" type="text/x-handlebars-template">
     {{#each this}}
@@ -1007,27 +1261,27 @@ fixed layout. -->
     </script>
 
 <script id="projectHospitalsTemplate" type="text/x-handlebars-template">
-            <label>Facilities</label>
+        <label>Facilities</label>
         {{#if this}}
-            <select class="form-control" style="width: 100%;" name="facilitySelection" id="facilitySelection">
-                {{#each this}}
-                    <option value="{{ProjectHospitalKey}}">{{HospitalName}}</option>
-                {{/each}}
-            </select>
+        <select class="form-control" style="width: 100%;" name="facilitySelection" id="facilitySelection">
+            {{#each this}}
+            <option value="{{ProjectHospitalKey}}">{{HospitalName}}</option>
+            {{/each}}
+        </select>
         {{else}}
-            <select class="form-control" disabled ="disabled" style="width: 100%;" name="facilitySelection" id="facilitySelection">
-                <option value="0">Select a valid Project...</option>
-            </select>
+        <select class="form-control" disabled="disabled" style="width: 100%;" name="facilitySelection" id="facilitySelection">
+            <option value="0">Select a valid Project...</option>
+        </select>
         {{/if}}
     </script>
 
 
 <script id="caseVolTableTemplate" type="text/x-handlebars-template">
-        {{#each this}}    
+        {{#each this}}
         <tr role="row">
-                <td class="">{{monthConvert Month}} {{Year}}</td>
-                <td>{{formatNumber IP_COUNT}}</td>
-                <td>{{formatNumber OP_COUNT}}</td>
+            <td class="">{{monthConvert Month}} {{Year}}</td>
+            <td>{{formatNumber IP_COUNT}}</td>
+            <td>{{formatNumber OP_COUNT}}</td>
         </tr>
         {{/each}}
     </script>
@@ -1036,24 +1290,24 @@ fixed layout. -->
         <tr role="row">
             <td class="{{formatColor THISCORE_CC}}" title="RED: 1.66 AND BELOW, YELLOW: 1.67 AND 2.04, GREEN: 2.05 AND ABOVE">{{formatTHIScores THIScore}}</td>
             <td class="{{formatColor Data_Submission_Timeliness_CC}}" title="RED: 7 AND ABOVE, YELLOW: 2.01 TO 6.99, GREEN: 2 AND BELOW">{{formatTHIScores Data_Submission_Timeliness}}</td>
-            <td class="{{formatColor C__Member_Support_Tickets_CC}}" title="RED: 4 AND ABOVE, YELLOW: 2 TO 3, GREEN: 1">{{formatTHIScores C__Member_Support_Tickets}}</td>
-            <td class="{{formatColor C__Critical_Diagnostics_CC}}" title="RED: 5 AND ABOVE, YELLOW: 2.01 TO 4.99, GREEN: 2 AND BELOW">{{formatTHIScores C__Critical_Diagnostics}}</td>
+            <td class="{{formatColor C__Member_Support_Tickets_CC}}" title="RED: 4 AND ABOVE, YELLOW: BETWEEN 1 AND 4, GREEN: 1 AND BELOW">{{formatTHIScores C__Member_Support_Tickets}}</td>
+            <td class="{{formatColor C__Critical_Diagnostics_CC}}" title="RED: 3 AND ABOVE, YELLOW: BETWEEN 1 AND 3, GREEN: 1 AND BELOW">{{formatTHIScores C__Critical_Diagnostics}}</td>
             <td class="{{formatColor C_Ability_to_Keep_up_w_Releases_CC}}" title="RED: 61 AND ABOVE, YELLOW: 30 TO 60, GREEN: BELOW 30">{{formatTHIScores C_Ability_to_Keep_up_w_Releases}}</td>
             <td class="{{formatColor C_MineSweeper_CC}}" title="RED: 3 AND ABOVE, YELLOW: 2, GREEN: 1 AND BELOW">{{formatTHIScores C_MineSweeper}}</td>
             <td class="{{formatColor C_Data_Lag_CC}}" title="RED: (46 AND ABOVE) OR QUARTERLY, YELLOW: 21 TO 45, 20 AND BELOW">{{formatTHIScoresToInt C_Data_Lag}}</td>
             <td class="{{formatColor C__USE_SSA_CC}}" title="RED: 0, GREEN: 1">{{formatTHIScoresToInt C__USE_SSA}}</td>
-            <td class="{{formatColor C_USE_Compass_Connect_CC}}" title="No Color Coding">{{formatTHIScoresToInt C_USE_Compass_Connect}}</td>
+            <td class="{{formatColor C_USE_Compass_Connect_CC}}" title="WHITE: Not Factored to THI Score">{{formatTHIScoresToInt C_USE_Compass_Connect}}</td>
             <td class="{{formatColor C_Data_Elements_Present_CC}}" title="RED: 0.8 AND BELOW, YELLOW: 0.801 TO 0.85, GREEN: 0.851 AND ABOVE">{{formatTHIScores C_Data_Elements_Present}}</td>
-            <td class="{{formatColor C_CriticalInternalDiagnostics_CC}}" title="No Color Coding">{{formatTHIScores C_CriticalInternalDiagnostics}}</td>
+            <td class="{{formatColor C_CriticalInternalDiagnostics_CC}}" title="WHITE: Not Factored to THI Score">{{formatTHIScores C_CriticalInternalDiagnostics}}</td>
 
         </tr>
     </script>
 
 <script id="memberContractInfoTemplate" type="text/x-handlebars-template">
-         <tr role="row">
-             <td>Annual Contract Value</td>
-             <td>{{formatMoney AnnualContractValue}}</td>
-         </tr>
+        <tr role="row">
+            <td>Annual Contract Value</td>
+            <td>{{formatMoney AnnualContractValue}}</td>
+        </tr>
         <tr role="row">
             <td>Latest Contract End Date</td>
             <td>{{formatDate LatestContractEndDate}}</td>
@@ -1081,7 +1335,7 @@ fixed layout. -->
             <td>Login Count</td>
             <td>{{formatNulls LoginCount}}</td>
         </tr>
-     </script>
+    </script>
 
 <script>
 
@@ -1116,7 +1370,7 @@ fixed layout. -->
 
     Handlebars.registerHelper('formatTHIScores',
         function(number) {
-            if (number == -99999.0) {
+            if (number === -99999.0) {
                 return 'N/A';
             } else {
                 return (number.toFixed(2));
@@ -1125,7 +1379,7 @@ fixed layout. -->
 
     Handlebars.registerHelper('formatTHIScoresToInt',
         function(number) {
-            if (number == -99999.0) {
+            if (number === -99999.0) {
                 return 'N/A';
             } else {
                 return (number.toFixed(0));
@@ -1156,16 +1410,16 @@ fixed layout. -->
                 return 'N/A';
             } else {
                 return ('$ ' + Number(money.toFixed(1)).toLocaleString());
-            }
+            } 
         });
 
     Handlebars.registerHelper('formatColor',
         function(color) {
-            if (color == 'GREEN') {
+            if (color === 'GREEN') {
                 return 'bg-green';
-            } else if (color == 'YELLOW') {
+            } else if (color === 'YELLOW') {
                 return 'bg-yellow';
-            } else if (color == 'RED') {
+            } else if (color === 'RED') {
                 return 'bg-red';
             } else {
                 return '';
@@ -1173,28 +1427,6 @@ fixed layout. -->
         });
 
 </script>
-
-@*<script>
-    var settings = {
-        "async": true,
-        "crossDomain": true,
-        "url": "https://loginbeta.advisory.com/CrimsonProvisioningService/api/User/SearchUsers",
-        "method": "POST",
-        "headers": {
-            "content-type": "application/json",
-            "version": "2",
-            "cache-control": "no-cache",
-            "postman-token": "d5cd0123-cf03-6984-c789-a502070bf1c4"
-        },
-        "data":
-            " {\r\n   \"Keyword\":\"\",\r\n   \"AccountStatus\": 1,\r\n   \"Usertype\":0,\r\n   \"SortColumn\":\"LastName,FirstName\",\r\n   \"SortDirection\":0,\r\n   \"Index\":0,\r\n   \"NoofItems\":10,\r\n   \"MemberOrgKeys\":[\r\n      \"5B95F3B2-C265-4E1A-91AB-60FC449E96EB\",\r\n   ],\r\n   \"ApplicationKey\":\"c3cc809f-9b80-438f-a20f-42e67b504cec\",\r\n   \"EnvironmentKeys\":[\r\n\t\"37b473ae-b5a5-4839-91d5-80676a86b4b9\"\r\n   ]\r\n}\r\n"
-    };
-    $.ajax(settings).done(function(response) {
-        console.log(response);
-    });
-
-</script>*@
-
 
 </body>
 

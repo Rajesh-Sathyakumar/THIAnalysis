@@ -1,5 +1,10 @@
 ﻿@model THI_Analysis.Models.ProjectHospital
 
+@{ 
+    SelectList Select = ViewBag.Project;
+    ViewBag.Project = Select.OrderBy(a => a.Text);
+}
+
 <div class="content-wrapper" id="DischargeVolumes">
     <!-- Content Header (Page header) -->
     <section class="content-header" id="introduction">

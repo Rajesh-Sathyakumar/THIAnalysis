@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-    <Schema Namespace="CCCOperationsModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+      <Schema Namespace="CCCOperationsModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="ACLBridge">
           <Key>
             <PropertyRef Name="ACLBridgeKey" />
@@ -837,7 +837,8 @@ warning 6002: The table/view 'CCCOperations.thi.MinesweeperData' does not have a
             <End Role="Users" EntitySet="Users" />
           </AssociationSet>
         </EntityContainer>
-      </Schema></edmx:StorageModels>
+      </Schema>
+    </edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="CCCOperationsModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
@@ -874,6 +875,16 @@ warning 6002: The table/view 'CCCOperations.thi.MinesweeperData' does not have a
           <Property Name="CriticalDiagnosticKey" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="CriticalDiagnosticsDescription" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="THI_AnalysisFeedback" Relationship="Self.FK_CriticalDiagnostics_CriticalDiagnosticKey" FromRole="CriticalDiagnostics" ToRole="THI_AnalysisFeedback" />
+        </EntityType>
+        <EntityType Name="CustomOPPEinfo">
+          <Key>
+            <PropertyRef Name="CustomOPPEinfoKey" />
+          </Key>
+          <Property Name="CustomOPPEinfoKey" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Project" Type="Int32" Nullable="false" />
+          <Property Name="TotalCount" Type="Int32" />
+          <Property Name="MaxRR" Type="DateTime" Precision="0" />
+          <NavigationProperty Name="SalesforceProject" Relationship="Self.FK_CustomOPPEInfo_SalesforceProjects_ProjectKey" FromRole="CustomOPPEinfo" ToRole="SalesforceProjects" />
         </EntityType>
         <EntityType Name="DAS_Findings">
           <Key>
@@ -970,9 +981,9 @@ warning 6002: The table/view 'CCCOperations.thi.MinesweeperData' does not have a
           <Property Name="APRDRGAggregate" Type="Boolean" />
           <Property Name="ProjectID" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
           <Property Name="ProjectPhase" Type="String" MaxLength="250" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="CustomOPPEinfoes" Relationship="Self.FK_CustomOPPEInfo_SalesforceProjects_ProjectKey" FromRole="SalesforceProjects" ToRole="CustomOPPEinfo" />
           <NavigationProperty Name="ProjectHospitals" Relationship="Self.FK_ProjectHospitals_SalesforceProjects_ProjectKey" FromRole="SalesforceProjects" ToRole="ProjectHospitals" />
           <NavigationProperty Name="THI_AnalysisFeedback" Relationship="Self.FK_Project_ProjectKey" FromRole="SalesforceProjects" ToRole="THI_AnalysisFeedback" />
-          <NavigationProperty Name="CustomOPPEinfoes" Relationship="CCCOperationsModel.FK_CustomOPPEInfo_SalesforceProjects_ProjectKey" FromRole="SalesforceProject" ToRole="CustomOPPEinfo" />
         </EntityType>
         <EntityType Name="SSA_Findings">
           <Key>
@@ -1274,6 +1285,18 @@ warning 6002: The table/view 'CCCOperations.thi.MinesweeperData' does not have a
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_CustomOPPEInfo_SalesforceProjects_ProjectKey">
+          <End Role="SalesforceProjects" Type="Self.SalesforceProject" Multiplicity="1" />
+          <End Role="CustomOPPEinfo" Type="Self.CustomOPPEinfo" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="SalesforceProjects">
+              <PropertyRef Name="ProjectKey" />
+            </Principal>
+            <Dependent Role="CustomOPPEinfo">
+              <PropertyRef Name="Project" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_DAS_Findings_DAS_FindingsKey">
           <End Role="DAS_Findings" Type="Self.DAS_Findings" Multiplicity="1" />
           <End Role="THI_AnalysisFeedback" Type="Self.THI_AnalysisFeedback" Multiplicity="*" />
@@ -1447,6 +1470,7 @@ warning 6002: The table/view 'CCCOperations.thi.MinesweeperData' does not have a
           <EntitySet Name="ACLs" EntityType="Self.ACL" />
           <EntitySet Name="AnalysisSummaries" EntityType="Self.AnalysisSummary" />
           <EntitySet Name="CriticalDiagnostics" EntityType="Self.CriticalDiagnostic" />
+          <EntitySet Name="CustomOPPEinfoes" EntityType="Self.CustomOPPEinfo" />
           <EntitySet Name="DAS_Findings" EntityType="Self.DAS_Findings" />
           <EntitySet Name="DataElements" EntityType="Self.DataElement" />
           <EntitySet Name="DataLags" EntityType="Self.DataLag" />
@@ -1487,6 +1511,10 @@ warning 6002: The table/view 'CCCOperations.thi.MinesweeperData' does not have a
           <AssociationSet Name="FK_CriticalDiagnostics_CriticalDiagnosticKey" Association="Self.FK_CriticalDiagnostics_CriticalDiagnosticKey">
             <End Role="CriticalDiagnostics" EntitySet="CriticalDiagnostics" />
             <End Role="THI_AnalysisFeedback" EntitySet="THI_AnalysisFeedback" />
+          </AssociationSet>
+          <AssociationSet Name="FK_CustomOPPEInfo_SalesforceProjects_ProjectKey" Association="Self.FK_CustomOPPEInfo_SalesforceProjects_ProjectKey">
+            <End Role="SalesforceProjects" EntitySet="SalesforceProjects" />
+            <End Role="CustomOPPEinfo" EntitySet="CustomOPPEinfoes" />
           </AssociationSet>
           <AssociationSet Name="FK_DAS_Findings_DAS_FindingsKey" Association="Self.FK_DAS_Findings_DAS_FindingsKey">
             <End Role="DAS_Findings" EntitySet="DAS_Findings" />
@@ -1549,11 +1577,6 @@ warning 6002: The table/view 'CCCOperations.thi.MinesweeperData' does not have a
             <Parameter Name="Year" Mode="In" Type="Int32" />
             <Parameter Name="Month" Mode="In" Type="Int32" />
           </FunctionImport>
-          <EntitySet Name="CustomOPPEinfoes" EntityType="CCCOperationsModel.CustomOPPEinfo" />
-          <AssociationSet Name="FK_CustomOPPEInfo_SalesforceProjects_ProjectKey" Association="CCCOperationsModel.FK_CustomOPPEInfo_SalesforceProjects_ProjectKey">
-            <End Role="SalesforceProject" EntitySet="SalesforceProjects" />
-            <End Role="CustomOPPEinfo" EntitySet="CustomOPPEinfoes" />
-          </AssociationSet>
         </EntityContainer>
         <ComplexType Name="ETLCompletion_Result">
           <Property Type="String" Name="Project_ProjectName" Nullable="true" MaxLength="255" />
@@ -1564,28 +1587,6 @@ warning 6002: The table/view 'CCCOperations.thi.MinesweeperData' does not have a
           <Property Type="Double" Name="Avg_ETLDurationn_DataLoad" Nullable="true" />
           <Property Type="Double" Name="FilesLate_DataLoad" Nullable="true" />
         </ComplexType>
-        <EntityType Name="CustomOPPEinfo">
-          <Key>
-            <PropertyRef Name="CustomOPPEinfoKey" />
-          </Key>
-          <Property Name="CustomOPPEinfoKey" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Project" Type="Int32" Nullable="false" />
-          <Property Name="TotalCount" Type="Int32" />
-          <Property Name="MaxRR" Type="DateTime" Precision="0" />
-          <NavigationProperty Name="SalesforceProject" Relationship="CCCOperationsModel.FK_CustomOPPEInfo_SalesforceProjects_ProjectKey" FromRole="CustomOPPEinfo" ToRole="SalesforceProject" />
-        </EntityType>
-        <Association Name="FK_CustomOPPEInfo_SalesforceProjects_ProjectKey">
-          <End Type="CCCOperationsModel.SalesforceProject" Role="SalesforceProject" Multiplicity="1" />
-          <End Type="CCCOperationsModel.CustomOPPEinfo" Role="CustomOPPEinfo" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="SalesforceProject">
-              <PropertyRef Name="ProjectKey" />
-            </Principal>
-            <Dependent Role="CustomOPPEinfo">
-              <PropertyRef Name="Project" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -1622,6 +1623,16 @@ warning 6002: The table/view 'CCCOperations.thi.MinesweeperData' does not have a
               <MappingFragment StoreEntitySet="CriticalDiagnostics">
                 <ScalarProperty Name="CriticalDiagnosticKey" ColumnName="CriticalDiagnosticKey" />
                 <ScalarProperty Name="CriticalDiagnosticsDescription" ColumnName="CriticalDiagnosticsDescription" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="CustomOPPEinfoes">
+            <EntityTypeMapping TypeName="CCCOperationsModel.CustomOPPEinfo">
+              <MappingFragment StoreEntitySet="CustomOPPEinfo">
+                <ScalarProperty Name="CustomOPPEinfoKey" ColumnName="CustomOPPEinfoKey" />
+                <ScalarProperty Name="Project" ColumnName="Project" />
+                <ScalarProperty Name="TotalCount" ColumnName="TotalCount" />
+                <ScalarProperty Name="MaxRR" ColumnName="MaxRR" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -1969,16 +1980,6 @@ warning 6002: The table/view 'CCCOperations.thi.MinesweeperData' does not have a
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
-          <EntitySetMapping Name="CustomOPPEinfoes">
-            <EntityTypeMapping TypeName="CCCOperationsModel.CustomOPPEinfo">
-              <MappingFragment StoreEntitySet="CustomOPPEinfo">
-                <ScalarProperty Name="MaxRR" ColumnName="MaxRR" />
-                <ScalarProperty Name="TotalCount" ColumnName="TotalCount" />
-                <ScalarProperty Name="Project" ColumnName="Project" />
-                <ScalarProperty Name="CustomOPPEinfoKey" ColumnName="CustomOPPEinfoKey" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

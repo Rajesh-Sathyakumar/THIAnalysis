@@ -34,6 +34,16 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
+    <EntitySetMapping Name="CustomOPPEinfoes">
+      <EntityTypeMapping TypeName="CCCOperationsModel.CustomOPPEinfo">
+        <MappingFragment StoreEntitySet="CustomOPPEinfo">
+          <ScalarProperty Name="CustomOPPEinfoKey" ColumnName="CustomOPPEinfoKey" />
+          <ScalarProperty Name="Project" ColumnName="Project" />
+          <ScalarProperty Name="TotalCount" ColumnName="TotalCount" />
+          <ScalarProperty Name="MaxRR" ColumnName="MaxRR" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
     <EntitySetMapping Name="DAS_Findings">
       <EntityTypeMapping TypeName="CCCOperationsModel.DAS_Findings">
         <MappingFragment StoreEntitySet="DAS_Findings">
@@ -378,15 +388,5 @@
         </ComplexTypeMapping>
       </ResultMapping>
     </FunctionImportMapping>
-    <EntitySetMapping Name="CustomOPPEinfoes">
-      <EntityTypeMapping TypeName="CCCOperationsModel.CustomOPPEinfo">
-        <MappingFragment StoreEntitySet="CustomOPPEinfo">
-          <ScalarProperty Name="MaxRR" ColumnName="MaxRR" />
-          <ScalarProperty Name="TotalCount" ColumnName="TotalCount" />
-          <ScalarProperty Name="Project" ColumnName="Project" />
-          <ScalarProperty Name="CustomOPPEinfoKey" ColumnName="CustomOPPEinfoKey" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
   </EntityContainerMapping>
 </Mapping>

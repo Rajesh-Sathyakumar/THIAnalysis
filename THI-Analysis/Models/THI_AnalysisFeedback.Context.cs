@@ -31,6 +31,7 @@ namespace THI_Analysis.Models
         public virtual DbSet<ACL> ACLs { get; set; }
         public virtual DbSet<AnalysisSummary> AnalysisSummaries { get; set; }
         public virtual DbSet<CriticalDiagnostic> CriticalDiagnostics { get; set; }
+        public virtual DbSet<CustomOPPEinfo> CustomOPPEinfoes { get; set; }
         public virtual DbSet<DAS_Findings> DAS_Findings { get; set; }
         public virtual DbSet<DataElement> DataElements { get; set; }
         public virtual DbSet<DataLag> DataLags { get; set; }
@@ -56,7 +57,6 @@ namespace THI_Analysis.Models
         public virtual DbSet<MemberDataElements_OP> MemberDataElements_OP { get; set; }
         public virtual DbSet<MemberDataElements_OPPE> MemberDataElements_OPPE { get; set; }
         public virtual DbSet<MinesweeperData> MinesweeperDatas { get; set; }
-        public virtual DbSet<CustomOPPEinfo> CustomOPPEinfoes { get; set; }
     
         public virtual ObjectResult<ETLCompletion_Result> ETLCompletion(Nullable<int> proj, Nullable<int> year, Nullable<int> month)
         {
