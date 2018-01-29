@@ -51,34 +51,34 @@ namespace THI_Analysis.Controllers
         public void SiamRedirection(string returnUrl)
         {
 
-            if (Session["UserSessionInfo"] == null)
-            {
-                var cas = new CasAuthenticationService(SamlHelperConfiguration.Config, UserSessionHandler.Get());
-                var httpContextBase = new HttpContextWrapper(System.Web.HttpContext.Current);
-                if (!cas.IsSAMLResponse(httpContextBase) && (Session == null || Session["UserSessionInfo"] == null))
-                {
-                    cas.RedirectUserToCasLogin(
-                        new Guid("5B95F3B2-C265-4E1A-91AB-60FC449E96EB"),
-                        new Guid("85346158-DB2E-49CE-80AC-0E868527DF2B"),
-                        new Guid("37B473AE-B5A5-4839-91D5-80676A86B4B9"),
-                        returnUrl);
-                }
-                else
-                {
-                    var sessionInfo = cas.GetSessionFromSaml(httpContextBase);
+            //if (Session["UserSessionInfo"] == null)
+            //{
+            //    var cas = new CasAuthenticationService(SamlHelperConfiguration.Config, UserSessionHandler.Get());
+            //    var httpContextBase = new HttpContextWrapper(System.Web.HttpContext.Current);
+            //    if (!cas.IsSAMLResponse(httpContextBase) && (Session == null || Session["UserSessionInfo"] == null))
+            //    {
+            //        cas.RedirectUserToCasLogin(
+            //            new Guid("5B95F3B2-C265-4E1A-91AB-60FC449E96EB"),
+            //            new Guid("85346158-DB2E-49CE-80AC-0E868527DF2B"),
+            //            new Guid("37B473AE-B5A5-4839-91D5-80676A86B4B9"),
+            //            returnUrl);
+            //    }
+            //    else
+            //    {
+            //        var sessionInfo = cas.GetSessionFromSaml(httpContextBase);
 
-                    if (sessionInfo != null)
-                    {
-                        HttpContext.Session.Add("UserSessionInfo", sessionInfo);
-                        HttpContext.Session.Timeout = 20;
-                        SetUsage(_usgAct.LogIn);
-                    }
+            //        if (sessionInfo != null)
+            //        {
+            //            HttpContext.Session.Add("UserSessionInfo", sessionInfo);
+            //            HttpContext.Session.Timeout = 20;
+            //            SetUsage(_usgAct.LogIn);
+            //        }
 
-                    returnUrl = returnUrl.Replace("http://thi.advisory.com:81", "https://thi.advisory.com");
+            //        returnUrl = returnUrl.Replace("http://thi.advisory.com:81", "https://thi.advisory.com");
 
-                    Response.Redirect(returnUrl);
-                }
-            }
+            //        Response.Redirect(returnUrl);
+            //    }
+            //}
         }
 
         public void Logout()
@@ -265,7 +265,11 @@ namespace THI_Analysis.Controllers
 
             SiamRedirection(HttpContext.Request.Url.AbsoluteUri);
             SetUsage(_usgAct.MemberThiScoresTab);
-            ViewBag.Project = new SelectList(db.SalesforceProjects, "ProjectKey", "ProjectName");
+
+            var projectList = db.SalesforceProjects.Where(a => a.ProjectPhase.ToLower().Contains("value stream")).OrderBy(a=>a.ProjectName);  
+
+
+            ViewBag.Project = new SelectList(projectList, "ProjectKey", "ProjectName");
             ViewBag.RefreshDate = db.ToolRefreshDates.Max(a => a.RecentRundate);
             return View();
         }
@@ -274,7 +278,8 @@ namespace THI_Analysis.Controllers
         {
             SiamRedirection(Request.Url.AbsoluteUri);
             SetUsage(_usgAct.ThiDataLogsTab);
-            ViewBag.Project = new SelectList(db.SalesforceProjects, "ProjectKey", "ProjectName");
+            var projectList = db.SalesforceProjects.Where(a => a.ProjectPhase.ToLower().Contains("value stream")).OrderBy(a => a.ProjectName);
+            ViewBag.Project = new SelectList(projectList, "ProjectKey", "ProjectName");
             var feedBackData =
                 db.THI_AnalysisFeedback.Include(t => t.SalesforceProject)
                     .OrderByDescending(model => model.AnalysisCreatedDate);
@@ -286,7 +291,8 @@ namespace THI_Analysis.Controllers
         {
             SiamRedirection(HttpContext.Request.Url.AbsoluteUri);
             SetUsage(_usgAct.MemberStatisticsTab);
-            ViewBag.Project = new SelectList(db.SalesforceProjects, "ProjectKey", "ProjectName");
+            var projectList = db.SalesforceProjects.Where(a => a.ProjectPhase.ToLower().Contains("value stream")).OrderBy(a => a.ProjectName);
+            ViewBag.Project = new SelectList(projectList, "ProjectKey", "ProjectName");
             ViewBag.RefreshDate = db.ToolRefreshDates.Max(a => a.RecentRundate);
             return View();
         }
@@ -356,7 +362,8 @@ namespace THI_Analysis.Controllers
             XDocument doc = new XDocument(root);
             SetUsage(_usgAct.ThiDataLogsFilterbyProjects, doc);
 
-            ViewBag.Project = new SelectList(db.SalesforceProjects, "ProjectKey", "ProjectName");
+            var projectList = db.SalesforceProjects.Where(a => a.ProjectPhase.ToLower().Contains("value stream")).OrderBy(a => a.ProjectName);
+            ViewBag.Project = new SelectList(projectList , "ProjectKey", "ProjectName");
 
             if (Project == 1)
             {
@@ -408,7 +415,10 @@ namespace THI_Analysis.Controllers
             ViewBag.MemberSupportTickets = new SelectList(db.MemberSupportTickets, "MemberSupportTicketsKey",
                 "MemberSupportTicketsDescription");
             ViewBag.Minesweeper = new SelectList(db.Minesweepers, "MinesweeperKey", "MinesweeperDescription");
-            ViewBag.Project = new SelectList(db.SalesforceProjects, "ProjectKey", "ProjectName");
+
+            var projectList = db.SalesforceProjects.Where(a => a.ProjectPhase.ToLower().Contains("value stream")).OrderBy(a => a.ProjectName);
+            ViewBag.Project = new SelectList(projectList, "ProjectKey", "ProjectName");
+
             ViewBag.SSA_Findings = new SelectList(db.SSA_Findings, "SSA_FindingsKey", "SSA_FindingsDescription");
             return View();
         }
@@ -507,7 +517,9 @@ namespace THI_Analysis.Controllers
                 "MemberSupportTicketsDescription", tHI_AnalysisFeedback.MemberSupportTickets);
             ViewBag.Minesweeper = new SelectList(db.Minesweepers, "MinesweeperKey", "MinesweeperDescription",
                 tHI_AnalysisFeedback.Minesweeper);
-            ViewBag.Project = new SelectList(db.SalesforceProjects, "ProjectKey", "ProjectName",
+
+            var projectList = db.SalesforceProjects.Where(a => a.ProjectPhase.ToLower().Contains("value stream")).OrderBy(a => a.ProjectName);
+            ViewBag.Project = new SelectList(projectList, "ProjectKey", "ProjectName",
                 tHI_AnalysisFeedback.Project);
             ViewBag.SSA_Findings = new SelectList(db.SSA_Findings, "SSA_FindingsKey", "SSA_FindingsDescription",
                 tHI_AnalysisFeedback.SSA_Findings);
